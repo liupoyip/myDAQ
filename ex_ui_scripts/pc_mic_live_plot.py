@@ -12,8 +12,6 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
 
 
 SAMPLE_COUNT = 2000
-
-
 RESOLUTION = 4
 SAMPLE_RATE = 44100
 SAMPLE_COUNT = int(SAMPLE_RATE*0.1)
@@ -22,7 +20,6 @@ SAMPLE_COUNT = int(SAMPLE_RATE*0.1)
 class MainWindow(QMainWindow):
     def __init__(self, device):
         super().__init__()
-
         self._series = QLineSeries()
         self._chart = QChart()
         self._chart.addSeries(self._series)

@@ -1,9 +1,8 @@
-# %%
+from TranslateObjectID import create_callback_data_id, get_callback_data_from_id, MyList
+
 import os
 import queue
 from datetime import datetime
-from dataclasses import dataclass
-import weakref
 from typing import Union
 
 import nidaqmx
@@ -15,57 +14,17 @@ from nidaqmx.constants import (AcquisitionType,
                                SoundPressureUnits,
                                ExcitationSource)
 import sounddevice as sd
-
 import numpy as np
 import matplotlib.pyplot as plt
 
-_id_to_obj_dict = weakref.WeakValueDictionary()
-
-
-def create_callback_data_id(obj):
-    """
-    Uses the weakref module to create and store a reference to obj
-
-    output value: reference to the object
-
-    It is not possible to directly uses python object through a Callback function because
-    with ctypes there is no pointer to python object.
-    This function store in a dictionary a reference to an object
-    This object can be retrieved using the get_callback_data_from_id function
-
-    For python object that cannot be weakreferenced, one can creat a dummy class to wrap
-    the python object :
-        def MyList(list)
-            pass
-
-        data = MyList()
-        id = create_callback_data_id(data)
-
-    """
-    obj_id = id(obj)
-    _id_to_obj_dict[obj_id] = obj
-    return obj_id
-
-
-def get_callback_data_from_id(obj_id):
-    """
-    Retrieve an object stored using create_call_backdata_id
-    """
-    return _id_to_obj_dict[obj_id]
-
-
-class MyList(list):
-    pass
-
-
 callback_data = MyList()
 callback_data_id = create_callback_data_id(callback_data)
-write_csv_trig = True
-callback_data.append(write_csv_trig)
+WRITE_CSV_TRIG = False
+callback_data.append(WRITE_CSV_TRIG)
 chunk = None
+daq = None
 
 
-# @dataclass
 class GeneralDAQParams:
     device: str = None
     sample_rate: int = 12800
@@ -76,9 +35,7 @@ class GeneralDAQParams:
     buffer_size: int = sample_rate * 5
 
 
-# @dataclass
 class NIDAQ(GeneralDAQParams):
-
     system = nidaqmx.system.System.local()
     task = None
 
@@ -97,7 +54,6 @@ class NIDAQ(GeneralDAQParams):
             raise BaseException('Cannot find local device.')
 
 
-# @dataclass
 class NI9234(NIDAQ):
     channel_num_list = (0, 1, 2, 3, '0', '1', '2', '3')
 
@@ -222,7 +178,7 @@ class NI9234(NIDAQ):
             callback_method=callback_NI9234)
         callback_data.clear()
         chunk = np.zeros((self.exist_channel_quantity, self.frame_size))
-        callback_data.append(write_csv_trig)
+        callback_data.append(WRITE_CSV_TRIG)
         callback_data.append(self.task)
         callback_data.append(chunk)
         self.task.start()
@@ -245,6 +201,14 @@ class CSVStreamWriter:
         self.file = None
         self.open_file()
 
+    def write_csv_on(self):
+        global WRITE_CSV_TRIG
+        WRITE_CSV_TRIG = True
+
+    def write_csv_off(self):
+        global WRITE_CSV_TRIG
+        WRITE_CSV_TRIG = False
+
     def open_file(self):
         self.file = open(self.file_path, mode='a')
 
@@ -266,14 +230,15 @@ def callback_NI9234(task_handle, every_n_samples_event_type,
     global chunk
     # get data from memory address and retrieve
     callback_data = get_callback_data_from_id(callback_data_id)
-    write_csv_trig = callback_data[0]
+    WRITE_CSV_TRIG = callback_data[0]
     task = callback_data[1]
     chunk = callback_data[2]
-    print(datetime.now().isoformat(sep=' ', timespec='milliseconds'))
+
     stream_reader = NiStreamReaders.AnalogMultiChannelReader(task.in_stream)
     stream_reader.read_many_sample(chunk)
-    if write_csv_trig:
+    if WRITE_CSV_TRIG:
         csv_stream_writer.write()
+    print(datetime.now().isoformat(sep=' ', timespec='milliseconds'))
     print(f'Every {number_of_samples} Samples callback invoked.')
     return 0
 
@@ -331,6 +296,8 @@ if __name__ == '__main__':
     directory = '.'
     file_name = 'foo.csv'
     csv_stream_writer = CSVStreamWriter(directory, file_name)
+    csv_stream_writer.write_csv_on()
+
     ni9234 = NI9234(device_name='NI_9234', task_name='myTask')
     ni9234.add_accel_channel(0)
     ni9234.add_microphone_channel(1)
@@ -338,4 +305,5 @@ if __name__ == '__main__':
     ni9234.set_sample_rate(12800)
     ni9234.start_streaming()
     ni9234.close_task()
+    csv_stream_writer.write_csv_off()
     csv_stream_writer.close_file()

@@ -3,7 +3,7 @@
 
 import random
 
-from PySide6.QtCharts import QChart, QSplineSeries, QValueAxis
+from PySide6.QtCharts import QChart, QSplineSeries, QValueAxis, QLineSeries
 from PySide6.QtCore import Qt, QTimer, Slot
 from PySide6.QtGui import QPen
 
@@ -12,7 +12,8 @@ class Chart(QChart):
     def __init__(self, parent=None):
         super().__init__(QChart.ChartTypeCartesian, parent, Qt.WindowFlags())
         self._timer = QTimer()
-        self._series = QSplineSeries(self)
+        #self._series = QSplineSeries(self)
+        self._series = QLineSeries(self)
         self._titles = []
         self._axisX = QValueAxis()
         self._axisY = QValueAxis()
