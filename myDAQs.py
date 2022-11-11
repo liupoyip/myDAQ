@@ -1,9 +1,5 @@
-"""
-TODO
-NI9234 未來要新增的功能: remove ai channel
-"""
-
 # %%
+import os
 import queue
 from datetime import datetime
 from dataclasses import dataclass
@@ -12,7 +8,12 @@ from typing import Union
 
 import nidaqmx
 from nidaqmx import stream_readers as NiStreamReaders
-from nidaqmx.constants import AcquisitionType
+from nidaqmx.constants import (AcquisitionType,
+                               TerminalConfiguration,
+                               AccelUnits,
+                               AccelSensitivityUnits,
+                               SoundPressureUnits,
+                               ExcitationSource)
 import sounddevice as sd
 
 import numpy as np
@@ -59,9 +60,12 @@ class MyList(list):
 
 callback_data = MyList()
 callback_data_id = create_callback_data_id(callback_data)
+write_csv_trig = True
+callback_data.append(write_csv_trig)
+chunk = None
 
 
-@dataclass
+# @dataclass
 class GeneralDAQParams:
     device: str = None
     sample_rate: int = 12800
@@ -72,7 +76,7 @@ class GeneralDAQParams:
     buffer_size: int = sample_rate * 5
 
 
-@dataclass
+# @dataclass
 class NIDAQ(GeneralDAQParams):
 
     system = nidaqmx.system.System.local()
@@ -93,7 +97,7 @@ class NIDAQ(GeneralDAQParams):
             raise BaseException('Cannot find local device.')
 
 
-@dataclass
+# @dataclass
 class NI9234(NIDAQ):
     channel_num_list = (0, 1, 2, 3, '0', '1', '2', '3')
 
@@ -107,7 +111,6 @@ class NI9234(NIDAQ):
         self.min_sample_rate = self.device.ai_min_rate
         self.frame_size = int(self.sample_rate * self.frame_duration * 0.001)
         self.buffer_size = self.frame_size * 10
-        self.chunk = None
         self.create_task(task_name)
 
     def clear_task(self):
@@ -118,7 +121,7 @@ class NI9234(NIDAQ):
         self.task = nidaqmx.Task(new_task_name=task_name)
 
     def add_ai_channel(self, channel):
-        # refactor to decorater, with analog input channel
+        # TODO: refactor to decorater, with analog input channel
         # target function: add_accel_channel, add_microphone_channel
         pass
 
@@ -128,12 +131,23 @@ class NI9234(NIDAQ):
         if len(self.task.channel_names) > 4:
             raise BaseException(f'All channels have added to task.')
 
-        self.task.ai_channels.add_ai_accel_chan(f'{self.device_name}/ai{channel}')
+        self.task.ai_channels.add_ai_accel_chan(
+            physical_channel=f'{self.device_name}/ai{channel}',
+            name_to_assign_to_channel=f'{self.device_name}-ch{channel}-accelerometer',
+            terminal_config=TerminalConfiguration.DEFAULT,
+            min_val=-5.0,
+            max_val=5.0,
+            units=AccelUnits.G,
+            sensitivity=1000.0,
+            sensitivity_units=AccelSensitivityUnits.MILLIVOLTS_PER_G,
+            current_excit_source=ExcitationSource.INTERNAL,
+            current_excit_val=0.004,
+            custom_scale_name='')
         self.task.timing.cfg_samp_clk_timing(
             rate=self.sample_rate, sample_mode=AcquisitionType.CONTINUOUS)
-        self.set_buffer_size()
         print(f'Channel added, exist channel: {self.task.channel_names}')
         self.exist_channel_quantity = len(self.task.channel_names)
+        self.set_buffer_size()
 
     def add_microphone_channel(self, channel: Union[int, str]):
         if channel not in self.channel_num_list:
@@ -141,12 +155,21 @@ class NI9234(NIDAQ):
         if len(self.task.channel_names) > 4:
             raise BaseException(f'All channels have added to task.')
 
-        self.task.ai_channels.add_ai_accel_chan(f'{self.device_name}/ai{channel}')
+        self.task.ai_channels.add_ai_microphone_chan(
+            physical_channel=f'{self.device_name}/ai{channel}',
+            name_to_assign_to_channel=f'{self.device_name}-ch{channel}-microphone',
+            terminal_config=TerminalConfiguration.DEFAULT,
+            units=SoundPressureUnits.PA,
+            mic_sensitivity=10.0,
+            max_snd_press_level=100.0,
+            current_excit_source=ExcitationSource.INTERNAL,
+            current_excit_val=0.004,
+            custom_scale_name='')
         self.task.timing.cfg_samp_clk_timing(
             rate=self.sample_rate, sample_mode=AcquisitionType.CONTINUOUS)
-        self.set_buffer_size()
         print(f'Channel added, exist channel: {self.task.channel_names}')
         self.exist_channel_quantity = len(self.task.channel_names)
+        self.set_buffer_size()
 
     def set_sample_rate(self, sample_rate: float):
         self.sample_rate = sample_rate
@@ -164,11 +187,13 @@ class NI9234(NIDAQ):
         self.task.in_stream.input_buf_size = self.buffer_size
 
     def show_daq_params(self):
+        print(f'Device name: {self.device_name}')
         self.show_device_channel_names()
-        print(f'{self.device_name} max sampling rate: {self.max_sample_rate} Hz')
-        print(f'{self.device_name} min sampling rate: {self.min_sample_rate} Hz')
+        print(f'max sampling rate: {self.max_sample_rate} Hz (single and multiple channel)')
+        print(f'min sampling rate: {self.min_sample_rate} Hz')
         print(f'Sampling rate: {self.sample_rate} Hz')
         print(f'Frame duration: {self.frame_duration} ms')
+        print(f'Frame size: {self.frame_size}')
         print(f'Buffer Size: {self.buffer_size}')
         print(f'Task exist channel num: {len(self.task.channel_names)}')
         self.show_task_exist_channels()
@@ -177,12 +202,12 @@ class NI9234(NIDAQ):
     def show_device_channel_names(self):
         print(f'{self.device_name} channels:')
         for name in list(self.device.ai_physical_chans):
-            print(f'\t{name}')
-        print('\t\n'.join(str(name) for name in list(self.device.ai_physical_chans)))
+            print(f'  {str(name)}')
 
     def show_task_exist_channels(self):
         print('Task exist_channels:')
-        print('\t\n'.join(str(name) for name in self.task.channel_names))
+        for channel_name in self.task.channel_names:
+            print(f'  {channel_name}')
 
     def show_max_sample_rate(self):
         print(self.max_sample_rate)
@@ -191,35 +216,64 @@ class NI9234(NIDAQ):
         print(self.device.compact_daq_chassis_device)
 
     def start_streaming(self):
+        global chunk
         self.task.register_every_n_samples_acquired_into_buffer_event(
             sample_interval=self.frame_size,
             callback_method=callback_NI9234)
         callback_data.clear()
-        self.chunk = np.zeros((self.exist_channel_quantity, self.frame_size))
+        chunk = np.zeros((self.exist_channel_quantity, self.frame_size))
+        callback_data.append(write_csv_trig)
         callback_data.append(self.task)
-        callback_data.append(self.chunk)
+        callback_data.append(chunk)
         self.task.start()
         input('Running task. Press Enter to stop and see number of '
               'accumulated samples.\n')
-        print(self.task.is_task_done())
         self.task.stop()
+        print('Task is done!!')
+
+    def close_task(self):
         self.task.close()
-        print('task:', self.task, 'task len:', len(self.task))
+        print('Task is closed.')
 
 
-def stream_to_csv():
-    pass
+class CSVStreamWriter:
+    def __init__(self, directory: str, file_name: str):
+        self.directory = directory
+        self.file_name = file_name
+        self.check_file_extension()
+        self.file_path = os.path.join(self.directory, self.file_name)
+        self.file = None
+        self.open_file()
+
+    def open_file(self):
+        self.file = open(self.file_path, mode='a')
+
+    def close_file(self):
+        self.file.close()
+
+    def check_file_extension(self):
+        name, extension = os.path.splitext(self.file_name)
+        if extension != '.csv':
+            raise BaseException('Illegal file extension, *.csv required.')
+
+    def write(self):
+        global chunk
+        np.savetxt(fname=self.file, X=np.transpose(chunk), delimiter=',')
 
 
 def callback_NI9234(task_handle, every_n_samples_event_type,
                     number_of_samples, foo):
+    global chunk
     # get data from memory address and retrieve
     callback_data = get_callback_data_from_id(callback_data_id)
-    task = callback_data[0]
-    chunk = callback_data[1]
+    write_csv_trig = callback_data[0]
+    task = callback_data[1]
+    chunk = callback_data[2]
     print(datetime.now().isoformat(sep=' ', timespec='milliseconds'))
     stream_reader = NiStreamReaders.AnalogMultiChannelReader(task.in_stream)
     stream_reader.read_many_sample(chunk)
+    if write_csv_trig:
+        csv_stream_writer.write()
     print(f'Every {number_of_samples} Samples callback invoked.')
     return 0
 
@@ -274,9 +328,14 @@ class AudioRecorder:
 
 # %%
 if __name__ == '__main__':
+    directory = '.'
+    file_name = 'foo.csv'
+    csv_stream_writer = CSVStreamWriter(directory, file_name)
     ni9234 = NI9234(device_name='NI_9234', task_name='myTask')
     ni9234.add_accel_channel(0)
     ni9234.add_microphone_channel(1)
     ni9234.set_frame_duration(100)
-    ni9234.set_sample_rate(51200)
+    ni9234.set_sample_rate(12800)
     ni9234.start_streaming()
+    ni9234.close_task()
+    csv_stream_writer.close_file()
