@@ -27,17 +27,18 @@ for device in system.devices:
     print(device)
 
 # %% check if device is exsit
-device = system.devices["cDAQ1Mod1"]
-device == nidaqmx.system.Device("cDAQ1Mod1")
+model_name = "NI_9234"
+device = system.devices[model_name]
+device == nidaqmx.system.Device(model_name)
 # %%
 pp = pprint.PrettyPrinter(indent=5)
 fs = 12800  # sampling rate
-channel = 2
+channel = 0
 duration = 200  # ms
 task = nidaqmx.Task()
 samps_per_frame = int(fs * duration * 0.001)
 # task.ai_channels.add_ai_accel_chan("cDAQ1/ai" + str(channel))
-task.ai_channels.add_ai_accel_chan("cDAQ1Mod1/ai" + str(channel))
+task.ai_channels.add_ai_accel_chan(f"{model_name}/ai{channel}")
 task.timing.cfg_samp_clk_timing(fs, samps_per_chan=samps_per_frame)
 # %%
 fig, ax = plt.subplots()
