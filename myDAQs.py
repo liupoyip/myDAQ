@@ -272,6 +272,7 @@ def callback_Ni9234(task_handle, every_n_samples_event_type,
         csv_stream_writer.write()
     print(datetime.now().isoformat(sep=' ', timespec='milliseconds'))
     print(f'Every {number_of_samples} Samples callback invoked.')
+    print(f'Task handle: {task_handle}')
     return 0
 
 

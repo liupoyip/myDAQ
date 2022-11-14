@@ -59,6 +59,7 @@ class WaveChart(QChart):
 
     @Slot()
     def handleTimeout(self):
+
         self.value = np.random.uniform(low=-1, high=1, size=FRAME_SIZE)
         available_samples = self.value.shape[0]  # // DOWNSAMPLE
         #
@@ -95,11 +96,13 @@ if __name__ == "__main__":
     chart = WaveChart()
     chart.setTitle("Dynamic series line chart")
     chart.legend().hide()
+
     # chart.setAnimationOptions(QChart.AllAnimations)
     chart.setAnimationOptions(QChart.SeriesAnimations)
     # chart.setAnimationOptions(QChart.GridAxisAnimations)
+
     chart_view = QChartView(chart)
-    chart_view.setRenderHint(QPainter.Antialiasing)
+    # chart_view.setRenderHint(QPainter.Antialiasing)
     chart_view.show()
     chart_view.resize(400, 300)
     # window = QMainWindow()
