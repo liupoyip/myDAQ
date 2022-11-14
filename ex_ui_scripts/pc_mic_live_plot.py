@@ -4,7 +4,7 @@
 """PySide6 port of the charts/audio example from Qt v5.x"""
 
 import sys
-from PySide6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis
+from PySide6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis, QSplineSeries
 from PySide6.QtCore import QPointF, Slot
 from PySide6.QtMultimedia import (QAudioDevice, QAudioFormat,
                                   QAudioSource, QMediaDevices)
@@ -12,7 +12,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
 
 
 SAMPLE_COUNT = 2000
-RESOLUTION = 4
+RESOLUTION = 100
 SAMPLE_RATE = 44100
 SAMPLE_COUNT = int(SAMPLE_RATE*0.1)
 
@@ -21,6 +21,7 @@ class MainWindow(QMainWindow):
     def __init__(self, device):
         super().__init__()
         self._series = QLineSeries()
+        #self._series = QSplineSeries()
         self._chart = QChart()
         self._chart.addSeries(self._series)
         self._axis_x = QValueAxis()
@@ -35,7 +36,6 @@ class MainWindow(QMainWindow):
         self._chart.legend().hide()
         name = device.description()
         self._chart.setTitle(f"Data from the microphone ({name})")
-
         format_audio = QAudioFormat()
         format_audio.setSampleRate(SAMPLE_RATE)
         format_audio.setChannelCount(1)
