@@ -20,22 +20,22 @@ SAMPLE_RATE = 44100
 SAMPLE_COUNT = int(SAMPLE_RATE*0.1)
 
 
-class DAQValueChanged(QObject):
-    Signal(int,)
+class ChunkValueChangedTracker(QObject):
+    valueChanged = Signal(int)
 
     def __init__(self, parent=None):
-        super(DAQValueChanged, self).__init__(parent)
+        super(ChunkValueChangedTracker, self).__init__(parent)
         self._t = 0
 
     @property
     def t(self):
-        return self.t
+        return self._t
 
     @t.setter
     def t(self, value):
         self._t = value
         self.valueChanged.emit(value)
-    # valueChanged = myDAQs.
+        print('value emit!')
 
 
 class WaveChart(QChart):
@@ -79,7 +79,6 @@ class WaveChart(QChart):
         self.chart_view = QChartView(self)
 
         self.buffer = [QPointF(x, 0) for x in range(SAMPLE_COUNT)]
-        # self.buffer
 
         self.line_series.append(self.buffer)
 
