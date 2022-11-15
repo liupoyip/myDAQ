@@ -107,10 +107,39 @@ class NI9234(NIDAQ):
     def create_task(self, task_name: str):
         self.task = nidaqmx.Task(new_task_name=task_name)
 
-    def add_ai_channel(self, channel):
+    def add_ai_channel(self, add_ai_channel_func):
+        def wrap(channel: Union[int, str]):
+            if channel not in self.channel_num_list:
+                raise BaseException(
+                    f'Illegal channel number. Legal channel : {self.channel_num_list}')
+            if len(self.task.channel_names) > 4:
+                raise BaseException(f'All channels have added to task.')
+
+            add_ai_channel_func()
+
+            self.task.timing.cfg_samp_clk_timing(
+                rate=self.sample_rate, sample_mode=AcquisitionType.CONTINUOUS)
+            print(f'Channel added, exist channel: {self.task.channel_names}')
+            self.exist_channel_quantity = len(self.task.channel_names)
+            self.set_buffer_size()
+        return wrap
         # TODO: refactor to decorater, with analog input channel
         # target function: add_accel_channel, add_microphone_channel
-        pass
+
+    @add_ai_channel
+    def add_accel_channel_new(self, channel: Union[int, str]):
+        self.task.ai_channels.add_ai_accel_chan(
+            physical_channel=f'{self.device_name}/ai{channel}',
+            name_to_assign_to_channel=f'{self.device_name}-ch{channel}-accelerometer',
+            terminal_config=TerminalConfiguration.DEFAULT,
+            min_val=-5.0,
+            max_val=5.0,
+            units=AccelUnits.G,
+            sensitivity=1000.0,
+            sensitivity_units=AccelSensitivityUnits.MILLIVOLTS_PER_G,
+            current_excit_source=ExcitationSource.INTERNAL,
+            current_excit_val=0.004,
+            custom_scale_name='')
 
     def add_accel_channel(self, channel: Union[int, str]):
         if channel not in self.channel_num_list:
