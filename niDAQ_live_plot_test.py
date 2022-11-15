@@ -20,22 +20,25 @@ SAMPLE_RATE = 44100
 SAMPLE_COUNT = int(SAMPLE_RATE*0.1)
 
 
-class ChunkValueChangedTracker(QObject):
+class ValueChangedSignalEmitter(QObject):
     valueChanged = Signal(int)
 
     def __init__(self, parent=None):
-        super(ChunkValueChangedTracker, self).__init__(parent)
-        self._t = 0
+        super(ValueChangedSignalEmitter, self).__init__(parent)
+        self._value = 0
 
     @property
-    def t(self):
-        return self._t
+    def value(self):
+        return self._value
 
-    @t.setter
-    def t(self, value):
-        self._t = value
+    @value.setter
+    def value(self, value):
+        self._value = value
         self.valueChanged.emit(value)
         print('value emit!')
+
+
+value_changed_signal_emitter = ValueChangedSignalEmitter()
 
 
 class WaveChart(QChart):

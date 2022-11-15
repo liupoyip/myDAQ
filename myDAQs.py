@@ -1,7 +1,4 @@
-# %%
-import os
 import queue
-from datetime import datetime
 from typing import Union
 import ctypes
 
@@ -15,21 +12,36 @@ from nidaqmx.constants import (AcquisitionType,
                                ExcitationSource)
 import sounddevice as sd
 import numpy as np
-import matplotlib.pyplot as plt
+from PySide6.QtCore import Signal, QObject
+
+
+class ValueChangedSignalEmitter(QObject):
+    valueChanged = Signal(int)
+
+    def __init__(self, parent=None):
+        super(ValueChangedSignalEmitter, self).__init__(parent)
+        self._value = 0
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        self._value = value
+        self.valueChanged.emit(value)
+        print('value emit!')
 
 
 class NiCallbackDataList(list):
     """
     Properties:
-        list[0]: bool
-            trigger of writing data to *.csv
-
-        list[1]: NiStreamReaders.AnalogMultiChannelReader
+        list[0]: NiStreamReaders.AnalogMultiChannelReader
             stream_reader for nidaqmx
             ```
             stream_reader = NiStreamReaders.AnalogMultiChannelReader(nidaqmx.Task.in_stream)
             ```
-        list[2]: numpy.array
+        list[1]: numpy.array
             chunk for acquiring data
 
     Limitation: max length is 3
@@ -46,14 +58,9 @@ class NiCallbackDataList(list):
                 f'Too many elements. {self.__class__.__name__} max length is {self.max_len} ')
 
 
-niDAQ = None
-
+niDAQ = None  # default variable for DAQ object instance
 callback_data = NiCallbackDataList()
-WRITE_CSV_TRIG: bool = False
-callback_data_pointer = ctypes.py_object(callback_data)
-callback_data.append(WRITE_CSV_TRIG)
-chunk = None
-callback_count: int = 0
+callback_data_ptr = ctypes.py_object(callback_data)
 
 
 class GeneralDAQParams:
@@ -64,39 +71,6 @@ class GeneralDAQParams:
     exist_channel_quantity: int = 0
     downsample: float = 1   # Down sampling ratio, greater than 1
     buffer_size: int = sample_rate * 5
-
-
-class CSVStreamWriter:
-    def __init__(self, directory: str, file_name: str):
-        self.directory = directory
-        self.file_name = file_name
-        self.check_file_extension()
-        self.file_path = os.path.join(self.directory, self.file_name)
-        self.file = None
-        self.open_file()
-
-    def write_csv_on(self):
-        global WRITE_CSV_TRIG
-        WRITE_CSV_TRIG = True
-
-    def write_csv_off(self):
-        global WRITE_CSV_TRIG
-        WRITE_CSV_TRIG = False
-
-    def open_file(self):
-        self.file = open(self.file_path, mode='a')
-
-    def close_file(self):
-        self.file.close()
-
-    def check_file_extension(self):
-        name, extension = os.path.splitext(self.file_name)
-        if extension != '.csv':
-            raise BaseException('Illegal file extension, *.csv required.')
-
-    def write(self):
-        global chunk
-        np.savetxt(fname=self.file, X=np.transpose(chunk), delimiter=',')
 
 
 class NIDAQ(GeneralDAQParams):
@@ -126,7 +100,6 @@ class NIDAQ(GeneralDAQParams):
         print(f'Frame duration: {self.frame_duration} ms')
         print(f'Frame size: {self.frame_size}')
         print(f'Buffer Size: {self.buffer_size}')
-        print(f'Task exist channel num: {len(self.task.channel_names)}')
         self.show_task_exist_channels()
         print(f'Chunk size: [{self.exist_channel_quantity}, {self.frame_size}]')
 
@@ -241,17 +214,17 @@ class NI9234(NIDAQ):
         self.buffer_size = self.frame_size * self.exist_channel_quantity * 10
         self.task.in_stream.input_buf_size = self.buffer_size
 
-    def start_streaming(self):
-        global chunk
-        self.task.register_every_n_samples_acquired_into_buffer_event(
-            sample_interval=self.frame_size,
-            callback_method=callback_Ni9234)
-        callback_data.clear()
-        chunk = np.zeros((self.exist_channel_quantity, self.frame_size))
-        stream_reader = NiStreamReaders.AnalogMultiChannelReader(self.task.in_stream)
-        callback_data.append(WRITE_CSV_TRIG)
-        callback_data.append(stream_reader)
-        callback_data.append(chunk)
+    def start_streaming(self, callback_method=None):
+        if callback_method != None:
+            self.task.register_every_n_samples_acquired_into_buffer_event(
+                sample_interval=self.frame_size,
+                callback_method=callback_method)
+            callback_data.clear()
+            chunk = np.zeros((self.exist_channel_quantity, self.frame_size))
+            stream_reader = NiStreamReaders.AnalogMultiChannelReader(self.task.in_stream)
+            callback_data.append(stream_reader)
+            callback_data.append(chunk)
+
         self.task.start()
         input('Running task.\n'
               'Press Enter to stop and see number of accumulated samples.\n')
@@ -261,26 +234,6 @@ class NI9234(NIDAQ):
     def close_task(self):
         self.task.close()
         print('Task is closed.')
-
-
-def callback_Ni9234(task_handle, every_n_samples_event_type,
-                    number_of_samples, foo):
-    global chunk, callback_count
-    WRITE_CSV_TRIG = callback_data_pointer.value[0]
-    stream_reader = callback_data_pointer.value[1]
-    chunk = callback_data_pointer.value[2]
-
-    # stream_reader is from NiStreamReaders.AnalogMultiChannelReader(nidaqmx.task.in_stream)
-    stream_reader.read_many_sample(chunk)
-
-    if WRITE_CSV_TRIG:
-        csv_stream_writer.write()
-    print(datetime.now().isoformat(sep=' ', timespec='milliseconds'))
-    print(f'Every {number_of_samples} Samples callback invoked.')
-    callback_count += 1
-    print(f'Task handle id: {task_handle}, Callback count: {callback_count}')
-
-    return 0
 
 
 class AudioRecorder:
@@ -331,13 +284,7 @@ class AudioRecorder:
         print("stream active:", self.stream.active)
 
 
-# %%
 if __name__ == '__main__':
-    directory = '.'
-    file_name = 'foo.csv'
-    csv_stream_writer = CSVStreamWriter(directory, file_name)
-
-    csv_stream_writer.write_csv_on()
     niDAQ = NI9234(device_name='NI_9234', task_name='myTask')
     niDAQ.add_accel_channel(0)
     niDAQ.add_microphone_channel(1)
@@ -345,6 +292,3 @@ if __name__ == '__main__':
     niDAQ.set_sample_rate(12800)
     niDAQ.start_streaming()
     niDAQ.close_task()
-
-    csv_stream_writer.write_csv_off()
-    csv_stream_writer.close_file()
