@@ -28,7 +28,7 @@ class ChunkValueChangedCounter(QObject):
 
 
 chunk_counter = ChunkValueChangedCounter()
-
+myDAQs.niDAQ = myDAQs.NI9234(device_name='NI_9234', task_name='myTask')
 myDAQs.niDAQ.add_accel_channel(0)
 myDAQs.niDAQ.add_microphone_channel(1)
 myDAQs.niDAQ.set_frame_duration(100)
