@@ -7,7 +7,7 @@ from PySide6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis
 from PySide6.QtCore import Qt, QTimer, QPointF, Slot
 from PySide6.QtMultimedia import (QAudioDevice, QAudioFormat,
                                   QAudioSource, QMediaDevices)
-from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
+from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QWidget
 from PySide6.QtGui import QPen, QPainter
 
 FRAME_SIZE = 12800

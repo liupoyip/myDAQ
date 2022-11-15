@@ -4,19 +4,38 @@
 """PySide6 port of the charts/audio example from Qt v5.x"""
 
 import myDAQs
+import numpy as np
 
 import sys
 from PySide6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis, QSplineSeries
-from PySide6.QtCore import Qt, QPointF, Slot
+from PySide6.QtCore import Qt, QPointF, Slot, Signal, QObject
 from PySide6.QtMultimedia import (QAudioDevice, QAudioFormat,
                                   QAudioSource, QMediaDevices)
-from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
+from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QWidget
 
 
 SAMPLE_COUNT = 2000
 RESOLUTION = 100
 SAMPLE_RATE = 44100
 SAMPLE_COUNT = int(SAMPLE_RATE*0.1)
+
+
+class DAQValueChanged(QObject):
+    Signal(int,)
+
+    def __init__(self, parent=None):
+        super(DAQValueChanged, self).__init__(parent)
+        self._t = 0
+
+    @property
+    def t(self):
+        return self.t
+
+    @t.setter
+    def t(self, value):
+        self._t = value
+        self.valueChanged.emit(value)
+    # valueChanged = myDAQs.
 
 
 class WaveChart(QChart):
