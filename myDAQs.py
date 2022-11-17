@@ -229,8 +229,7 @@ class NI9234(NIDAQ):
         print('Ready to stream.\n'
               'Press\n'
               '  "s" to start'
-              '  "p" to stop'
-              '  "q" to quit task')
+              '  "p" to stop')
 
         self.task.register_every_n_samples_acquired_into_buffer_event(
             sample_interval=self.frame_size,
@@ -274,9 +273,7 @@ class NI9234(NIDAQ):
     async def key_switch_event(self):
         while True:
             await asyncio.sleep(0.1)
-            if keyboard.is_pressed('s'):
-                if self.stream_trig:
-                    continue
+            if keyboard.is_pressed('s') and not self.stream_trig:
                 self.stream_trig_on()
                 self.task.start()
                 print('start streaming')
@@ -299,7 +296,7 @@ def callback_NIDAQ(task_handle, every_n_samples_event_type,
     current_time = datetime.now().isoformat(sep=' ', timespec='milliseconds')
     print(
         f'Current time: {current_time} Recording... every {number_of_samples} Samples callback invoked. stream trig: {niDAQ.stream_trig}\n'
-        'Press "p" to stop streaming.\t Press "q" to quit program.')
+        'Press "p" to stop streaming, "q" to quit program.')
 
     if not niDAQ.stream_trig:
         niDAQ.stop_task()

@@ -23,17 +23,16 @@ myDAQs.NI9234.callback_data_ptr.value[1] : chunk in myDAQs module
 WRTIE_CSV_TRIG = True
 CALLBACK_COUNT = 0
 WAVE_PLOT_CHUNK = None
-FRAME_INTERVAL = 250
+FRAME_INTERVAL = 100
+niDAQ = myDAQs.NI9234(device_name='NI_9234', task_name='myTask')
 
 
 class NiWaveChunkChanger(QObject):
-
     valueChanged = Signal(int)
 
-    def __init__(self, niDAQ: myDAQs.NI9234, parent=None):
+    def __init__(self, parent=None):
         super(NiWaveChunkChanger, self).__init__(parent)
         self._count = 0
-        self.wave_plot_chunk = niDAQ.callback_data_ptr.value[1]
 
     @property
     def count(self):
@@ -41,11 +40,11 @@ class NiWaveChunkChanger(QObject):
 
     @count.setter
     def count(self, count):
-        self._value = count
+        global WAVE_PLOT_CHUNK
+        self._count = count
         self.valueChanged.emit(count)
-        self.wave_plot_chunk = niDAQ.callback_data_ptr.value[1]
-        print(self.wave_plot_chunk.shape)
-        print('value emit!')
+        WAVE_PLOT_CHUNK = niDAQ.callback_data_ptr.value[1]
+        print(f'chunk for plotting wave is recieve! , chunk shape: {WAVE_PLOT_CHUNK.shape}')
 
 
 class WaveChart(QChart):
@@ -62,35 +61,33 @@ class WaveChart(QChart):
         self.axis_x = QValueAxis()
         self.axis_y = QValueAxis()
 
-        #self.sample_count = len(chunk_changer.wave_plot_chunk)
         self.sample_count = 1024
         self.axis_x.setRange(0, self.sample_count)
-        self.axis_x.setLabelFormat("%g")
+        self.axis_y.setRange(-0.01, 0.01)
+        # self.axis_x.setLabelFormat("%g")
         self.axis_x.setTitleText("Samples")
-        self.axis_y.setRange(-1, 1)
-        self.axis_y.setTitleText("Audio level")
+        self.axis_y.setTitleText("Acceleration (g)")
 
         self.addAxis(self.axis_x, Qt.AlignBottom)
         self.addAxis(self.axis_y, Qt.AlignLeft)
         self.line_series.attachAxis(self.axis_x)
         self.line_series.attachAxis(self.axis_y)
         self.legend().hide()
-
         self.buffer = [QPointF(x, 0) for x in range(self.sample_count)]
         self.pre_buffer = [QPointF(x, 0) for x in range(self.sample_count)]
         self.chart_view = QChartView(self)
         self.line_series.append(self.buffer)
 
-        self.timer.start()
+        self.timer.start()  # 未來將timer開啟的功能放到button click上
 
     @Slot()
     def interval_update_line(self):
-
+        #self.buffer != self.pre_buffer
         if niDAQ.stream_trig:
             self.buffer = [QPointF(x, y) for x, y in zip(
                 range(self.sample_count), WAVE_PLOT_CHUNK[0])]
             # self.buffer != self.pre_buffer:
-            self.pre_buffer = self.buffer
+            # self.pre_buffer = self.buffer
             print('interval_update_line')
             self.line_series.replace(self.buffer)
 
@@ -105,16 +102,20 @@ class ChartHorizonLayout(QWidget):
 
         print('Press "s" to start streaming')
 
+    # TODO: 未來將這些功能放到button上
     def keyPressEvent(self, event: QKeyEvent) -> None:
         print(f'key num: {event.key()} / key text: {event.text()}')
-        if event.text() == 's':
-            event_loop = asyncio.get_event_loop()
-            tasks = [
-                asyncio.ensure_future(niDAQ.async_streaming()),
-                asyncio.ensure_future(niDAQ.key_stop_event())
-            ]
-            event_loop.run_until_complete(asyncio.wait(tasks))
-            # TODO: 用event 更新plot
+        if event.text() == 's' and not niDAQ.stream_trig:
+            niDAQ.stream_trig_on()
+            niDAQ.task.start()
+            print('start streaming')
+        elif event.text() == 'p':
+            niDAQ.stream_trig_off()
+            print('stop streamming')
+        # elif event.text('q'):
+        #     niDAQ.stream_trig_off()
+        #     niDAQ.close_task()
+        #     print('close task')
 
 
 def callback_NIDAQ(task_handle, every_n_samples_event_type,
@@ -123,17 +124,16 @@ def callback_NIDAQ(task_handle, every_n_samples_event_type,
 
     CALLBACK_COUNT += 1
     stream_reader = niDAQ.callback_data_ptr.value[0]
-    chunk = niDAQ.callback_data_ptr.value[1]
-    stream_reader.read_many_sample(chunk)
-    ni_wave_chunk_changer.value = CALLBACK_COUNT
+    stream_reader.read_many_sample(niDAQ.callback_data_ptr.value[1])    # read daq buffer data
+    ni_wave_chunk_changer.count = CALLBACK_COUNT
 
     if WRTIE_CSV_TRIG:
-        csv_stream_writer.write(chunk)
+        csv_stream_writer.write(niDAQ.callback_data_ptr.value[1])
     current_time = datetime.now().isoformat(sep=' ', timespec='milliseconds')
-    print(f'Current time: {current_time}')
     print(
-        f'Current time: {current_time} Recording... every {number_of_samples} Samples callback invoked. stream trig: {niDAQ.stream_trig}\n'
-        'Press "p" to stop streaming.\t Press "q" to quit program.')
+        f'Current time: {current_time}\tCallback count: {CALLBACK_COUNT}\tstream trig: {niDAQ.stream_trig}\n'
+        f'Recording...\t every {number_of_samples} Samples callback invoked. \n'
+        'Press "s" to start streaming, "p" to stop streamming.')
 
     if not niDAQ.stream_trig:
         niDAQ.stop_task()
@@ -146,11 +146,10 @@ file_name = 'foo.csv'
 csv_stream_writer = utils.CSVStreamWriter(directory, file_name)
 
 
-niDAQ = myDAQs.NI9234(device_name='NI_9234', task_name='myTask')
 niDAQ.add_accel_channel(0)
-niDAQ.add_accel_channel(1)
-niDAQ.add_microphone_channel(2)
-niDAQ.add_microphone_channel(3)
+# niDAQ.add_accel_channel(1)
+# niDAQ.add_microphone_channel(2)
+# niDAQ.add_microphone_channel(3)
 niDAQ.set_frame_duration(FRAME_INTERVAL)
 niDAQ.set_sample_rate(12800)
 niDAQ.show_daq_params()
@@ -158,17 +157,13 @@ niDAQ.ready_read(callback_method=callback_NIDAQ)
 
 
 app = QApplication(sys.argv)
-ni_wave_chunk_changer = NiWaveChunkChanger(niDAQ)
+ni_wave_chunk_changer = NiWaveChunkChanger()
 chart_wave = WaveChart()
 window = ChartHorizonLayout(chart_view=chart_wave.chart_view)
-window.resize(400, 300)
+window.resize(480, 480)
 available_geometry = window.screen().availableGeometry()
-size = available_geometry.height() * 3 / 4
-window.resize(size, size*0.75)
+#size = available_geometry.height() * 3 / 4
+#window.resize(size, size*0.75)
 window.show()
-# niDAQ.start_streaming(callback_method=callback_NIDAQ)
 
-# niDAQ.close_task()
-
-app.exec()
 sys.exit(app.exec())
