@@ -1,7 +1,11 @@
 import queue
 from typing import Union
 import ctypes
+import asyncio
+import threading
+from datetime import datetime
 
+import keyboard
 import nidaqmx
 from nidaqmx import stream_readers as NiStreamReaders
 from nidaqmx.constants import (AcquisitionType,
@@ -9,7 +13,8 @@ from nidaqmx.constants import (AcquisitionType,
                                AccelUnits,
                                AccelSensitivityUnits,
                                SoundPressureUnits,
-                               ExcitationSource)
+                               ExcitationSource,
+                               DigitalWidthUnits)
 import sounddevice as sd
 import numpy as np
 from PySide6.QtCore import Signal, QObject
@@ -58,23 +63,18 @@ class NiCallbackDataList(list):
                 f'Too many elements. {self.__class__.__name__} max length is {self.max_len} ')
 
 
-niDAQ = None  # default variable for DAQ object instance
-callback_data = NiCallbackDataList()
-callback_data_ptr = ctypes.py_object(callback_data)
-
-
 class GeneralDAQParams:
     device: str = None
     sample_rate: int = 12800
     record_duration: float = 1.0
     frame_duration: float = 1000.0  # millisecond
     exist_channel_quantity: int = 0
-    downsample: float = 1   # Down sampling ratio, greater than 1
     buffer_size: int = sample_rate * 5
 
 
 class NIDAQ(GeneralDAQParams):
     system = nidaqmx.system.System.local()
+    stream_trig = False
     task = None
 
     def __init__(self):
@@ -134,6 +134,9 @@ class NIDAQ(GeneralDAQParams):
 
 class NI9234(NIDAQ):
     channel_num_list = (0, 1, 2, 3, '0', '1', '2', '3')
+    chunk: np.float64
+    callback_data_ptr = ctypes.py_object(NiCallbackDataList())
+    stream_reader: NiStreamReaders.AnalogMultiChannelReader
 
     def __init__(self, device_name, task_name):
         super(NI9234, self).__init__()
@@ -214,81 +217,135 @@ class NI9234(NIDAQ):
         self.buffer_size = self.frame_size * self.exist_channel_quantity * 10
         self.task.in_stream.input_buf_size = self.buffer_size
 
-    def start_streaming(self, callback_method=None):
-        if callback_method != None:
-            self.task.register_every_n_samples_acquired_into_buffer_event(
-                sample_interval=self.frame_size,
-                callback_method=callback_method)
-            callback_data.clear()
-            chunk = np.zeros((self.exist_channel_quantity, self.frame_size))
-            stream_reader = NiStreamReaders.AnalogMultiChannelReader(self.task.in_stream)
-            callback_data.append(stream_reader)
-            callback_data.append(chunk)
+    def stream_trig_on(self):
+        self.stream_trig = True
 
+    def stream_trig_off(self):
+        self.stream_trig = False
+
+    def ready_read(self, callback_method):
+        self.callback_data_ptr.value.clear()
+
+        print('Ready to stream.\n'
+              'Press\n'
+              '  "s" to start'
+              '  "p" to stop'
+              '  "q" to quit task')
+
+        self.task.register_every_n_samples_acquired_into_buffer_event(
+            sample_interval=self.frame_size,
+            callback_method=callback_method)
+
+        self.chunk = np.zeros((self.exist_channel_quantity, self.frame_size))
+        self.stream_reader = NiStreamReaders.AnalogMultiChannelReader(self.task.in_stream)
+        self.callback_data_ptr.value.append(self.stream_reader)
+        self.callback_data_ptr.value.append(self.chunk)
+
+    def start_task(self):
         self.task.start()
-        input('Running task.\n'
-              'Press Enter to stop and see number of accumulated samples.\n')
+
+    def start_streaming_period_time(self, time: float):
+        """
+        time: second
+        """
+        number_of_samples = time * self.sample_rate
+        return self.task.in_stream.read(number_of_samples_per_channel=number_of_samples)
+
+    async def async_streaming(self):
+        self.task.start()
+
+    def stop_task(self):
         self.task.stop()
-        print('Task is done!!')
+        print('Task is stopped!!')
 
     def close_task(self):
+        self.stream_trig_off()
         self.task.close()
-        print('Task is closed.')
+        print('Task is done!!')
+
+    async def key_stop_event(self):
+        while True:
+            await asyncio.sleep(0.1)
+            if keyboard.is_pressed('q'):
+                self.stream_trig_off()
+                print('stop streamming')
+                break
+
+    async def key_switch_event(self):
+        while True:
+            await asyncio.sleep(0.1)
+            if keyboard.is_pressed('s'):
+                if self.stream_trig:
+                    continue
+                self.stream_trig_on()
+                self.task.start()
+                print('start streaming')
+            elif keyboard.is_pressed('p'):
+                self.stream_trig_off()
+                print('stop streamming')
+            elif keyboard.is_pressed('q'):
+                self.stream_trig_off()
+                self.close_task()
+                print('close task')
+                break
 
 
-class AudioRecorder:
-    def __init__(self, fs, window, channels):
-        self.name = "audio recorder"
-        self.fs = fs
-        self.channels = channels  # specific channel list
-        self.window = window    # interval of each frame (ms)
-        self.frame_size = int(self.fs * self.window * 0.001)
-        self.trigger = False
-        self.downsample = 1  # down sampling ratio (greater than 1)
-        # self.input_device = sd.default.device
-        self.input_device = 2
-        # mapping channel index
-        self.mapping = [c - 1 for c in (self.channels)]
-        self.max_qsize = 20
-        self.queue_plot_data = queue.Queue(maxsize=self.max_qsize)
-        self.queue_raw_data = queue.Queue(maxsize=self.max_qsize)
-        self.stream = sd.InputStream(
-            device=self.input_device,
-            channels=max(self.channels),
-            samplerate=self.fs,
-            callback=self.audio_callback,
-            blocksize=self.frame_size,
-            latency="low",
-        )
-        self.pa_ref = 0.00002  # pa ref
+def callback_NIDAQ(task_handle, every_n_samples_event_type,
+                   number_of_samples, callback_data):
+    stream_reader = niDAQ.callback_data_ptr.value[0]
+    chunk = niDAQ.callback_data_ptr.value[1]
+    stream_reader.read_many_sample(chunk)
 
-        self.plot_len = int(self.frame_size / self.downsample)
+    current_time = datetime.now().isoformat(sep=' ', timespec='milliseconds')
+    print(
+        f'Current time: {current_time} Recording... every {number_of_samples} Samples callback invoked. stream trig: {niDAQ.stream_trig}\n'
+        'Press "p" to stop streaming.\t Press "q" to quit program.')
 
-    def audio_callback(self, indata, frames, time, status):
+    if not niDAQ.stream_trig:
+        niDAQ.stop_task()
+    return 0
 
-        # print("doing audio callback, chunk length:", len(indata))
-        # print("print part of input data:", indata[0], indata[1])
-        self.queue_plot_data.put(np.squeeze(
-            indata[:: self.downsample, self.mapping]))
-        self.queue_raw_data.put(np.squeeze(indata[:, self.mapping]))
-        print("recording")
 
-    def start_streaming(self):
-        print("doing start_streaming Function")
-        self.stream.start()
-        print("stream active:", self.stream.active)
+class BaseThread(threading.Thread):
+    def __init__(self, callback=None, callback_args=None, *args, **kwargs):
+        target = kwargs.pop('target')
+        super(BaseThread, self).__init__(target=self.target_with_callback, *args, **kwargs)
+        self.callback = callback
+        self.method = target
+        self.callback_args = callback_args
 
-    def stop_streaming(self):
-        print("doing stop_streaming Function")
-        self.stream.stop()
-        print("stream active:", self.stream.active)
+    def target_with_callback(self):
+        self.method(self.callback)
 
 
 if __name__ == '__main__':
     niDAQ = NI9234(device_name='NI_9234', task_name='myTask')
     niDAQ.add_accel_channel(0)
-    niDAQ.add_microphone_channel(1)
-    niDAQ.set_frame_duration(100)
-    niDAQ.set_sample_rate(12800)
-    niDAQ.start_streaming()
-    niDAQ.close_task()
+    niDAQ.add_accel_channel(1)
+    # niDAQ.add_microphone_channel(2)
+    # niDAQ.add_microphone_channel(3)
+    # tasks = [niDAQ.key_stop_event()]
+    # asyncio.run(asyncio.wait(tasks))
+    niDAQ.set_frame_duration(50)
+    niDAQ.set_sample_rate(25600)
+    niDAQ.ready_read(callback_method=callback_NIDAQ)
+
+    # method 1 thread
+    # thread = BaseThread(name='streaming', target=niDAQ.start_task(), callback=callback_NIDAQ)
+    # thread.start()
+
+    # method 2 async function with event loop
+    # loop = asyncio.get_event_loop()
+    # tasks = [asyncio.ensure_future(niDAQ.key_switch_event())]
+    # loop.run_until_complete(asyncio.wait(tasks))
+
+    # method 3 async run (similiar with method 2)
+    tasks = [niDAQ.key_switch_event()]
+    asyncio.run(asyncio.wait(tasks))
+
+    # method 4 read with period time
+    # niDAQ.start_streaming(callback_method=callback_NIDAQ)
+    # data = niDAQ.start_streaming_period_time(10)    # only read ch0??
+    # print(data.shape)
+
+    # niDAQ.close_task()
