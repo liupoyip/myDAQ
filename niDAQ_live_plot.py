@@ -106,14 +106,14 @@ class ChartHorizonLayout(QWidget):
     def keyPressEvent(self, event: QKeyEvent) -> None:
         print(f'key num: {event.key()} / key text: {event.text()}')
         if event.text() == 's' and not niDAQ.stream_trig:
-            niDAQ.stream_trig_on()
+            niDAQ.set_stream_on()
             niDAQ.task.start()
             print('start streaming')
         elif event.text() == 'p':
-            niDAQ.stream_trig_off()
+            niDAQ.set_stream_off()
             print('stop streamming')
         # elif event.text('q'):
-        #     niDAQ.stream_trig_off()
+        #     niDAQ.set_stream_off()
         #     niDAQ.close_task()
         #     print('close task')
 

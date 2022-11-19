@@ -217,10 +217,10 @@ class NI9234(NIDAQ):
         self.buffer_size = self.frame_size * self.exist_channel_quantity * 10
         self.task.in_stream.input_buf_size = self.buffer_size
 
-    def stream_trig_on(self):
+    def set_stream_on(self):
         self.stream_trig = True
 
-    def stream_trig_off(self):
+    def set_stream_off(self):
         self.stream_trig = False
 
     def ready_read(self, callback_method):
@@ -301,18 +301,6 @@ def callback_NIDAQ(task_handle, every_n_samples_event_type,
     if not niDAQ.stream_trig:
         niDAQ.stop_task()
     return 0
-
-
-class BaseThread(threading.Thread):
-    def __init__(self, callback=None, callback_args=None, *args, **kwargs):
-        target = kwargs.pop('target')
-        super(BaseThread, self).__init__(target=self.target_with_callback, *args, **kwargs)
-        self.callback = callback
-        self.method = target
-        self.callback_args = callback_args
-
-    def target_with_callback(self):
-        self.method(self.callback)
 
 
 if __name__ == '__main__':
