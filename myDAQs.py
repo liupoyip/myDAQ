@@ -2,11 +2,13 @@ from typing import Optional, Union
 import ctypes
 import asyncio
 from datetime import datetime
+import dataclasses
 
 import keyboard
 import nidaqmx
 import nidaqmx.system
 import nidaqmx.system.device
+import nidaqmx.system.system
 import nidaqmx.task
 from nidaqmx import stream_readers as NiStreamReaders
 from nidaqmx.constants import (AcquisitionType,
@@ -17,25 +19,8 @@ from nidaqmx.constants import (AcquisitionType,
                                ExcitationSource)
 # DigitalWidthUnits)
 import numpy as np
+import numpy.typing as npt
 from PySide6.QtCore import Signal, QObject
-
-
-class ValueChangedSignalEmitter(QObject):
-    valueChanged = Signal(int)
-
-    def __init__(self, parent=None):
-        super(ValueChangedSignalEmitter, self).__init__(parent)
-        self._value = 0
-
-    @property
-    def value(self):
-        return self._value
-
-    @value.setter
-    def value(self, value):
-        self._value = value
-        self.valueChanged.emit(value)
-        print('value emit!')
 
 
 class NiCallbackDataList(list):
@@ -63,33 +48,31 @@ class NiCallbackDataList(list):
                 f'Too many elements. {self.__class__.__name__} max length is {self.max_len} ')
 
 
+@dataclasses.dataclass
 class GeneralDAQParams:
     device: Optional[str]
-    sample_rate: Optional[float]
-    record_duration: Optional[float]
-    frame_duration: Optional[float]  # millisecond
-    exist_channel_quantity: Optional[int]
-    buffer_size: Optional[int]
+    sample_rate: float
+    record_duration: float
+    frame_duration: float  # millisecond
+    exist_channel_quantity: int
+    frame_size: int
+    buffer_size: int
 
 
 class NIDAQ(GeneralDAQParams):
-    system = nidaqmx.system.System.local()
-    stream_trig: Optional[bool] = False
-    task: Optional[nidaqmx.task.Task] = None
-    device: Optional[nidaqmx.system.device.Device] = None
+    system: nidaqmx.system.system.System
+    stream_trig: bool
+    task: nidaqmx.task.Task
+    device: nidaqmx.system.device.Device
+    callback_data_ptr: ctypes.py_object
+    device_name: str
+    min_sample_rate: float
+    max_sample_rate: float
+    exist_channel_quantity: int
+    stream_reader: NiStreamReaders.AnalogMultiChannelReader
 
     def __init__(self):
         super(NIDAQ, self).__init__()
-
-        self.sample_rate: Optional[float] = 12800
-        self.record_duration: Optional[float] = 5.0
-        self.frame_duration: Optional[int] = 1000  # millisecond
-        self.exist_channel_quantity: Optional[int] = 0
-        self.frame_size: Optional[int] = int(self.sample_rate * self.frame_duration*0.001)
-        self.buffer_size: Optional[int]
-        self.device_name: Optional[str] = None
-        self.min_sample_rate: Optional[float] = None
-        self.max_sample_rate: Optional[float] = None
 
     def show_local_deivce(self):
         for device in self.system.devices:
@@ -144,16 +127,19 @@ class NIDAQ(GeneralDAQParams):
 
 
 class NI9234(NIDAQ):
-    channel_num_list = (0, 1, 2, 3, '0', '1', '2', '3')
-    chunk: np.float64
-    callback_data_ptr = ctypes.py_object(NiCallbackDataList())
-    stream_reader: NiStreamReaders.AnalogMultiChannelReader
+    channel_num_list: tuple = (0, 1, 2, 3, '0', '1', '2', '3')
+    chunk: npt.NDArray[np.float32]
 
     def __init__(self, device_name, task_name):
         super(NI9234, self).__init__()
         self.device_name = device_name
         self.device = nidaqmx.system.device.Device(device_name)
         self.device.reset_device()
+        self.system = nidaqmx.system.System.local()
+        self.sample_rate = 12800
+        self.record_duration = 5.0
+        self.frame_duration = 1000  # millisecond
+        self.exist_channel_quantity = 0
         # max/min sampling rate of multi-channel and single-channel is same in NI-9234
         self.max_sample_rate = self.device.ai_max_single_chan_rate
         self.min_sample_rate = self.device.ai_min_rate
