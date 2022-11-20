@@ -48,7 +48,7 @@ class NiCallbackDataList(list):
                 f'Too many elements. {self.__class__.__name__} max length is {self.max_len} ')
 
 
-@dataclasses.dataclass
+# @dataclasses.dataclass
 class GeneralDAQParams:
     device: Optional[str]
     sample_rate: float
@@ -64,6 +64,7 @@ class NIDAQ(GeneralDAQParams):
     stream_trig: bool
     task: nidaqmx.task.Task
     device: nidaqmx.system.device.Device
+    callback_data: NiCallbackDataList
     callback_data_ptr: ctypes.py_object
     device_name: str
     min_sample_rate: float
@@ -141,11 +142,14 @@ class NI9234(NIDAQ):
         self.frame_duration = 1000  # millisecond
         self.exist_channel_quantity = 0
         # max/min sampling rate of multi-channel and single-channel is same in NI-9234
-        self.max_sample_rate = self.device.ai_max_single_chan_rate
         self.min_sample_rate = self.device.ai_min_rate
+        self.max_sample_rate = self.device.ai_max_single_chan_rate
         self.frame_size = int(self.sample_rate * self.frame_duration * 0.001)
         self.buffer_size = self.frame_size * 10
         self.create_task(task_name)
+        self.callback_data = NiCallbackDataList()
+        self.callback_data_ptr = ctypes.py_object(self.callback_data)
+        self.stream_trig = False
 
     def clear_task(self):
         if self.task != None:
