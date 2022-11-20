@@ -1,4 +1,3 @@
-autopep8
 pyqt6
 pyside6
 pyqt6-tools

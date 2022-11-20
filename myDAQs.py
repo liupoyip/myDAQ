@@ -1,21 +1,21 @@
-import queue
-from typing import Union
+from typing import Optional, Union
 import ctypes
 import asyncio
-import threading
 from datetime import datetime
 
 import keyboard
 import nidaqmx
+import nidaqmx.system
+import nidaqmx.system.device
+import nidaqmx.task
 from nidaqmx import stream_readers as NiStreamReaders
 from nidaqmx.constants import (AcquisitionType,
                                TerminalConfiguration,
                                AccelUnits,
                                AccelSensitivityUnits,
                                SoundPressureUnits,
-                               ExcitationSource,
-                               DigitalWidthUnits)
-import sounddevice as sd
+                               ExcitationSource)
+# DigitalWidthUnits)
 import numpy as np
 from PySide6.QtCore import Signal, QObject
 
@@ -64,21 +64,32 @@ class NiCallbackDataList(list):
 
 
 class GeneralDAQParams:
-    device: str = None
-    sample_rate: int = 12800
-    record_duration: float = 1.0
-    frame_duration: float = 1000.0  # millisecond
-    exist_channel_quantity: int = 0
-    buffer_size: int = sample_rate * 5
+    device: Optional[str]
+    sample_rate: Optional[float]
+    record_duration: Optional[float]
+    frame_duration: Optional[float]  # millisecond
+    exist_channel_quantity: Optional[int]
+    buffer_size: Optional[int]
 
 
 class NIDAQ(GeneralDAQParams):
     system = nidaqmx.system.System.local()
-    stream_trig = False
-    task = None
+    stream_trig: Optional[bool] = False
+    task: Optional[nidaqmx.task.Task] = None
+    device: Optional[nidaqmx.system.device.Device] = None
 
     def __init__(self):
         super(NIDAQ, self).__init__()
+
+        self.sample_rate: Optional[float] = 12800
+        self.record_duration: Optional[float] = 5.0
+        self.frame_duration: Optional[int] = 1000  # millisecond
+        self.exist_channel_quantity: Optional[int] = 0
+        self.frame_size: Optional[int] = int(self.sample_rate * self.frame_duration*0.001)
+        self.buffer_size: Optional[int] = self.frame_size * 5
+        self.device_name: Optional[str] = None
+        self.min_sample_rate: Optional[float] = None
+        self.max_sample_rate: Optional[float] = None
 
     def show_local_deivce(self):
         for device in self.system.devices:
@@ -125,7 +136,7 @@ class NIDAQ(GeneralDAQParams):
         print(f'DAQ chassis name: {self.device.compact_daq_chassis_device}')
 
     def create_task(self, task_name: str):
-        self.task = nidaqmx.Task(new_task_name=task_name)
+        self.task = nidaqmx.task.Task(new_task_name=task_name)
 
     def clear_task(self):
         if self.task != None:
@@ -163,7 +174,7 @@ class NI9234(NIDAQ):
                 raise BaseException(
                     f'Illegal channel number. Legal channel : {self.channel_num_list}')
             if len(self.task.channel_names) > 4:
-                raise BaseException(f'All channels have added to task.')
+                raise BaseException('All channels have added to task.')
 
             add_ai_channel_func(self, channel)
 
@@ -243,11 +254,11 @@ class NI9234(NIDAQ):
     def start_task(self):
         self.task.start()
 
-    def start_streaming_period_time(self, time: float):
+    def start_streaming_period_time(self, time: Union[float, int]):
         """
         time: second
         """
-        number_of_samples = time * self.sample_rate
+        number_of_samples: int = int(time * self.sample_rate)
         return self.task.in_stream.read(number_of_samples_per_channel=number_of_samples)
 
     async def async_streaming(self):
@@ -258,7 +269,7 @@ class NI9234(NIDAQ):
         print('Task is stopped!!')
 
     def close_task(self):
-        self.stream_trig_off()
+        self.set_stream_off()
         self.task.close()
         print('Task is done!!')
 
@@ -266,7 +277,7 @@ class NI9234(NIDAQ):
         while True:
             await asyncio.sleep(0.1)
             if keyboard.is_pressed('q'):
-                self.stream_trig_off()
+                self.set_stream_off()
                 print('stop streamming')
                 break
 
@@ -274,14 +285,14 @@ class NI9234(NIDAQ):
         while True:
             await asyncio.sleep(0.1)
             if keyboard.is_pressed('s') and not self.stream_trig:
-                self.stream_trig_on()
+                self.set_stream_on()
                 self.task.start()
                 print('start streaming')
             elif keyboard.is_pressed('p'):
-                self.stream_trig_off()
+                self.set_stream_off()
                 print('stop streamming')
             elif keyboard.is_pressed('q'):
-                self.stream_trig_off()
+                self.set_stream_off()
                 self.close_task()
                 print('close task')
                 break
