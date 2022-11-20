@@ -17,10 +17,8 @@ from nidaqmx.constants import (AcquisitionType,
                                AccelSensitivityUnits,
                                SoundPressureUnits,
                                ExcitationSource)
-# DigitalWidthUnits)
 import numpy as np
 import numpy.typing as npt
-from PySide6.QtCore import Signal, QObject
 
 
 class NiCallbackDataList(list):
@@ -34,11 +32,11 @@ class NiCallbackDataList(list):
         list[1]: numpy.array
             chunk for acquiring data
 
-    Limitation: max length is 3
+    Limitation: max length is 2
     """
 
     def __init__(self):
-        self.max_len = 3
+        self.max_len = 2
 
     def append(self, item):
         if len(self) < self.max_len:
@@ -48,9 +46,8 @@ class NiCallbackDataList(list):
                 f'Too many elements. {self.__class__.__name__} max length is {self.max_len} ')
 
 
-# @dataclasses.dataclass
+@dataclasses.dataclass
 class GeneralDAQParams:
-    device: Optional[str]
     sample_rate: float
     record_duration: float
     frame_duration: float  # millisecond

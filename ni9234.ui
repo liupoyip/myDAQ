@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>480</height>
+    <width>1280</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
   <widget class="QGroupBox" name="ChannelOption_GroupBox">
    <property name="geometry">
     <rect>
-     <x>380</x>
-     <y>10</y>
+     <x>10</x>
+     <y>220</y>
      <width>210</width>
      <height>150</height>
     </rect>
@@ -249,8 +249,8 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
-     <width>360</width>
+     <y>60</y>
+     <width>340</width>
      <height>150</height>
     </rect>
    </property>
@@ -265,7 +265,7 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>340</width>
+      <width>320</width>
       <height>30</height>
      </rect>
     </property>
@@ -280,7 +280,7 @@
       <rect>
        <x>140</x>
        <y>5</y>
-       <width>120</width>
+       <width>100</width>
        <height>20</height>
       </rect>
      </property>
@@ -303,7 +303,7 @@
     <widget class="QSpinBox" name="SampleRate_SpinBox">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>250</x>
        <y>5</y>
        <width>60</width>
        <height>20</height>
@@ -350,7 +350,7 @@
      <rect>
       <x>10</x>
       <y>110</y>
-      <width>340</width>
+      <width>320</width>
       <height>30</height>
      </rect>
     </property>
@@ -365,7 +365,7 @@
       <rect>
        <x>140</x>
        <y>5</y>
-       <width>120</width>
+       <width>100</width>
        <height>20</height>
       </rect>
      </property>
@@ -385,7 +385,7 @@
     <widget class="QSpinBox" name="DownSample_SpinBox">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>250</x>
        <y>5</y>
        <width>60</width>
        <height>20</height>
@@ -432,7 +432,7 @@
      <rect>
       <x>10</x>
       <y>50</y>
-      <width>340</width>
+      <width>320</width>
       <height>30</height>
      </rect>
     </property>
@@ -447,7 +447,7 @@
       <rect>
        <x>140</x>
        <y>5</y>
-       <width>120</width>
+       <width>100</width>
        <height>20</height>
       </rect>
      </property>
@@ -470,7 +470,7 @@
     <widget class="QSpinBox" name="FrameDuration_SpinBox">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>250</x>
        <y>5</y>
        <width>60</width>
        <height>20</height>
@@ -520,7 +520,7 @@
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>340</width>
+      <width>320</width>
       <height>30</height>
      </rect>
     </property>
@@ -535,7 +535,7 @@
       <rect>
        <x>140</x>
        <y>5</y>
-       <width>120</width>
+       <width>100</width>
        <height>20</height>
       </rect>
      </property>
@@ -555,7 +555,7 @@
     <widget class="QSpinBox" name="UpdateInterval_SpinBox">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>250</x>
        <y>5</y>
        <width>60</width>
        <height>20</height>
@@ -595,31 +595,181 @@
     </widget>
    </widget>
   </widget>
-  <widget class="QPushButton" name="StartRecord_PushButton">
+  <widget class="QFrame" name="TaskName_Frame">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>180</y>
-     <width>75</width>
-     <height>24</height>
+     <y>10</y>
+     <width>341</width>
+     <height>40</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Start</string>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
    </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="TaskName_Label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>60</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Task Name</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="TaskName_LineEdit">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>10</y>
+      <width>251</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
-  <widget class="QPushButton" name="StopRecord_PushButton">
+  <widget class="QGroupBox" name="ControlButtons_GroupBox">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>180</y>
-     <width>75</width>
-     <height>24</height>
+     <x>370</x>
+     <y>0</y>
+     <width>261</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Control</string>
+   </property>
+   <widget class="QPushButton" name="StartRecord_PushButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Start</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="StopRecord_PushButton">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>20</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Stop</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="PauseRecord_PushButton">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>20</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pause</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="Parameters_Label">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>380</y>
+     <width>191</width>
+     <height>181</height>
     </rect>
    </property>
    <property name="text">
-    <string>Stop</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Parameters!!&lt;/p&gt;&lt;p&gt;Will show at here!!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
+   <property name="wordWrap">
+    <bool>false</bool>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+   </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>760</x>
+     <y>70</y>
+     <width>371</width>
+     <height>631</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="spectrum" stretch="0,0,0,0">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="sizeConstraint">
+     <enum>QLayout::SetDefaultConstraint</enum>
+    </property>
+    <item>
+     <widget class="QGraphicsView" name="graphicsView_5"/>
+    </item>
+    <item>
+     <widget class="QGraphicsView" name="graphicsView_6"/>
+    </item>
+    <item>
+     <widget class="QGraphicsView" name="graphicsView_7"/>
+    </item>
+    <item>
+     <widget class="QGraphicsView" name="graphicsView_8"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>70</y>
+     <width>381</width>
+     <height>631</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="wave" stretch="0,0,0,0">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="sizeConstraint">
+     <enum>QLayout::SetDefaultConstraint</enum>
+    </property>
+    <item>
+     <widget class="QGraphicsView" name="graphicsView"/>
+    </item>
+    <item>
+     <widget class="QGraphicsView" name="graphicsView_2"/>
+    </item>
+    <item>
+     <widget class="QGraphicsView" name="graphicsView_3"/>
+    </item>
+    <item>
+     <widget class="QGraphicsView" name="graphicsView_4"/>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>
