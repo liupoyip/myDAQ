@@ -86,7 +86,7 @@ class NIDAQ(GeneralDAQParams):
         self.frame_duration: Optional[int] = 1000  # millisecond
         self.exist_channel_quantity: Optional[int] = 0
         self.frame_size: Optional[int] = int(self.sample_rate * self.frame_duration*0.001)
-        self.buffer_size: Optional[int] = self.frame_size * 5
+        self.buffer_size: Optional[int]
         self.device_name: Optional[str] = None
         self.min_sample_rate: Optional[float] = None
         self.max_sample_rate: Optional[float] = None
@@ -238,9 +238,7 @@ class NI9234(NIDAQ):
         self.callback_data_ptr.value.clear()
 
         print('Ready to stream.\n'
-              'Press\n'
-              '  "s" to start'
-              '  "p" to stop')
+              'Press "s" to start, "p" to stop.')
 
         self.task.register_every_n_samples_acquired_into_buffer_event(
             sample_interval=self.frame_size,
@@ -258,7 +256,7 @@ class NI9234(NIDAQ):
         """
         time: second
         """
-        number_of_samples: int = int(time * self.sample_rate)
+        number_of_samples = int(time * self.sample_rate)
         return self.task.in_stream.read(number_of_samples_per_channel=number_of_samples)
 
     async def async_streaming(self):
