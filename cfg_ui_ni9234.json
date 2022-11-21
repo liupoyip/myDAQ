@@ -1,14 +1,15 @@
 {
     "_comment": "This config is for QWidget - ui_ni9234.py",
     "device_name": "NI_9234",
-    "task_name": "myTask",
-    "default_sample_rate": 12800,
     "max_sample_rate": 51200,
     "min_sample_rate": 3200,
-    "default_frame_duration": 1,
-    "default_plot_buffer_duration": 10,
     "sensor_type": [
         "Accelerometer",
         "Microphone"
-    ]
+    ],
+    "default_graph_downsample": 50,
+    "default_frame_duration": 100,
+    "default_buffer_duration": 10,
+    "default_task_name": "myTask",
+    "default_sample_rate": 12800
 }

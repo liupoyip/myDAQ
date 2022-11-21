@@ -22,11 +22,11 @@
      <x>10</x>
      <y>220</y>
      <width>210</width>
-     <height>150</height>
+     <height>181</height>
     </rect>
    </property>
    <property name="title">
-    <string>Channel option</string>
+    <string>Channel Option</string>
    </property>
    <widget class="QFrame" name="Ch4_Frame">
     <property name="geometry">
@@ -67,7 +67,7 @@
      </property>
      <item>
       <property name="text">
-       <string>Sensor type</string>
+       <string>Sensor</string>
       </property>
      </item>
      <item>
@@ -121,7 +121,7 @@
      </property>
      <item>
       <property name="text">
-       <string>Sensor type</string>
+       <string>Sensor</string>
       </property>
      </item>
      <item>
@@ -175,7 +175,7 @@
      </property>
      <item>
       <property name="text">
-       <string>Sensor type</string>
+       <string>Sensor</string>
       </property>
      </item>
      <item>
@@ -229,7 +229,7 @@
      </property>
      <item>
       <property name="text">
-       <string>Sensor type</string>
+       <string>Sensor</string>
       </property>
      </item>
      <item>
@@ -243,6 +243,32 @@
       </property>
      </item>
     </widget>
+   </widget>
+   <widget class="QPushButton" name="CreateTask_PushButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>145</y>
+      <width>90</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Create Task</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="CreateTask_PushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>106</x>
+      <y>145</y>
+      <width>90</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Clear Options</string>
+    </property>
    </widget>
   </widget>
   <widget class="QGroupBox" name="Prameters_GroupBox">
@@ -600,7 +626,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>341</width>
+     <width>340</width>
      <height>40</height>
     </rect>
    </property>
@@ -641,15 +667,15 @@
    <property name="geometry">
     <rect>
      <x>370</x>
-     <y>0</y>
-     <width>261</width>
+     <y>10</y>
+     <width>171</width>
      <height>51</height>
     </rect>
    </property>
    <property name="title">
     <string>Control</string>
    </property>
-   <widget class="QPushButton" name="StartRecord_PushButton">
+   <widget class="QPushButton" name="Start_PushButton">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -662,10 +688,10 @@
      <string>Start</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="StopRecord_PushButton">
+   <widget class="QPushButton" name="Stop_PushButton">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>90</x>
       <y>20</y>
       <width>75</width>
       <height>24</height>
@@ -673,19 +699,6 @@
     </property>
     <property name="text">
      <string>Stop</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="PauseRecord_PushButton">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>20</y>
-      <width>75</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Pause</string>
     </property>
    </widget>
   </widget>
@@ -696,7 +709,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>380</y>
+     <y>440</y>
      <width>191</width>
      <height>181</height>
     </rect>
@@ -717,7 +730,7 @@
      <x>760</x>
      <y>70</y>
      <width>371</width>
-     <height>631</height>
+     <height>641</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="spectrum" stretch="0,0,0,0">
@@ -741,13 +754,13 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>370</x>
      <y>70</y>
      <width>381</width>
-     <height>631</height>
+     <height>641</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="wave" stretch="0,0,0,0">
@@ -770,6 +783,32 @@
      <widget class="QGraphicsView" name="graphicsView_4"/>
     </item>
    </layout>
+  </widget>
+  <widget class="QPushButton" name="Reset_PushButton">
+   <property name="geometry">
+    <rect>
+     <x>1190</x>
+     <y>10</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Reset</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>230</y>
+     <width>76</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Write CSV</string>
+   </property>
   </widget>
  </widget>
  <resources/>
