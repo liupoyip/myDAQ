@@ -24,7 +24,7 @@ WRTIE_CSV_TRIG = True
 CALLBACK_COUNT = 0
 WAVE_PLOT_CHUNK = None
 FRAME_INTERVAL = 100
-niDAQ = myDAQs.NI9234(device_name='NI_9234', task_name='myTask')
+niDAQ = myDAQs.NI9234(device_name='NI_9234')
 
 
 class NiWaveChunkChanger(QObject):
