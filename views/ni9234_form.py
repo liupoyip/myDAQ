@@ -1,14 +1,8 @@
-import os
-import json
-
 from .ui_ni9234 import Ui_NI9234
 from PySide6.QtWidgets import QWidget, QTableWidget, QMessageBox
 from PySide6.QtCore import Slot, QTimer
 from PySide6 import QtUiTools
-
-#cfg_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cfg_ni9234.json')
-#cfg_file = open(cfg_path)
-#default_settings = json.load(cfg_file)
+#from ..model.NIdaqModel import DAQModel
 
 
 class NI9234Form(QWidget):
@@ -81,7 +75,9 @@ class NI9234Form(QWidget):
         self.ui.ClearTask_PushButton.setDisabled(True)
 
         # connet slot
+        self.ui.TaskName_LineEdit.textChanged.connect(self.on_task_name_changed)
         self.ui.FrameDuration_SpinBox.valueChanged.connect(self.on_frame_duration_changed)
+        self.ui.Reset_PushButton.clicked.connect(self.set_default_values)
         self.ui.Start_PushButton.clicked.connect(self.on_start_button_clicked)
         self.ui.Stop_PushButton.clicked.connect(self.on_stop_button_clicked)
         self.ui.CreateTask_PushButton.clicked.connect(self.on_create_task_button_clicked)
@@ -97,11 +93,17 @@ class NI9234Form(QWidget):
             self.ui.Channel1_ComboBox,
             self.ui.Channel2_ComboBox,
             self.ui.Channel3_ComboBox]
-        for combox in self.channel_combobox_list:
+        for checkbox, combox in zip(self.channel_checkbox_list, self.channel_combobox_list):
+            combox.clear()
             combox.addItems(self.model.default_settings["sensor_type"])
             combox.setDisabled(True)
-        for checkbox, combox in zip(self.channel_checkbox_list, self.channel_combobox_list):
+            checkbox.setChecked(False)
             checkbox.toggled.connect(combox.setEnabled)
+        # for checkbox, combox in zip(self.channel_checkbox_list, self.channel_combobox_list):
+
+    @Slot(str)
+    def on_task_name_changed(self):
+        self.controller.change_task_name(self.ui.TaskName_LineEdit.text())
 
     @Slot(int)
     def on_frame_duration_changed(self, value):
@@ -115,14 +117,15 @@ class NI9234Form(QWidget):
             self.ui.ClearTask_PushButton.setEnabled(True)
             self.ui.CreateTask_PushButton.setDisabled(True)
             self.ui.PreparationSetting_Frame.setDisabled(True)
-            self.model.sample_rate = self.ui.SampleRate_SpinBox.value()
-            self.model.frame_duration = self.ui.FrameDuration_SpinBox.value()
-            self.model.buffer_duration = self.ui.BufferDuration_SpinBox.value()
-            self.model.update_interval = self.ui.UpdateInterval_SpinBox.value()
-            self.model.downsample = self.ui.DownSample_SpinBox.value()
+            self.controller.change_sample_rate(self.ui.SampleRate_SpinBox.value())
+            self.controller.change_frame_duration(self.ui.FrameDuration_SpinBox.value())
+            self.controller.change_buffer_duration(self.ui.BufferDuration_SpinBox.value())
+            self.controller.change_update_interval(self.ui.UpdateInterval_SpinBox.value())
+            self.controller.change_downsample(self.ui.DownSample_SpinBox.value())
             channels, sensor_types = self.add_channels()
-            self.model.channels = channels
-            self.model.sensor_types = sensor_types
+            self.controller.change_channels(channels)
+            self.controller.change_sensor_types(sensor_types)
+            self.model.create()
 
     @Slot()
     def on_clear_task_button_clicked(self):
@@ -130,6 +133,7 @@ class NI9234Form(QWidget):
         self.ui.CreateTask_PushButton.setEnabled(True)
         self.ui.Start_PushButton.setDisabled(True)
         self.ui.ClearTask_PushButton.setDisabled(True)
+        self.model.clear()
 
     @Slot()
     def on_start_button_clicked(self):
@@ -137,6 +141,7 @@ class NI9234Form(QWidget):
         self.ui.Start_PushButton.setDisabled(True)
         self.ui.Reset_PushButton.setDisabled(True)
         self.ui.ClearTask_PushButton.setDisabled(True)
+        self.model.start()
 
     @Slot()
     def on_stop_button_clicked(self):
@@ -144,6 +149,7 @@ class NI9234Form(QWidget):
         self.ui.ClearTask_PushButton.setEnabled(True)
         self.ui.Reset_PushButton.setEnabled(True)
         self.ui.Stop_PushButton.setDisabled(True)
+        self.model.stop()
 
     def check_channel_options(self):
         error_channels = list()
@@ -169,5 +175,5 @@ class NI9234Form(QWidget):
         for i, (checkbox, combox) in enumerate(zip(self.channel_checkbox_list, self.channel_combobox_list)):
             if checkbox.isChecked():
                 channels.append(i)
-                sensor_types.append(combox.currentText)
+                sensor_types.append(combox.currentText())
         return channels, sensor_types

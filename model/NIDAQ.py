@@ -162,6 +162,7 @@ class NI9234(NIDAQ):
                     f'Illegal channel number. Legal channel : {self.channel_num_list}')
             if self.task.number_of_channels > 4:
                 raise BaseException('All channels have added to task.')
+            add_ai_channel_func(self, channel)
             print(f'Channel added, exist channel: {self.task.channel_names}')
         return wrap
 
@@ -216,9 +217,6 @@ class NI9234(NIDAQ):
 
     def ready_read(self, callback_method) -> None:
         self.callback_data_ptr.value.clear()
-
-        print('Ready to stream.\n'
-              'Press "s" to start, "p" to stop.')
 
         self.task.register_every_n_samples_acquired_into_buffer_event(
             sample_interval=self.frame_size,
