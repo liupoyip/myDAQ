@@ -1,0 +1,26 @@
+{
+    "_comment": "This config is for QWidget - ui_ni9234.py",
+    "device_name": "NI_9234",
+    "min_sample_rate": 3200,
+    "max_sample_rate": 51200,
+    "min_frame_duration": 100,
+    "max_frame_duration": 1000,
+    "min_graph_downsample": 1,
+    "max_graph_downsample": 10,
+    "max_update_interval": 10000,
+    "max_buffer_duration": 10000,
+    "default_graph_downsample": 3,
+    "default_frame_duration": 100,
+    "default_buffer_duration": 100,
+    "default_task_name": "myTask",
+    "default_write_file_path": "./output_data",
+    "default_sample_rate": 12800,
+    "write_file_type": [
+        "*.csv"
+    ],
+    "sensor_type": [
+        "",
+        "Accelerometer",
+        "Microphone"
+    ]
+}

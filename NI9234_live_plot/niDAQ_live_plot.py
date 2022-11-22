@@ -1,5 +1,4 @@
-
-import myDAQs
+import NIDAQ
 import utils
 
 import sys
@@ -24,7 +23,7 @@ WRTIE_CSV_TRIG = True
 CALLBACK_COUNT = 0
 WAVE_PLOT_CHUNK = None
 FRAME_INTERVAL = 100
-niDAQ = myDAQs.NI9234(device_name='NI_9234')
+niDAQ = NIDAQ.NI9234(device_name='NI_9234')
 
 
 class NiWaveChunkChanger(QObject):

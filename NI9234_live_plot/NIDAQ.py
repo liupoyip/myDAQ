@@ -56,16 +56,16 @@ class GeneralDAQParams:
 
 
 class NIDAQ(GeneralDAQParams):
-    system: nidaqmx.system.system.System
-    stream_trig: bool
+    system: Optional[nidaqmx.system.system.System] = None
+    stream_trig: Optional[bool] = None
     task: Optional[nidaqmx.task.Task] = None
-    device: nidaqmx.system.device.Device
-    callback_data: NiCallbackDataList
-    callback_data_ptr: ctypes.py_object
-    device_name: str
-    min_sample_rate: float
-    max_sample_rate: float
-    stream_reader: NiStreamReaders.AnalogMultiChannelReader
+    device: Optional[nidaqmx.system.device.Device] = None
+    callback_data: Optional[NiCallbackDataList] = None
+    callback_data_ptr: Optional[ctypes.py_object] = None
+    device_name: Optional[str] = None
+    min_sample_rate: Optional[float] = None
+    max_sample_rate: Optional[float] = None
+    stream_reader: Optional[NiStreamReaders.AnalogMultiChannelReader] = None
 
     def __init__(self) -> None:
         super(NIDAQ, self).__init__()
@@ -276,7 +276,7 @@ def callback_NIDAQ(task_handle, every_n_samples_event_type,
 
     current_time = datetime.now().isoformat(sep=' ', timespec='milliseconds')
     print(
-        f'Current time: {current_time} Recording... every {number_of_samples} Samples callback invoked. stream trig: {niDAQ.stream_trig}\n'
+        f'Current time: {current_time} / Recording... every {number_of_samples} Samples callback invoked. stream trig: {niDAQ.stream_trig}\n'
         'Press "p" to stop streaming, "q" to quit program.')
 
     if not niDAQ.stream_trig:
@@ -289,10 +289,10 @@ if __name__ == '__main__':
     niDAQ.create_task(task_name='myTask')
     niDAQ.add_accel_channel(0)
     niDAQ.add_accel_channel(1)
-    niDAQ.set_sample_rate(25600)
-    niDAQ.set_frame_duration(50)
     # niDAQ.add_microphone_channel(2)
     # niDAQ.add_microphone_channel(3)
+    niDAQ.set_sample_rate(25600)
+    niDAQ.set_frame_duration(100)
 
     niDAQ.ready_read(callback_method=callback_NIDAQ)
 
