@@ -4,7 +4,7 @@ from PySide6.QtCore import QObject
 from PySide6.QtCore import Signal
 
 from datetime import datetime
-from .NIDAQ import NI9234
+from ..lib.NIDAQ import NI9234
 from ..views.ni9234_form import NI9234Form
 from ..utils import CSVStreamWriter
 

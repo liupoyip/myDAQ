@@ -58,25 +58,25 @@ class Ui_NI9234(object):
         self.SpectrumVBoxLayout.setObjectName(u"SpectrumVBoxLayout")
         self.SpectrumVBoxLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
         self.SpectrumVBoxLayout.setContentsMargins(0, 0, 0, 0)
+        self.SpectrumChannel0_GraphicsView = QGraphicsView(self.layoutWidget)
+        self.SpectrumChannel0_GraphicsView.setObjectName(u"SpectrumChannel0_GraphicsView")
+
+        self.SpectrumVBoxLayout.addWidget(self.SpectrumChannel0_GraphicsView)
+
         self.SpectrumChannel1_GraphicsView = QGraphicsView(self.layoutWidget)
         self.SpectrumChannel1_GraphicsView.setObjectName(u"SpectrumChannel1_GraphicsView")
 
         self.SpectrumVBoxLayout.addWidget(self.SpectrumChannel1_GraphicsView)
 
-        self.SpectrumChannel2_GraphicsView = QGraphicsView(self.layoutWidget)
-        self.SpectrumChannel2_GraphicsView.setObjectName(u"SpectrumChannel2_GraphicsView")
+        self.SpectrumChannel2_GgraphicsView = QGraphicsView(self.layoutWidget)
+        self.SpectrumChannel2_GgraphicsView.setObjectName(u"SpectrumChannel2_GgraphicsView")
 
-        self.SpectrumVBoxLayout.addWidget(self.SpectrumChannel2_GraphicsView)
+        self.SpectrumVBoxLayout.addWidget(self.SpectrumChannel2_GgraphicsView)
 
         self.SpectrumChannel3_GgraphicsView = QGraphicsView(self.layoutWidget)
         self.SpectrumChannel3_GgraphicsView.setObjectName(u"SpectrumChannel3_GgraphicsView")
 
         self.SpectrumVBoxLayout.addWidget(self.SpectrumChannel3_GgraphicsView)
-
-        self.SpectrumChannel4_GgraphicsView = QGraphicsView(self.layoutWidget)
-        self.SpectrumChannel4_GgraphicsView.setObjectName(u"SpectrumChannel4_GgraphicsView")
-
-        self.SpectrumVBoxLayout.addWidget(self.SpectrumChannel4_GgraphicsView)
 
         self.layoutWidget1 = QWidget(NI9234)
         self.layoutWidget1.setObjectName(u"layoutWidget1")
@@ -86,6 +86,11 @@ class Ui_NI9234(object):
         self.WaveVBoxLayout.setObjectName(u"WaveVBoxLayout")
         self.WaveVBoxLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
         self.WaveVBoxLayout.setContentsMargins(0, 0, 0, 0)
+        self.WaveChannel0_GraphicsView = QGraphicsView(self.layoutWidget1)
+        self.WaveChannel0_GraphicsView.setObjectName(u"WaveChannel0_GraphicsView")
+
+        self.WaveVBoxLayout.addWidget(self.WaveChannel0_GraphicsView)
+
         self.WaveChannel1_GraphicsView = QGraphicsView(self.layoutWidget1)
         self.WaveChannel1_GraphicsView.setObjectName(u"WaveChannel1_GraphicsView")
 
@@ -100,11 +105,6 @@ class Ui_NI9234(object):
         self.WaveChannel3_GraphicsView.setObjectName(u"WaveChannel3_GraphicsView")
 
         self.WaveVBoxLayout.addWidget(self.WaveChannel3_GraphicsView)
-
-        self.WaveChannel4_GraphicsView = QGraphicsView(self.layoutWidget1)
-        self.WaveChannel4_GraphicsView.setObjectName(u"WaveChannel4_GraphicsView")
-
-        self.WaveVBoxLayout.addWidget(self.WaveChannel4_GraphicsView)
 
         self.WriteFile_GroupBox = QGroupBox(NI9234)
         self.WriteFile_GroupBox.setObjectName(u"WriteFile_GroupBox")
@@ -217,20 +217,20 @@ class Ui_NI9234(object):
         self.ChannelOption_GroupBox = QGroupBox(self.PreparationSetting_Frame)
         self.ChannelOption_GroupBox.setObjectName(u"ChannelOption_GroupBox")
         self.ChannelOption_GroupBox.setGeometry(QRect(10, 290, 210, 151))
-        self.Channel4_Frame = QFrame(self.ChannelOption_GroupBox)
-        self.Channel4_Frame.setObjectName(u"Channel4_Frame")
-        self.Channel4_Frame.setGeometry(QRect(10, 110, 190, 32))
-        self.Channel4_Frame.setFrameShape(QFrame.NoFrame)
-        self.Channel4_Frame.setFrameShadow(QFrame.Plain)
-        self.Channel4_CheckBox = QCheckBox(self.Channel4_Frame)
-        self.Channel4_CheckBox.setObjectName(u"Channel4_CheckBox")
-        self.Channel4_CheckBox.setGeometry(QRect(5, 5, 75, 22))
-        self.Channel4_ComboBox = QComboBox(self.Channel4_Frame)
-        self.Channel4_ComboBox.setObjectName(u"Channel4_ComboBox")
-        self.Channel4_ComboBox.setGeometry(QRect(85, 5, 100, 22))
+        self.Channel0_Frame = QFrame(self.ChannelOption_GroupBox)
+        self.Channel0_Frame.setObjectName(u"Channel0_Frame")
+        self.Channel0_Frame.setGeometry(QRect(10, 20, 190, 32))
+        self.Channel0_Frame.setFrameShape(QFrame.NoFrame)
+        self.Channel0_Frame.setFrameShadow(QFrame.Plain)
+        self.Channel0_CheckBox = QCheckBox(self.Channel0_Frame)
+        self.Channel0_CheckBox.setObjectName(u"Channel0_CheckBox")
+        self.Channel0_CheckBox.setGeometry(QRect(5, 5, 75, 22))
+        self.Channel0_ComboBox = QComboBox(self.Channel0_Frame)
+        self.Channel0_ComboBox.setObjectName(u"Channel0_ComboBox")
+        self.Channel0_ComboBox.setGeometry(QRect(85, 5, 100, 22))
         self.Channel2_Frame = QFrame(self.ChannelOption_GroupBox)
         self.Channel2_Frame.setObjectName(u"Channel2_Frame")
-        self.Channel2_Frame.setGeometry(QRect(10, 50, 190, 32))
+        self.Channel2_Frame.setGeometry(QRect(10, 80, 190, 32))
         self.Channel2_Frame.setFrameShape(QFrame.NoFrame)
         self.Channel2_Frame.setFrameShadow(QFrame.Plain)
         self.Channel2_CheckBox = QCheckBox(self.Channel2_Frame)
@@ -241,7 +241,7 @@ class Ui_NI9234(object):
         self.Channel2_ComboBox.setGeometry(QRect(85, 5, 100, 22))
         self.Channel3_Frame = QFrame(self.ChannelOption_GroupBox)
         self.Channel3_Frame.setObjectName(u"Channel3_Frame")
-        self.Channel3_Frame.setGeometry(QRect(10, 80, 190, 32))
+        self.Channel3_Frame.setGeometry(QRect(10, 110, 190, 32))
         self.Channel3_Frame.setFrameShape(QFrame.NoFrame)
         self.Channel3_Frame.setFrameShadow(QFrame.Plain)
         self.Channel3_CheckBox = QCheckBox(self.Channel3_Frame)
@@ -252,7 +252,7 @@ class Ui_NI9234(object):
         self.Channel3_ComboBox.setGeometry(QRect(85, 5, 100, 22))
         self.Channel1_Frame = QFrame(self.ChannelOption_GroupBox)
         self.Channel1_Frame.setObjectName(u"Channel1_Frame")
-        self.Channel1_Frame.setGeometry(QRect(10, 20, 190, 32))
+        self.Channel1_Frame.setGeometry(QRect(10, 50, 190, 32))
         self.Channel1_Frame.setFrameShape(QFrame.NoFrame)
         self.Channel1_Frame.setFrameShadow(QFrame.Plain)
         self.Channel1_CheckBox = QCheckBox(self.Channel1_Frame)
@@ -360,7 +360,7 @@ class Ui_NI9234(object):
         self.FrameDuration_Label.setText(QCoreApplication.translate("NI9234", u"Frame Duration (ms)", None))
         self.BufferDuration_Label.setText(QCoreApplication.translate("NI9234", u"Buffer Duration (ms)", None))
         self.ChannelOption_GroupBox.setTitle(QCoreApplication.translate("NI9234", u"Channel Option", None))
-        self.Channel4_CheckBox.setText(QCoreApplication.translate("NI9234", u"Channel 4", None))
+        self.Channel0_CheckBox.setText(QCoreApplication.translate("NI9234", u"Channel 0", None))
         self.Channel2_CheckBox.setText(QCoreApplication.translate("NI9234", u"Channel 2", None))
         self.Channel3_CheckBox.setText(QCoreApplication.translate("NI9234", u"Channel 3", None))
         self.Channel1_CheckBox.setText(QCoreApplication.translate("NI9234", u"Channel 1", None))
