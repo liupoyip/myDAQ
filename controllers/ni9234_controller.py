@@ -8,7 +8,7 @@ class NI9234Controller(QObject):
         self._model = model
 
     def change_task_name(self, value):
-        self._model.device_name = value
+        self._model.task_name = value
 
     def change_sample_rate(self, value):
         self._model.sample_rate = value
@@ -30,3 +30,9 @@ class NI9234Controller(QObject):
 
     def change_sensor_types(self, value):
         self._model.sensor_types = value
+
+    def change_write_file_trig(self, value):
+        self._model.write_file_trig = value
+
+    def change_write_file_dir(self, value):
+        self._model.write_file_dir = value

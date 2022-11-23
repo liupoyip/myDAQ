@@ -1,164 +1,192 @@
 from .ui_ni9234 import Ui_NI9234
-from PySide6.QtWidgets import QWidget, QTableWidget, QMessageBox
+from PySide6.QtWidgets import QWidget, QMessageBox
 from PySide6.QtCore import Slot, QTimer
-from PySide6 import QtUiTools
-#from ..model.NIdaqModel import DAQModel
 
 
-class NI9234Form(QWidget):
+class NI9234Form(QWidget, Ui_NI9234):
     def __init__(self, model=None, controller=None):
         super().__init__()
-        self.model = model
-        self.controller = controller
-        self.ui = Ui_NI9234()
-        self.ui.setupUi(self)
+        self._model = model
+        self._controller = controller
+        self._ui = Ui_NI9234()
+        self._ui.setupUi(self)
         self.set_default_values()
 
     def set_default_values(self):
-        self.ui.TaskName_LineEdit.setText(self.model.default_settings['default_task_name'])
+        self._ui.TaskName_LineEdit.setText(
+            self._model._default_settings['default_task_name'])
 
-        self.ui.SampleRate_SpinBox.setValue(self.model.default_settings['default_sample_rate'])
-        self.ui.SampleRate_SpinBox.setMinimum(self.model.default_settings['min_sample_rate'])
-        self.ui.SampleRate_SpinBox.setMaximum(self.model.default_settings['max_sample_rate'])
-        self.ui.SampleRate_HorizontalSlider.setValue(
-            self.model.default_settings['default_sample_rate'])
-        self.ui.SampleRate_HorizontalSlider.setMinimum(
-            self.model.default_settings['min_sample_rate'])
-        self.ui.SampleRate_HorizontalSlider.setMaximum(
-            self.model.default_settings['max_sample_rate'])
+        self._ui.SampleRate_SpinBox.setValue(
+            self._model._default_settings['default_sample_rate'])
+        self._ui.SampleRate_SpinBox.setMinimum(
+            self._model._default_settings['min_sample_rate'])
+        self._ui.SampleRate_SpinBox.setMaximum(
+            self._model._default_settings['max_sample_rate'])
+        self._ui.SampleRate_HorizontalSlider.setValue(
+            self._model._default_settings['default_sample_rate'])
+        self._ui.SampleRate_HorizontalSlider.setMinimum(
+            self._model._default_settings['min_sample_rate'])
+        self._ui.SampleRate_HorizontalSlider.setMaximum(
+            self._model._default_settings['max_sample_rate'])
 
-        self.ui.FrameDuration_SpinBox.setValue(
-            self.model.default_settings['default_frame_duration'])
-        self.ui.FrameDuration_SpinBox.setMinimum(self.model.default_settings['min_frame_duration'])
-        self.ui.FrameDuration_SpinBox.setMaximum(self.model.default_settings['max_frame_duration'])
-        self.ui.FrameDuration_HorizontalSlider.setValue(
-            self.model.default_settings['default_frame_duration'])
-        self.ui.FrameDuration_HorizontalSlider.setMinimum(
-            self.model.default_settings['min_frame_duration'])
-        self.ui.FrameDuration_HorizontalSlider.setMaximum(
-            self.model.default_settings['max_frame_duration'])
+        self._ui.FrameDuration_SpinBox.setValue(
+            self._model._default_settings['default_frame_duration'])
+        self._ui.FrameDuration_SpinBox.setMinimum(
+            self._model._default_settings['min_frame_duration'])
+        self._ui.FrameDuration_SpinBox.setMaximum(
+            self._model._default_settings['max_frame_duration'])
+        self._ui.FrameDuration_HorizontalSlider.setValue(
+            self._model._default_settings['default_frame_duration'])
+        self._ui.FrameDuration_HorizontalSlider.setMinimum(
+            self._model._default_settings['min_frame_duration'])
+        self._ui.FrameDuration_HorizontalSlider.setMaximum(
+            self._model._default_settings['max_frame_duration'])
 
-        self.ui.BufferDuration_SpinBox.setValue(self.ui.FrameDuration_SpinBox.value())
-        self.ui.BufferDuration_SpinBox.setMinimum(self.ui.FrameDuration_SpinBox.value())
-        self.ui.BufferDuration_SpinBox.setMaximum(
-            self.model.default_settings['max_buffer_duration'])
-        self.ui.BufferDuration_HorizontalSlider.setValue(self.ui.FrameDuration_SpinBox.value())
-        self.ui.BufferDuration_HorizontalSlider.setMinimum(self.ui.FrameDuration_SpinBox.value())
-        self.ui.BufferDuration_HorizontalSlider.setMaximum(
-            self.model.default_settings['max_buffer_duration'])
+        self._ui.BufferDuration_SpinBox.setValue(
+            self._ui.FrameDuration_SpinBox.value())
+        self._ui.BufferDuration_SpinBox.setMinimum(
+            self._ui.FrameDuration_SpinBox.value())
+        self._ui.BufferDuration_SpinBox.setMaximum(
+            self._model._default_settings['max_buffer_duration'])
+        self._ui.BufferDuration_HorizontalSlider.setValue(
+            self._ui.FrameDuration_SpinBox.value())
+        self._ui.BufferDuration_HorizontalSlider.setMinimum(
+            self._ui.FrameDuration_SpinBox.value())
+        self._ui.BufferDuration_HorizontalSlider.setMaximum(
+            self._model._default_settings['max_buffer_duration'])
 
-        self.ui.UpdateInterval_SpinBox.setValue(self.ui.FrameDuration_SpinBox.value())
-        self.ui.UpdateInterval_SpinBox.setMinimum(self.ui.FrameDuration_SpinBox.value())
-        self.ui.UpdateInterval_SpinBox.setMaximum(
-            self.model.default_settings['max_update_interval'])
-        self.ui.UpdateInterval_HorizontalSlider.setValue(self.ui.FrameDuration_SpinBox.value())
-        self.ui.UpdateInterval_HorizontalSlider.setMinimum(self.ui.FrameDuration_SpinBox.value())
-        self.ui.UpdateInterval_HorizontalSlider.setMaximum(
-            self.model.default_settings['max_update_interval'])
+        self._ui.UpdateInterval_SpinBox.setValue(
+            self._ui.FrameDuration_SpinBox.value())
+        self._ui.UpdateInterval_SpinBox.setMinimum(
+            self._ui.FrameDuration_SpinBox.value())
+        self._ui.UpdateInterval_SpinBox.setMaximum(
+            self._model._default_settings['max_update_interval'])
+        self._ui.UpdateInterval_HorizontalSlider.setValue(
+            self._ui.FrameDuration_SpinBox.value())
+        self._ui.UpdateInterval_HorizontalSlider.setMinimum(
+            self._ui.FrameDuration_SpinBox.value())
+        self._ui.UpdateInterval_HorizontalSlider.setMaximum(
+            self._model._default_settings['max_update_interval'])
 
-        self.ui.DownSample_SpinBox.setValue(self.model.default_settings['default_graph_downsample'])
-        self.ui.DownSample_SpinBox.setMinimum(self.model.default_settings['min_graph_downsample'])
-        self.ui.DownSample_SpinBox.setMaximum(self.model.default_settings['max_graph_downsample'])
-        self.ui.DownSample_HorizontalSlider.setValue(
-            self.model.default_settings['default_graph_downsample'])
-        self.ui.DownSample_HorizontalSlider.setMinimum(
-            self.model.default_settings['min_graph_downsample'])
-        self.ui.DownSample_HorizontalSlider.setMaximum(
-            self.model.default_settings['max_graph_downsample'])
+        self._ui.DownSample_SpinBox.setValue(
+            self._model._default_settings['default_graph_downsample'])
+        self._ui.DownSample_SpinBox.setMinimum(
+            self._model._default_settings['min_graph_downsample'])
+        self._ui.DownSample_SpinBox.setMaximum(
+            self._model._default_settings['max_graph_downsample'])
+        self._ui.DownSample_HorizontalSlider.setValue(
+            self._model._default_settings['default_graph_downsample'])
+        self._ui.DownSample_HorizontalSlider.setMinimum(
+            self._model._default_settings['min_graph_downsample'])
+        self._ui.DownSample_HorizontalSlider.setMaximum(
+            self._model._default_settings['max_graph_downsample'])
 
-        self.ui.WriteFileType_ComboBox.addItems(self.model.default_settings['write_file_type'])
-        self.ui.WriteFile_LineEdit.setText(self.model.default_settings['default_write_file_path'])
+        self._ui.WriteFileType_ComboBox.addItems(
+            self._model._default_settings['write_file_type'])
+        self._ui.WriteFile_LineEdit.setText(
+            self._model._default_settings['default_write_file_dir'])
 
         # set initial disable component
-        self.ui.Stop_PushButton.setDisabled(True)
-        self.ui.Start_PushButton.setDisabled(True)
-        self.ui.ClearTask_PushButton.setDisabled(True)
+        self._ui.CreateTask_PushButton.setEnabled(True)
+        self._ui.Stop_PushButton.setDisabled(True)
+        self._ui.Start_PushButton.setDisabled(True)
+        self._ui.ClearTask_PushButton.setDisabled(True)
+        self._ui.WriteFile_GroupBox.setDisabled(True)
 
-        # connet slot
-        self.ui.TaskName_LineEdit.textChanged.connect(self.on_task_name_changed)
-        self.ui.FrameDuration_SpinBox.valueChanged.connect(self.on_frame_duration_changed)
-        self.ui.Reset_PushButton.clicked.connect(self.set_default_values)
-        self.ui.Start_PushButton.clicked.connect(self.on_start_button_clicked)
-        self.ui.Stop_PushButton.clicked.connect(self.on_stop_button_clicked)
-        self.ui.CreateTask_PushButton.clicked.connect(self.on_create_task_button_clicked)
-        self.ui.ClearTask_PushButton.clicked.connect(self.on_clear_task_button_clicked)
+        # connect slots
+        self._ui.TaskName_LineEdit.textChanged.connect(self.on_task_name_changed)
+        self._ui.FrameDuration_SpinBox.valueChanged.connect(self.on_frame_duration_changed)
+        self._ui.Reset_PushButton.clicked.connect(self.set_default_values)
+        self._ui.Start_PushButton.clicked.connect(self.on_start_button_clicked)
+        self._ui.Stop_PushButton.clicked.connect(self.on_stop_button_clicked)
+        self._ui.CreateTask_PushButton.clicked.connect(self.on_create_task_button_clicked)
+        self._ui.ClearTask_PushButton.clicked.connect(self.on_clear_task_button_clicked)
 
-        self.channel_checkbox_list = [
-            self.ui.Channel0_CheckBox,
-            self.ui.Channel1_CheckBox,
-            self.ui.Channel2_CheckBox,
-            self.ui.Channel3_CheckBox]
-        self.channel_combobox_list = [
-            self.ui.Channel0_ComboBox,
-            self.ui.Channel1_ComboBox,
-            self.ui.Channel2_ComboBox,
-            self.ui.Channel3_ComboBox]
-        for checkbox, combox in zip(self.channel_checkbox_list, self.channel_combobox_list):
+        self._channel_checkbox_list = [
+            self._ui.Channel0_CheckBox,
+            self._ui.Channel1_CheckBox,
+            self._ui.Channel2_CheckBox,
+            self._ui.Channel3_CheckBox]
+        self._channel_combox_list = [
+            self._ui.Channel0_ComboBox,
+            self._ui.Channel1_ComboBox,
+            self._ui.Channel2_ComboBox,
+            self._ui.Channel3_ComboBox]
+        for checkbox, combox in zip(self._channel_checkbox_list, self._channel_combox_list):
             combox.clear()
-            combox.addItems(self.model.default_settings["sensor_type"])
+            combox.addItems(self._model._default_settings["sensor_type"])
             combox.setDisabled(True)
             checkbox.setChecked(False)
             checkbox.toggled.connect(combox.setEnabled)
-        # for checkbox, combox in zip(self.channel_checkbox_list, self.channel_combobox_list):
+
+        self._ui.WriteFile_CheckBox.toggled.connect(self.on_write_file_checkbox_toggled)
 
     @Slot(str)
     def on_task_name_changed(self):
-        self.controller.change_task_name(self.ui.TaskName_LineEdit.text())
+        self._controller.change_task_name(self._ui.TaskName_LineEdit.text())
 
     @Slot(int)
     def on_frame_duration_changed(self, value):
-        self.ui.BufferDuration_SpinBox.setMinimum(value)
-        self.ui.UpdateInterval_SpinBox.setMinimum(value)
+        self._ui.BufferDuration_SpinBox.setMinimum(value)
+        self._ui.UpdateInterval_SpinBox.setMinimum(value)
 
     @Slot()
     def on_create_task_button_clicked(self):
         if self.check_channel_options():
-            self.ui.Start_PushButton.setEnabled(True)
-            self.ui.ClearTask_PushButton.setEnabled(True)
-            self.ui.CreateTask_PushButton.setDisabled(True)
-            self.ui.PreparationSetting_Frame.setDisabled(True)
-            self.controller.change_sample_rate(self.ui.SampleRate_SpinBox.value())
-            self.controller.change_frame_duration(self.ui.FrameDuration_SpinBox.value())
-            self.controller.change_buffer_duration(self.ui.BufferDuration_SpinBox.value())
-            self.controller.change_update_interval(self.ui.UpdateInterval_SpinBox.value())
-            self.controller.change_downsample(self.ui.DownSample_SpinBox.value())
+            self._ui.Start_PushButton.setEnabled(True)
+            self._ui.ClearTask_PushButton.setEnabled(True)
+            self._ui.WriteFile_GroupBox.setEnabled(True)
+            self._ui.CreateTask_PushButton.setDisabled(True)
+            self._ui.PreparationSetting_Frame.setDisabled(True)
+            self._controller.change_sample_rate(self._ui.SampleRate_SpinBox.value())
+            self._controller.change_frame_duration(self._ui.FrameDuration_SpinBox.value())
+            self._controller.change_buffer_duration(self._ui.BufferDuration_SpinBox.value())
+            self._controller.change_update_interval(self._ui.UpdateInterval_SpinBox.value())
+            self._controller.change_downsample(self._ui.DownSample_SpinBox.value())
             channels, sensor_types = self.add_channels()
-            self.controller.change_channels(channels)
-            self.controller.change_sensor_types(sensor_types)
-            self.model.create()
+            self._controller.change_channels(channels)
+            self._controller.change_sensor_types(sensor_types)
+            self._model.create()
 
     @Slot()
     def on_clear_task_button_clicked(self):
-        self.ui.PreparationSetting_Frame.setEnabled(True)
-        self.ui.CreateTask_PushButton.setEnabled(True)
-        self.ui.Start_PushButton.setDisabled(True)
-        self.ui.ClearTask_PushButton.setDisabled(True)
-        self.model.clear()
+        self._ui.PreparationSetting_Frame.setEnabled(True)
+        self._ui.CreateTask_PushButton.setEnabled(True)
+        self._ui.Start_PushButton.setDisabled(True)
+        self._ui.ClearTask_PushButton.setDisabled(True)
+        self._ui.WriteFile_GroupBox.setDisabled(True)
+        self._ui.WriteFile_CheckBox.setChecked(False)
+        self._model.clear()
 
     @Slot()
     def on_start_button_clicked(self):
-        self.ui.Stop_PushButton.setEnabled(True)
-        self.ui.Start_PushButton.setDisabled(True)
-        self.ui.Reset_PushButton.setDisabled(True)
-        self.ui.ClearTask_PushButton.setDisabled(True)
-        self.model.start()
+        self._ui.Stop_PushButton.setEnabled(True)
+        self._ui.Start_PushButton.setDisabled(True)
+        self._ui.Reset_PushButton.setDisabled(True)
+        self._ui.ClearTask_PushButton.setDisabled(True)
+        self._model.start()
 
     @Slot()
     def on_stop_button_clicked(self):
-        self.ui.Start_PushButton.setEnabled(True)
-        self.ui.ClearTask_PushButton.setEnabled(True)
-        self.ui.Reset_PushButton.setEnabled(True)
-        self.ui.Stop_PushButton.setDisabled(True)
-        self.model.stop()
+        self._ui.Start_PushButton.setEnabled(True)
+        self._ui.ClearTask_PushButton.setEnabled(True)
+        self._ui.Reset_PushButton.setEnabled(True)
+        self._ui.Stop_PushButton.setDisabled(True)
+        self._model.stop()
+
+    @Slot()
+    def on_write_file_checkbox_toggled(self):
+        self._controller.change_write_file_trig(self._ui.WriteFile_CheckBox.isChecked())
+        self._model.ready_write_file()
 
     def check_channel_options(self):
         error_channels = list()
 
-        if set([checkbox.isChecked() for checkbox in self.channel_checkbox_list]) == {False}:
+        if set([checkbox.isChecked() for checkbox in self._channel_checkbox_list]) == {False}:
             QMessageBox.critical(None, "Channel error", "Please select channels!!")
             return False
 
-        for i, (checkbox, combox) in enumerate(zip(self.channel_checkbox_list, self.channel_combobox_list)):
+        for i, (checkbox, combox) in enumerate(zip(self._channel_checkbox_list, self._channel_combox_list)):
             if checkbox.isChecked() and combox.currentText() == '':
                 error_channels.append(i)
 
@@ -172,7 +200,7 @@ class NI9234Form(QWidget):
     def add_channels(self):
         channels = list()
         sensor_types = list()
-        for i, (checkbox, combox) in enumerate(zip(self.channel_checkbox_list, self.channel_combobox_list)):
+        for i, (checkbox, combox) in enumerate(zip(self._channel_checkbox_list, self._channel_combox_list)):
             if checkbox.isChecked():
                 channels.append(i)
                 sensor_types.append(combox.currentText())

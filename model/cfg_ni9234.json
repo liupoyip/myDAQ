@@ -13,7 +13,7 @@
     "max_update_interval": 10000,
     "max_buffer_duration": 10000,
     "default_task_name": "myTask",
-    "default_write_file_path": "./output_data",
+    "default_write_file_dir": "./record_data",
     "write_file_type": [
         "*.csv"
     ],

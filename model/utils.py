@@ -3,13 +3,20 @@ import numpy as np
 
 
 class CSVStreamWriter:
-    def __init__(self, directory: str, file_name: str):
+    def __init__(self, directory: str):
         self.directory = directory
+        self.file_name = None
+        self.file_path = None
+        self.file = None
+
+    def set_directory(self, directory):
+        self.directory = directory
+        self.file_path = os.path.join(self.directory, f'{self.file_name}')
+
+    def set_file_name(self, file_name):
         self.file_name = file_name
         self.check_file_extension()
         self.file_path = os.path.join(self.directory, self.file_name)
-        self.file = None
-        self.open_file()
 
     def open_file(self):
         self.file = open(self.file_path, mode='a')

@@ -1,6 +1,6 @@
 import sys
 from PySide6.QtWidgets import QApplication
-from model.NIdaqModel import DAQModel
+from model.ModelNIDAQ import DAQModel
 from controllers.ni9234_controller import NI9234Controller
 from views.ni9234_form import NI9234Form
 
