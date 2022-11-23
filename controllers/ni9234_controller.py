@@ -1,5 +1,5 @@
 #from ..model.NIdaqModel import DAQModel
-from PySide6.QtCore import QObject, Slot
+from PySide6.QtCore import QObject
 
 
 class NI9234Controller(QObject):
