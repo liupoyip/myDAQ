@@ -202,6 +202,9 @@
     </property>
    </widget>
    <widget class="QLineEdit" name="WriteFile_LineEdit">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -228,6 +231,9 @@
     </property>
    </widget>
    <widget class="QComboBox" name="WriteFileType_ComboBox">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>90</x>
@@ -555,84 +561,6 @@
     <property name="title">
      <string>Channel Option</string>
     </property>
-    <widget class="QFrame" name="Channel0_Frame">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>190</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <widget class="QCheckBox" name="Channel0_CheckBox">
-      <property name="geometry">
-       <rect>
-        <x>5</x>
-        <y>5</y>
-        <width>75</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Channel 0</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="Channel0_ComboBox">
-      <property name="geometry">
-       <rect>
-        <x>85</x>
-        <y>5</y>
-        <width>100</width>
-        <height>22</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QFrame" name="Channel2_Frame">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>80</y>
-       <width>190</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <widget class="QCheckBox" name="Channel2_CheckBox">
-      <property name="geometry">
-       <rect>
-        <x>5</x>
-        <y>5</y>
-        <width>75</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Channel 2</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="Channel2_ComboBox">
-      <property name="geometry">
-       <rect>
-        <x>85</x>
-        <y>5</y>
-        <width>100</width>
-        <height>22</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
     <widget class="QFrame" name="Channel3_Frame">
      <property name="geometry">
       <rect>
@@ -658,7 +586,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Channel 3</string>
+       <string>Channel 4</string>
       </property>
      </widget>
      <widget class="QComboBox" name="Channel3_ComboBox">
@@ -697,10 +625,88 @@
        </rect>
       </property>
       <property name="text">
-       <string>Channel 1</string>
+       <string>Channel 2</string>
       </property>
      </widget>
      <widget class="QComboBox" name="Channel1_ComboBox">
+      <property name="geometry">
+       <rect>
+        <x>85</x>
+        <y>5</y>
+        <width>100</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="Channel2_Frame">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>190</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <widget class="QCheckBox" name="Channel2_CheckBox">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>5</y>
+        <width>75</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Channel 3</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="Channel2_ComboBox">
+      <property name="geometry">
+       <rect>
+        <x>85</x>
+        <y>5</y>
+        <width>100</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="Channel0_Frame">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>190</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <widget class="QCheckBox" name="Channel0_CheckBox">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>5</y>
+        <width>75</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Channel 1</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="Channel0_ComboBox">
       <property name="geometry">
        <rect>
         <x>85</x>
