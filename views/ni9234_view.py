@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QWidget, QMessageBox
 from PySide6.QtCore import Slot, QTimer
 
 
-class NI9234Form(QWidget, Ui_NI9234):
+class NI9234View(QWidget, Ui_NI9234):
     def __init__(self, model=None, controller=None):
         super().__init__()
         self._model = model
