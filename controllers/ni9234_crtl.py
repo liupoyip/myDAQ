@@ -31,8 +31,8 @@ class NI9234Controller(QObject):
     def change_sensor_types(self, value):
         self._model.sensor_types = value
 
-    def change_write_file_trig(self, value):
-        self._model.write_file_trig = value
+    def change_write_file_flag(self, value):
+        self._model.write_file_flag = value
 
     def change_write_file_dir(self, value):
         self._model.write_file_dir = value

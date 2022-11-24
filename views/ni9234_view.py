@@ -176,7 +176,7 @@ class NI9234View(QWidget, Ui_NI9234):
 
     @Slot()
     def on_write_file_checkbox_toggled(self):
-        self._controller.change_write_file_trig(self._ui.WriteFile_CheckBox.isChecked())
+        self._controller.change_write_file_flag(self._ui.WriteFile_CheckBox.isChecked())
         self._model.ready_write_file()
 
     def check_channel_options(self):

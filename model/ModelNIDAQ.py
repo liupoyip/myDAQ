@@ -50,7 +50,7 @@ class DAQModel(QObject):
     downsample_changed = Signal(int)
     channels_changed = Signal(list)
     sensor_types_changed = Signal(list)
-    write_file_trig_changed = Signal(bool)
+    write_file_flag_changed = Signal(bool)
 
     def __init__(self):
         super().__init__()
@@ -128,13 +128,13 @@ class DAQModel(QObject):
         self.sensor_types_changed.emit(value)
 
     @property
-    def write_file_trig(self):
+    def write_file_flag(self):
         return self._write_file_tirg
 
-    @write_file_trig.setter
-    def write_file_trig(self, value: bool):
+    @write_file_flag.setter
+    def write_file_flag(self, value: bool):
         self._write_file_tirg = value
-        self.write_file_trig_changed.emit(value)
+        self.write_file_flag_changed.emit(value)
 
     def create(self):
         try:
@@ -157,7 +157,7 @@ class DAQModel(QObject):
         self._nidaq.stream_writer.set_directory(self._write_file_directory)
 
     def start(self):
-        if self.write_file_trig:
+        if self.write_file_flag:
             self.write_file()
 
         self._nidaq.set_stream_enable()
@@ -166,7 +166,7 @@ class DAQModel(QObject):
     def stop(self):
         self._nidaq.set_stream_disable()
         self._nidaq.stop_task()
-        if self.write_file_trig:
+        if self.write_file_flag:
             self._nidaq.stream_writer.close_file()
 
     def clear(self):
@@ -175,10 +175,10 @@ class DAQModel(QObject):
             self._nidaq.stream_writer.close_file()
 
     def ready_write_file(self):
-        if self.write_file_trig:
+        if self.write_file_flag:
             self._nidaq.set_write_file_enable()
             self.write_file()
-        elif not self.write_file_trig:
+        elif not self.write_file_flag:
             self._nidaq.set_write_file_disable()
             self._nidaq.stream_writer.close_file()
 
