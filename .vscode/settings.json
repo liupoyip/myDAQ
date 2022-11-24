@@ -1,3 +1,4 @@
 {
     "python.defaultInterpreterPath": "${workspaceFolder}/../venv/Qt6/",
+    "qtForPython.designer.path": "${workspaceFolder}/../venv/Qt6/Lib/site-packages/qt6_applications/Qt/bin/designer.exe",
 }
