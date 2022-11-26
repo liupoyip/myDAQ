@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'ni9234.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.0
+## Created by: Qt User Interface Compiler version 6.4.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -28,31 +28,32 @@ class Ui_NI9234(object):
         NI9234.resize(1280, 720)
         self.ControlButtons_GroupBox = QGroupBox(NI9234)
         self.ControlButtons_GroupBox.setObjectName(u"ControlButtons_GroupBox")
-        self.ControlButtons_GroupBox.setGeometry(QRect(1160, 10, 111, 171))
+        self.ControlButtons_GroupBox.setGeometry(QRect(10, 630, 330, 80))
         self.Start_PushButton = QPushButton(self.ControlButtons_GroupBox)
         self.Start_PushButton.setObjectName(u"Start_PushButton")
-        self.Start_PushButton.setGeometry(QRect(10, 110, 91, 24))
+        self.Start_PushButton.setGeometry(QRect(10, 50, 91, 24))
         self.Stop_PushButton = QPushButton(self.ControlButtons_GroupBox)
         self.Stop_PushButton.setObjectName(u"Stop_PushButton")
-        self.Stop_PushButton.setGeometry(QRect(10, 140, 91, 24))
+        self.Stop_PushButton.setGeometry(QRect(110, 50, 91, 24))
         self.Reset_PushButton = QPushButton(self.ControlButtons_GroupBox)
         self.Reset_PushButton.setObjectName(u"Reset_PushButton")
-        self.Reset_PushButton.setGeometry(QRect(10, 20, 91, 24))
+        self.Reset_PushButton.setGeometry(QRect(220, 50, 91, 24))
         self.CreateTask_PushButton = QPushButton(self.ControlButtons_GroupBox)
         self.CreateTask_PushButton.setObjectName(u"CreateTask_PushButton")
-        self.CreateTask_PushButton.setGeometry(QRect(10, 50, 90, 24))
+        self.CreateTask_PushButton.setGeometry(QRect(10, 20, 90, 24))
         self.ClearTask_PushButton = QPushButton(self.ControlButtons_GroupBox)
         self.ClearTask_PushButton.setObjectName(u"ClearTask_PushButton")
-        self.ClearTask_PushButton.setGeometry(QRect(10, 80, 90, 24))
+        self.ClearTask_PushButton.setGeometry(QRect(110, 20, 90, 24))
         self.Parameters_Label = QLabel(NI9234)
         self.Parameters_Label.setObjectName(u"Parameters_Label")
         self.Parameters_Label.setEnabled(True)
-        self.Parameters_Label.setGeometry(QRect(10, 550, 191, 151))
+        self.Parameters_Label.setGeometry(QRect(10, 550, 191, 51))
+        self.Parameters_Label.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
         self.Parameters_Label.setWordWrap(False)
         self.Parameters_Label.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextSelectableByMouse)
         self.layoutWidget = QWidget(NI9234)
         self.layoutWidget.setObjectName(u"layoutWidget")
-        self.layoutWidget.setGeometry(QRect(760, 10, 371, 701))
+        self.layoutWidget.setGeometry(QRect(500, 360, 771, 351))
         self.SpectrumVBoxLayout = QVBoxLayout(self.layoutWidget)
         self.SpectrumVBoxLayout.setSpacing(0)
         self.SpectrumVBoxLayout.setObjectName(u"SpectrumVBoxLayout")
@@ -80,7 +81,7 @@ class Ui_NI9234(object):
 
         self.layoutWidget1 = QWidget(NI9234)
         self.layoutWidget1.setObjectName(u"layoutWidget1")
-        self.layoutWidget1.setGeometry(QRect(370, 10, 381, 701))
+        self.layoutWidget1.setGeometry(QRect(510, 10, 711, 331))
         self.WaveVBoxLayout = QVBoxLayout(self.layoutWidget1)
         self.WaveVBoxLayout.setSpacing(0)
         self.WaveVBoxLayout.setObjectName(u"WaveVBoxLayout")
@@ -126,7 +127,7 @@ class Ui_NI9234(object):
         self.WriteFileType_ComboBox.setGeometry(QRect(90, 20, 61, 22))
         self.NowTime_Label = QLabel(NI9234)
         self.NowTime_Label.setObjectName(u"NowTime_Label")
-        self.NowTime_Label.setGeometry(QRect(1170, 690, 201, 16))
+        self.NowTime_Label.setGeometry(QRect(260, 570, 201, 16))
         self.PreparationSetting_Frame = QFrame(NI9234)
         self.PreparationSetting_Frame.setObjectName(u"PreparationSetting_Frame")
         self.PreparationSetting_Frame.setGeometry(QRect(0, 10, 361, 441))

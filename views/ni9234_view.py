@@ -10,10 +10,7 @@ class NI9234View(QWidget, Ui_NI9234):
         self._controller = controller
         self._ui = Ui_NI9234()
         self._ui.setupUi(self)
-        self.set_default_values()
 
-
-        
         # listen for model event signals
         self._ui.TaskName_LineEdit.textChanged.connect(self.on_task_name_changed)
         self._ui.FrameDuration_SpinBox.valueChanged.connect(self.on_frame_duration_changed)
@@ -22,7 +19,7 @@ class NI9234View(QWidget, Ui_NI9234):
         self._ui.Stop_PushButton.clicked.connect(self.on_stop_button_clicked)
         self._ui.CreateTask_PushButton.clicked.connect(self.on_create_task_button_clicked)
         self._ui.ClearTask_PushButton.clicked.connect(self.on_clear_task_button_clicked)
-        
+
         self._channel_checkbox_list = [
             self._ui.Channel0_CheckBox,
             self._ui.Channel1_CheckBox,
@@ -39,6 +36,7 @@ class NI9234View(QWidget, Ui_NI9234):
 
         self._ui.WriteFile_CheckBox.toggled.connect(self.on_write_file_checkbox_toggled)
 
+        self.set_default_values()
 
     def set_default_values(self):
         self._ui.TaskName_LineEdit.setText(
@@ -125,13 +123,12 @@ class NI9234View(QWidget, Ui_NI9234):
         self._ui.ClearTask_PushButton.setDisabled(True)
         self._ui.WriteFile_GroupBox.setDisabled(True)
 
-
         for checkbox, combox in zip(self._channel_checkbox_list, self._channel_combox_list):
             combox.clear()
             combox.addItems(self._model._default_settings["sensor_type"])
             combox.setDisabled(True)
             checkbox.setChecked(False)
- 
+
     @Slot(str)
     def on_task_name_changed(self):
         self._controller.change_task_name(self._ui.TaskName_LineEdit.text())
@@ -153,7 +150,6 @@ class NI9234View(QWidget, Ui_NI9234):
                 f'Sample Rate: {self._ui.SampleRate_SpinBox.value()} Hz\n'
                 f'Frame Duration: {self._ui.FrameDuration_SpinBox.value()} ms\n'
                 f'Buffer Duration: {self._ui.BufferDuration_SpinBox.value()} ms\n')
-
 
             self._controller.change_sample_rate(self._ui.SampleRate_SpinBox.value())
             self._controller.change_frame_duration(self._ui.FrameDuration_SpinBox.value())

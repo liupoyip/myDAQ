@@ -12,6 +12,7 @@ from . import NIDAQ
 
 
 class DAQModel(QObject):
+    # _cfg_path = os.path.join(os.getcwd(),'config','cfg_ni9234')
     _cfg_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cfg_ni9234.json')
     _cfg_file = open(_cfg_path)
     _default_settings = json.load(_cfg_file)
