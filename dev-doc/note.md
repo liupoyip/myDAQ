@@ -14,3 +14,6 @@ tangram
 
 演算法使用
 套用張暐現在servey的範例
+
+### reference
+https://stackoverflow.com/questions/26698628/mvc-design-with-qt-designer-and-pyqt-pyside

@@ -5,14 +5,13 @@ from datetime import datetime
 
 import numpy as np
 import numpy.typing as npt
-from PySide6.QtCore import Signal, QObject
+from PySide6.QtCore import Signal, QObject, QTimer
 
 from .utils import CSVStreamWriter
 from . import NIDAQ
 
 
-class DAQModel(QObject):
-    # _cfg_path = os.path.join(os.getcwd(),'config','cfg_ni9234')
+class NIDAQModel(QObject):
     _cfg_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cfg_ni9234.json')
     _cfg_file = open(_cfg_path)
     _default_settings = json.load(_cfg_file)
@@ -31,22 +30,27 @@ class DAQModel(QObject):
     _update_interval: int = _frame_duration
     _min_update_interval: int = _frame_duration
     _max_update_interval: int = _default_settings['max_update_interval']
-    _buffer_duration: int = _frame_duration
-    _min_buffer_duration: int = _frame_duration
-    _max_buffer_duration: int = _default_settings['max_buffer_duration']
+    _buffer_rate: int = _default_settings['min_buffer_rate']
+    _min_buffer_rate: int = _default_settings['min_buffer_rate']
+    _max_buffer_rate: int = _default_settings['max_buffer_rate']
+    buffer_duration = _frame_duration * _buffer_rate
+    buffer_len = _sample_rate * buffer_duration * 0.001
     _channels: list[int] = list()
     _sensor_types: list[str] = list()
-    _graph_plot_data_buffer: Optional[npt.NDArray[np.float64]]
     _write_file_tirg: bool = False
-
     _nidaq: NIDAQ.NI9234 = None
     _stream_writer: CSVStreamWriter = None
     _write_file_directory = _default_settings['default_write_file_dir']
 
+    # buffer for visualize data
+    _wave_data_buffer_update_timer = QTimer()
+
+    _wave_data_buffer: Optional[npt.NDArray[np.float64]]
+
     task_name_changed = Signal(str)
     sample_rate_changed = Signal(int)
     frame_duration_changed = Signal(int)
-    buffer_duration_changed = Signal(int)
+    buffer_rate_changed = Signal(int)
     update_interval_changed = Signal(int)
     downsample_changed = Signal(int)
     channels_changed = Signal(list)
@@ -55,6 +59,7 @@ class DAQModel(QObject):
 
     def __init__(self):
         super().__init__()
+        self._wave_data_buffer_update_timer.timeout.connect(self._update_wave_data_buffer)
 
     @property
     def task_name(self):
@@ -84,17 +89,17 @@ class DAQModel(QObject):
         self.frame_duration_changed.emit(value)
 
     @property
-    def buffer_duration(self):
-        return self._buffer_duration
+    def buffer_rate(self):
+        return self._buffer_rate
 
-    @buffer_duration.setter
-    def buffer_duration(self, value: int):
-        self._buffer_duration = value
-        self.buffer_duration_changed.emit(value)
+    @buffer_rate.setter
+    def buffer_rate(self, value: int):
+        self._buffer_rate = value
+        self.buffer_rate_changed.emit(value)
 
     @property
     def update_interval(self):
-        return self._buffer_duration
+        return self._buffer_rate
 
     @update_interval.setter
     def update_interval(self, value: int):
@@ -149,13 +154,18 @@ class DAQModel(QObject):
                 self._nidaq.add_accel_channel(channel)
             if sensor_type == 'Microphone':
                 self._nidaq.add_microphone_channel(channel)
-        self._nidaq.set_sample_rate(self.sample_rate)
-        self._nidaq.set_frame_duration(self.frame_duration)
+        self._nidaq.set_sample_rate(self._sample_rate)
+        self._nidaq.set_frame_duration(self._frame_duration)
         self._nidaq.show_daq_params()
         NIDAQ.callback_obj_ptr = self._nidaq.self_ptr
-        self._nidaq.ready_read(callback_method=self._nidaq.callback_method)
-
+        self._nidaq.ready_read(callback_method=NIDAQ.callback_method)
         self._nidaq.stream_writer.set_directory(self._write_file_directory)
+
+        self._wave_data_buffer_update_timer.setInterval(self._frame_duration)
+        self.buffer_duration = self._frame_duration * self._buffer_rate
+        self.buffer_len = int(self._sample_rate * self.buffer_duration * 0.001)
+        self._wave_data_buffer = np.zeros((self._nidaq.task.number_of_channels, self.buffer_len))
+        self._wave_data_buffer_roll_element = int(self.sample_rate * self._frame_duration * 0.001)
 
     def start(self):
         if self.write_file_flag:
@@ -163,12 +173,14 @@ class DAQModel(QObject):
 
         self._nidaq.set_stream_enable()
         self._nidaq.start_task()
+        self._wave_data_buffer_update_timer.start()
 
     def stop(self):
         self._nidaq.set_stream_disable()
         self._nidaq.stop_task()
         if self.write_file_flag:
             self._nidaq.stream_writer.close_file()
+        self._wave_data_buffer_update_timer.stop()
 
     def clear(self):
         self._nidaq.close_task()
@@ -188,5 +200,10 @@ class DAQModel(QObject):
         self._nidaq.stream_writer.set_file_name(file_name)
         self._nidaq.stream_writer.open_file()
 
+    def _update_wave_data_buffer(self):
+        self._wave_data_buffer = np.roll(
+            self._wave_data_buffer, self._wave_data_buffer_roll_element)
+        self._wave_data_buffer[:, :self._wave_data_buffer_roll_element] = self._nidaq.chunk
+
     def interval_split_write_file():
-        pass
+        ...

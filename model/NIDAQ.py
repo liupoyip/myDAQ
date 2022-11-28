@@ -42,7 +42,7 @@ class NIDAQ(GeneralDAQParams):
     max_sample_rate: Optional[float] = None
     stream_reader: Optional[NiStreamReaders.AnalogMultiChannelReader] = None
     stream_writer: Optional[CSVStreamWriter] = None
-    write_file_trig: Optional[bool] = None
+    write_file_flag: Optional[bool] = None
 
     def __init__(self) -> None:
         super(NIDAQ, self).__init__()
@@ -112,7 +112,7 @@ class NI9234(NIDAQ):
         self.frame_size = int(self.sample_rate * self.frame_duration * 0.001)
         self.buffer_size = self.frame_size * 10
 
-        self.write_file_trig = False
+        self.write_file_flag = False
         self.write_file_dir = '.'
 
         self.stream_writer = CSVStreamWriter(directory=self.write_file_dir)
@@ -192,10 +192,10 @@ class NI9234(NIDAQ):
         self.stream_trig = False
 
     def set_write_file_enable(self) -> None:
-        self.write_file_trig = True
+        self.write_file_flag = True
 
     def set_write_file_disable(self) -> None:
-        self.write_file_trig = False
+        self.write_file_flag = False
 
     def ready_read(self, callback_method) -> None:
 
@@ -253,26 +253,26 @@ class NI9234(NIDAQ):
                 print('close task')
                 break
 
-    @staticmethod
-    def callback_method(task_handle, every_n_samples_event_type,
-                        number_of_samples, _):
-        global callback_obj_ptr
-        callback_obj_ptr.value.stream_reader.read_many_sample(callback_obj_ptr.value.chunk)
 
-        if callback_obj_ptr.value.write_file_trig:
-            callback_obj_ptr.value.stream_writer.write(
-                chunk=callback_obj_ptr.value.chunk, transpose=True)
+def callback_method(task_handle, every_n_samples_event_type,
+                    number_of_samples, _):
+    global callback_obj_ptr
+    callback_obj_ptr.value.stream_reader.read_many_sample(callback_obj_ptr.value.chunk)
 
-        current_time = datetime.now().isoformat(sep=' ', timespec='milliseconds')
-        print(
-            f'Current time: {current_time} / Recording... every {number_of_samples} Samples callback invoked.')
+    if callback_obj_ptr.value.write_file_flag:
+        callback_obj_ptr.value.stream_writer.write(
+            chunk=callback_obj_ptr.value.chunk, transpose=True)
 
-        if not callback_obj_ptr.value.stream_trig:
-            callback_obj_ptr.value.stop_task()
-        return 0
+    current_time = datetime.now().isoformat(sep=' ', timespec='milliseconds')
+    print(
+        f'Current time: {current_time} / Recording... every {number_of_samples} Samples callback invoked.')
+
+    if not callback_obj_ptr.value.stream_trig:
+        callback_obj_ptr.value.stop_task()
+    return 0
 
 
-callback_obj_ptr: NIDAQ = None
+callback_obj_ptr = None
 
 if __name__ == '__main__':
     nidaq = NI9234(device_name='NI_9234')
@@ -285,7 +285,7 @@ if __name__ == '__main__':
     nidaq.set_sample_rate(25600)
     nidaq.set_frame_duration(100)
 
-    nidaq.ready_read(callback_method=nidaq.callback_method)
+    nidaq.ready_read(callback_method=callback_method)
     nidaq.show_control_manual()
     # method 1 async function with event loop
     # loop = asyncio.get_event_loop()
