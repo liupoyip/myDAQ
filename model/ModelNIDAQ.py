@@ -33,8 +33,8 @@ class NIDAQModel(QObject):
     _buffer_rate: int = _default_settings['min_buffer_rate']
     _min_buffer_rate: int = _default_settings['min_buffer_rate']
     _max_buffer_rate: int = _default_settings['max_buffer_rate']
-    buffer_duration = _frame_duration * _buffer_rate
-    buffer_len = _sample_rate * buffer_duration * 0.001
+    buffer_duration: int = _frame_duration * _buffer_rate
+    buffer_len: int = int(_sample_rate * buffer_duration * 0.001)
     _channels: list[int] = list()
     _sensor_types: list[str] = list()
     _write_file_tirg: bool = False
