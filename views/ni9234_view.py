@@ -1,14 +1,16 @@
+from typing import Optional
 import numpy as np
 from .ui_ni9234 import Ui_NI9234
 from PySide6.QtWidgets import QWidget, QMessageBox
 from PySide6.QtCore import Slot, QTimer
-from .chart import WaveChart
+from .chart import WaveChart, SpectrumChart
 #from ..model.ModelNIDAQ import NIDAQModel
 #from ..controllers.ni9234_crtl import NI9234Controller
 
 
 class NI9234View(QWidget, Ui_NI9234):
     # def __init__(self, model: NIDAQModel, controller: NI9234Controller):
+    _downsample_rate: Optional[int] = None
 
     def __init__(self, model, controller):
         super().__init__()
@@ -29,6 +31,18 @@ class NI9234View(QWidget, Ui_NI9234):
             self.Channel3_WaveChart]
         for wave_chart in self.channel_wave_charts:
             self._ui.WaveCharts_VBoxLayout.addWidget(wave_chart.chart_view)
+
+        self.Channel0_SpectrumChart = SpectrumChart()
+        self.Channel1_SpectrumChart = SpectrumChart()
+        self.Channel2_SpectrumChart = SpectrumChart()
+        self.Channel3_SpectrumChart = SpectrumChart()
+        self.channel_spectrum_charts = [
+            self.Channel0_SpectrumChart,
+            self.Channel1_SpectrumChart,
+            self.Channel2_SpectrumChart,
+            self.Channel3_SpectrumChart]
+        for spectrum_chart in self.channel_spectrum_charts:
+            self._ui.SpectrumCharts_VBoxLayout.addWidget(spectrum_chart.chart_view)
 
         # graph update timer
         self.graph_update_timer = QTimer()
@@ -61,22 +75,9 @@ class NI9234View(QWidget, Ui_NI9234):
 
         self._ui.WriteFile_CheckBox.toggled.connect(self.on_write_file_checkbox_toggled)
 
-        # self._model.task_name_changed.connect(self.on_task_name_changed)
-        # self._model.sample_rate_changed.connect(self.on_sample_rate_changed)
-        # self._model.frame_duration_changed.connect
-        # self._model.buffer_rate_changed.connect
-        # self._model.update_interval_changed.connect
-        # self._model.downsample_changed.connect
-        # self._model.channels_changed.connect
-        # self._model.write_file_flag_changed.connect
-
         self.set_default_values()
 
     def set_default_values(self):
-        # self._controller.change_task_name(
-        #     self._model._default_settings['default_task_name'])
-        # self._controller.change_sample_rate(
-        #    self._model._default_settings['default_sample_rate'])
 
         self._ui.TaskName_LineEdit.setText(
             self._model._default_settings['default_task_name'])
@@ -199,18 +200,21 @@ class NI9234View(QWidget, Ui_NI9234):
                 f'Frame Duration: {self._ui.FrameDuration_SpinBox.value()} ms\n'
                 f'Buffer Rate: {self._ui.BufferRate_SpinBox.value()}\n')
             self.graph_update_timer.setInterval(self._ui.ChartUpdateInterval_SpinBox.value())
+            self._downsample_rate = self._ui.DownSample_SpinBox.value()
 
+            self.add_channels()
             self._controller.change_task_name(self._ui.TaskName_LineEdit.text())
             self._controller.change_sample_rate(self._ui.SampleRate_SpinBox.value())
             self._controller.change_frame_duration(self._ui.FrameDuration_SpinBox.value())
             self._controller.change_buffer_rate(self._ui.BufferRate_SpinBox.value())
             self._controller.change_update_interval(self._ui.ChartUpdateInterval_SpinBox.value())
             self._controller.change_downsample(self._ui.DownSample_SpinBox.value())
-            self.add_channels()
             self._controller.change_channels(self.active_channel_num_list)
             self._controller.change_sensor_types(self.sensor_type_list)
+
             self._model.create()
             self.reset_wave_chart()
+            self.reset_spectrum_chart()
 
     @Slot()
     def on_clear_task_button_clicked(self):
@@ -253,8 +257,9 @@ class NI9234View(QWidget, Ui_NI9234):
     @Slot()
     def on_graph_update_timer_timeout(self):
         self.wave_data_buffer = self._controller.read_wave_data_buffer()
+        self.spectrum_data_buffer = self._controller.read_spectrum_data_buffer()
         self.update_wave_chart()
-        # print('veiw', self.wave_data_buffer[:, 0:2])
+        self.update_spectrum_chart()
 
     def check_channel_options(self):
         """
@@ -294,14 +299,45 @@ class NI9234View(QWidget, Ui_NI9234):
                 self.active_channel_num_list.append(i)
                 self.sensor_type_list.append(combox.currentText())
 
-    # def activate_wave_chart(self):
-
     def reset_wave_chart(self):
+        time_limit = self._model.buffer_duration
+        wave_len = self._model.get_wave_buffer_len()
+        wave_tail = wave_len % self._downsample_rate
+        if wave_tail == 0:
+            wave_len = wave_len // self._downsample_rate
+        else:
+            wave_len = wave_len // self._downsample_rate + 1
+
         for num in self.active_channel_num_list:
-            self.channel_wave_charts[num].reset_axis(
-                self._model.buffer_duration, buffer_len=self._model._buffer_len)
-            # TODO : 改一下 _buffer_len -> buffer_len
+            self.channel_wave_charts[num].reset_axis(time_limit, wave_len)
+
+    def reset_spectrum_chart(self):
+        spectrum_len = len(self._model.get_spectrum_freqs())
+        freqs_tail = spectrum_len % self._downsample_rate
+        if freqs_tail == 0:
+            spectrum_len = spectrum_len // self._downsample_rate
+        else:
+            spectrum_len = spectrum_len // self._downsample_rate + 1
+        freqs_tail += 1
+        self.freq_limit = self._model.get_spectrum_freqs()[-freqs_tail]
+
+        for num in self.active_channel_num_list:
+            self.channel_spectrum_charts[num].reset_axis(self.freq_limit, spectrum_len)
 
     def update_wave_chart(self):
         for i, num in enumerate(self.active_channel_num_list):
-            self.channel_wave_charts[num].set_y(self.wave_data_buffer[i])
+            wave_downsample = self.wave_data_buffer[i, ::self._downsample_rate]
+            self.channel_wave_charts[num].set_y(wave_downsample)
+
+    def update_spectrum_chart(self):
+        for i, num in enumerate(self.active_channel_num_list):
+            mean_spectrum = np.mean(self.spectrum_data_buffer[i], axis=0)
+            mean_spectrum = mean_spectrum / np.max(mean_spectrum)   # normalize 0~1
+            spectrum_downsample = mean_spectrum[::self._downsample_rate]
+            self.channel_spectrum_charts[num].set_y(spectrum_downsample)
+
+    def activate_wave_chart(self):
+        ...
+
+    def activate_spectrum_chart(self):
+        ...
