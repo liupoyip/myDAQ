@@ -23,7 +23,7 @@ class NI9234Controller(QObject):
     @Slot(int)
     def change_buffer_rate(self, value):
         self._model.buffer_rate = value
-        self._model.buffer_duration = self._model.frame_duration
+        self._model.buffer_duration = self._model.frame_duration*self._model.buffer_rate
 
     @Slot(int)
     def change_update_interval(self, value):
@@ -51,4 +51,8 @@ class NI9234Controller(QObject):
 
     @Slot()
     def read_wave_data_buffer(self) -> npt.NDArray:
-        return self._model._wave_data_buffer
+        return self._model.get_wave_data_buffer()
+
+    @Slot()
+    def read_spectrum_data_buffer(self) -> npt.NDArray:
+        return self._model.get_spectrum_data_buffer()

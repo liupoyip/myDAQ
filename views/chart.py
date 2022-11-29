@@ -39,14 +39,9 @@ class LineChart(QChart):
         self._buffer = [QPointF(x, y) for x, y in zip(self._x, self._y)]
         self._series.append(self._buffer)
 
-    def reset_axis(self, end_point, buffer_len):
-        self._axis_x.setRange(0, end_point)
-        self._x = np.linspace(0, end_point, buffer_len)
-        self._y = np.zeros(buffer_len)
-        self._buffer = [QPointF(x, y) for x, y in zip(self._x, self._y)]
-        self._series.replace(self._buffer)
-
     def set_y(self, y_line):
+        if len(self._buffer) != y_line.shape[0]:
+            raise BaseException('Length of buffer and y-line is not match!')
         for i in range(y_line.shape[0]):
             self._buffer[i].setY(y_line[i])
         self._series.replace(self._buffer)
@@ -72,19 +67,34 @@ class WaveChart(LineChart):
         self._buffer = [QPointF(x, y) for x, y in zip(self._x, self._y)]
         self._series.append(self._buffer)
 
+    def reset_axis(self, end_point, buffer_len):
+        self._axis_x.setRange(0, end_point)
+        self._x = np.linspace(0, end_point, buffer_len)
+        self._y = np.zeros(buffer_len)
+        self._buffer = [QPointF(x, y) for x, y in zip(self._x, self._y)]
+        self._series.replace(self._buffer)
+
 
 class SpectrumChart(LineChart):
     def __init__(self):
         super(SpectrumChart, self).__init__()
 
         self._axis_x.setRange(0, 1600)
-        self._axis_y.setRange(0, 1600)
+        self._axis_y.setRange(0, 1)
 
         self._x = np.linspace(0, 1600, 512)
         self._y = np.zeros(512)
 
         self._buffer = [QPointF(x, y) for x, y in zip(self._x, self._y)]
         self._series.append(self._buffer)
+
+    def reset_axis(self, end_point, buffer_len):
+        self._axis_x.setRange(0, end_point)
+        self._axis_y.setRange(0, 1)
+        self._x = np.linspace(0, end_point, buffer_len)
+        self._y = np.zeros(buffer_len)
+        self._buffer = [QPointF(x, y) for x, y in zip(self._x, self._y)]
+        self._series.replace(self._buffer)
 
 
 if __name__ == "__main__":
