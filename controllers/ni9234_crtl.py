@@ -23,6 +23,7 @@ class NI9234Controller(QObject):
     @Slot(int)
     def change_buffer_rate(self, value):
         self._model.buffer_rate = value
+        self._model.buffer_duration = self._model.frame_duration
 
     @Slot(int)
     def change_update_interval(self, value):

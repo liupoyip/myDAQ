@@ -33,8 +33,9 @@ class NIDAQModel(QObject):
     _buffer_rate: int = _default_settings['min_buffer_rate']
     _min_buffer_rate: int = _default_settings['min_buffer_rate']
     _max_buffer_rate: int = _default_settings['max_buffer_rate']
-    buffer_duration: int = _frame_duration * _buffer_rate
-    buffer_len: int = int(_sample_rate * buffer_duration * 0.001)
+    _chunk_len = int(_sample_rate * _frame_duration * 0.001)
+    _buffer_duration: int = _frame_duration * _buffer_rate
+    _buffer_len: int = int(_sample_rate * _buffer_duration * 0.001)
     _channels: list[int] = list()
     _sensor_types: list[str] = list()
     _write_file_tirg: bool = False
@@ -43,9 +44,9 @@ class NIDAQModel(QObject):
     _write_file_directory = _default_settings['default_write_file_dir']
 
     # buffer for visualize data
-    _wave_data_buffer_update_timer = QTimer()
-
+    _data_buffer_update_timer = QTimer()
     _wave_data_buffer: Optional[npt.NDArray[np.float64]]
+    _spectrum_data_buffer: Optional[npt.NDArray[np.float64]]
 
     task_name_changed = Signal(str)
     sample_rate_changed = Signal(int)
@@ -56,10 +57,11 @@ class NIDAQModel(QObject):
     channels_changed = Signal(list)
     sensor_types_changed = Signal(list)
     write_file_flag_changed = Signal(bool)
+    #buffer_duration_changed = Signal(int)
 
     def __init__(self):
         super().__init__()
-        self._wave_data_buffer_update_timer.timeout.connect(self._update_wave_data_buffer)
+        self._data_buffer_update_timer.timeout.connect(self._update_wave_data_buffer)
 
     @property
     def task_name(self):
@@ -95,6 +97,15 @@ class NIDAQModel(QObject):
     @buffer_rate.setter
     def buffer_rate(self, value: int):
         self._buffer_rate = value
+        self.buffer_rate_changed.emit(value)
+
+    @property
+    def buffer_duration(self):
+        return self._buffer_duration
+
+    @buffer_duration.setter
+    def buffer_duration(self, value: int):
+        self._buffer_duration = value
         self.buffer_rate_changed.emit(value)
 
     @property
@@ -161,11 +172,17 @@ class NIDAQModel(QObject):
         self._nidaq.ready_read(callback_method=NIDAQ.callback_method)
         self._nidaq.stream_writer.set_directory(self._write_file_directory)
 
-        self._wave_data_buffer_update_timer.setInterval(self._frame_duration)
-        self.buffer_duration = self._frame_duration * self._buffer_rate
-        self.buffer_len = int(self._sample_rate * self.buffer_duration * 0.001)
-        self._wave_data_buffer = np.zeros((self._nidaq.task.number_of_channels, self.buffer_len))
-        self._wave_data_buffer_roll_element = int(self.sample_rate * self._frame_duration * 0.001)
+        self._data_buffer_update_timer.setInterval(self._frame_duration)
+        self._chunk_len = int(self._sample_rate * self._frame_duration * 0.001)
+        self._buffer_duration: int = self._frame_duration * self._buffer_rate
+        self._buffer_len: int = int(self._sample_rate * self._buffer_duration * 0.001)
+
+        self._wave_data_buffer = np.zeros((self._nidaq.task.number_of_channels, self._buffer_len))
+        # spectrum array format: (number of channels, buffer rate, chunk len)
+
+        self._spectrum_freqs = np.fft.rfftfreq(self._chunk_len, 1/self._sample_rate)
+        self._spectrum_data_buffer = np.zeros(
+            (self._nidaq.task.number_of_channels, self._buffer_rate, self._spectrum_freqs.shape[0]))
 
     def start(self):
         if self.write_file_flag:
@@ -173,14 +190,14 @@ class NIDAQModel(QObject):
 
         self._nidaq.set_stream_enable()
         self._nidaq.start_task()
-        self._wave_data_buffer_update_timer.start()
+        self._data_buffer_update_timer.start()
 
     def stop(self):
         self._nidaq.set_stream_disable()
         self._nidaq.stop_task()
         if self.write_file_flag:
             self._nidaq.stream_writer.close_file()
-        self._wave_data_buffer_update_timer.stop()
+        self._data_buffer_update_timer.stop()
 
     def clear(self):
         self._nidaq.close_task()
@@ -202,8 +219,14 @@ class NIDAQModel(QObject):
 
     def _update_wave_data_buffer(self):
         self._wave_data_buffer = np.roll(
-            self._wave_data_buffer, self._wave_data_buffer_roll_element)
-        self._wave_data_buffer[:, :self._wave_data_buffer_roll_element] = self._nidaq.chunk
+            self._wave_data_buffer, self._chunk_len)
+        self._wave_data_buffer[:, :self._chunk_len] = self._nidaq.chunk
+
+        # if _spectrum_flag == True:
+        self._spectrum_data = np.abs(np.fft.rfft(self._nidaq.chunk))
+        self._spectrum_data_buffer = np.roll(self._spectrum_data_buffer, 1, axis=1)
+        self._spectrum_data_buffer[:, 0, :] = self._spectrum_data
+        print(self._spectrum_data_buffer[:, 0, 0])
 
     def interval_split_write_file():
         ...

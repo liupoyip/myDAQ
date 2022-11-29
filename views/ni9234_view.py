@@ -1,9 +1,8 @@
 import numpy as np
 from .ui_ni9234 import Ui_NI9234
 from PySide6.QtWidgets import QWidget, QMessageBox
-from PySide6.QtCharts import QChartView
 from PySide6.QtCore import Slot, QTimer
-from .wave_chart import WaveChart
+from .chart import WaveChart
 #from ..model.ModelNIDAQ import NIDAQModel
 #from ..controllers.ni9234_crtl import NI9234Controller
 
@@ -46,18 +45,18 @@ class NI9234View(QWidget, Ui_NI9234):
         self.graph_update_timer.timeout.connect(self.on_graph_update_timer_timeout)
         self.wave_data_buffer = None
 
-        self._channel_checkbox_list = [
+        self._channel_checkboxes = [
             self._ui.Channel0_CheckBox,
             self._ui.Channel1_CheckBox,
             self._ui.Channel2_CheckBox,
             self._ui.Channel3_CheckBox]
-        self._channel_combox_list = [
+        self._channel_comboxes = [
             self._ui.Channel0_ComboBox,
             self._ui.Channel1_ComboBox,
             self._ui.Channel2_ComboBox,
             self._ui.Channel3_ComboBox]
 
-        for checkbox, combox in zip(self._channel_checkbox_list, self._channel_combox_list):
+        for checkbox, combox in zip(self._channel_checkboxes, self._channel_comboxes):
             checkbox.toggled.connect(combox.setEnabled)
 
         self._ui.WriteFile_CheckBox.toggled.connect(self.on_write_file_checkbox_toggled)
@@ -81,70 +80,71 @@ class NI9234View(QWidget, Ui_NI9234):
 
         self._ui.TaskName_LineEdit.setText(
             self._model._default_settings['default_task_name'])
-        self._ui.SampleRate_SpinBox.setValue(
-            self._model._default_settings['default_sample_rate'])
+
         self._ui.SampleRate_SpinBox.setMinimum(
             self._model._default_settings['min_sample_rate'])
         self._ui.SampleRate_SpinBox.setMaximum(
             self._model._default_settings['max_sample_rate'])
-        self._ui.SampleRate_HorizontalSlider.setValue(
+        self._ui.SampleRate_SpinBox.setValue(
             self._model._default_settings['default_sample_rate'])
         self._ui.SampleRate_HorizontalSlider.setMinimum(
             self._model._default_settings['min_sample_rate'])
         self._ui.SampleRate_HorizontalSlider.setMaximum(
             self._model._default_settings['max_sample_rate'])
+        self._ui.SampleRate_HorizontalSlider.setValue(
+            self._model._default_settings['default_sample_rate'])
 
-        self._ui.FrameDuration_SpinBox.setValue(
-            self._model._default_settings['default_frame_duration'])
         self._ui.FrameDuration_SpinBox.setMinimum(
             self._model._default_settings['min_frame_duration'])
         self._ui.FrameDuration_SpinBox.setMaximum(
             self._model._default_settings['max_frame_duration'])
-        self._ui.FrameDuration_HorizontalSlider.setValue(
+        self._ui.FrameDuration_SpinBox.setValue(
             self._model._default_settings['default_frame_duration'])
         self._ui.FrameDuration_HorizontalSlider.setMinimum(
             self._model._default_settings['min_frame_duration'])
         self._ui.FrameDuration_HorizontalSlider.setMaximum(
             self._model._default_settings['max_frame_duration'])
+        self._ui.FrameDuration_HorizontalSlider.setValue(
+            self._model._default_settings['default_frame_duration'])
 
-        self._ui.BufferRate_SpinBox.setValue(
-            self._model._default_settings['min_buffer_rate'])
         self._ui.BufferRate_SpinBox.setMinimum(
             self._model._default_settings['min_buffer_rate'])
         self._ui.BufferRate_SpinBox.setMaximum(
             self._model._default_settings['max_buffer_rate'])
-        self._ui.BufferRate_HorizontalSlider.setValue(
-            self._model._default_settings['min_buffer_rate'])
+        self._ui.BufferRate_SpinBox.setValue(
+            self._model._default_settings['default_buffer_rate'])
         self._ui.BufferRate_HorizontalSlider.setMinimum(
             self._model._default_settings['min_buffer_rate'])
         self._ui.BufferRate_HorizontalSlider.setMaximum(
             self._model._default_settings['max_buffer_rate'])
+        self._ui.BufferRate_HorizontalSlider.setValue(
+            self._model._default_settings['default_buffer_rate'])
 
-        self._ui.UpdateInterval_SpinBox.setValue(
+        self._ui.ChartUpdateInterval_SpinBox.setMinimum(
             self._ui.FrameDuration_SpinBox.value())
-        self._ui.UpdateInterval_SpinBox.setMinimum(
-            self._ui.FrameDuration_SpinBox.value())
-        self._ui.UpdateInterval_SpinBox.setMaximum(
+        self._ui.ChartUpdateInterval_SpinBox.setMaximum(
             self._model._default_settings['max_update_interval'])
-        self._ui.UpdateInterval_HorizontalSlider.setValue(
+        self._ui.ChartUpdateInterval_SpinBox.setValue(
             self._ui.FrameDuration_SpinBox.value())
-        self._ui.UpdateInterval_HorizontalSlider.setMinimum(
+        self._ui.ChartUpdateInterval_HorizontalSlider.setMinimum(
             self._ui.FrameDuration_SpinBox.value())
-        self._ui.UpdateInterval_HorizontalSlider.setMaximum(
+        self._ui.ChartUpdateInterval_HorizontalSlider.setMaximum(
             self._model._default_settings['max_update_interval'])
+        self._ui.ChartUpdateInterval_HorizontalSlider.setValue(
+            self._ui.FrameDuration_SpinBox.value())
 
-        self._ui.DownSample_SpinBox.setValue(
-            self._model._default_settings['default_graph_downsample'])
         self._ui.DownSample_SpinBox.setMinimum(
             self._model._default_settings['min_graph_downsample'])
         self._ui.DownSample_SpinBox.setMaximum(
             self._model._default_settings['max_graph_downsample'])
-        self._ui.DownSample_HorizontalSlider.setValue(
+        self._ui.DownSample_SpinBox.setValue(
             self._model._default_settings['default_graph_downsample'])
         self._ui.DownSample_HorizontalSlider.setMinimum(
             self._model._default_settings['min_graph_downsample'])
         self._ui.DownSample_HorizontalSlider.setMaximum(
             self._model._default_settings['max_graph_downsample'])
+        self._ui.DownSample_HorizontalSlider.setValue(
+            self._model._default_settings['default_graph_downsample'])
 
         self._ui.WriteFileType_ComboBox.addItems(
             self._model._default_settings['write_file_type'])
@@ -165,7 +165,7 @@ class NI9234View(QWidget, Ui_NI9234):
         self._ui.ClearTask_PushButton.setDisabled(True)
         self._ui.WriteFile_GroupBox.setDisabled(True)
 
-        for checkbox, combox in zip(self._channel_checkbox_list, self._channel_combox_list):
+        for checkbox, combox in zip(self._channel_checkboxes, self._channel_comboxes):
             checkbox.setChecked(False)
             combox.clear()
             combox.addItems(self._model._default_settings["sensor_type"])
@@ -181,8 +181,10 @@ class NI9234View(QWidget, Ui_NI9234):
 
     @Slot(int)
     def on_frame_duration_changed(self, value):
-        # self._ui.BufferRate_SpinBox.setMinimum(value)
-        self._ui.UpdateInterval_SpinBox.setMinimum(value)
+        self._ui.ChartUpdateInterval_SpinBox.setMinimum(value)
+        self._ui.ChartUpdateInterval_SpinBox.setSingleStep(value)
+        self._ui.ChartUpdateInterval_HorizontalSlider.setSingleStep(value)
+        self._ui.ChartUpdateInterval_HorizontalSlider.setPageStep(value)
 
     @Slot()
     def on_create_task_button_clicked(self):
@@ -196,19 +198,19 @@ class NI9234View(QWidget, Ui_NI9234):
                 f'Sample Rate: {self._ui.SampleRate_SpinBox.value()} Hz\n'
                 f'Frame Duration: {self._ui.FrameDuration_SpinBox.value()} ms\n'
                 f'Buffer Rate: {self._ui.BufferRate_SpinBox.value()}\n')
-            self.graph_update_timer.setInterval(self._ui.UpdateInterval_SpinBox.value())
+            self.graph_update_timer.setInterval(self._ui.ChartUpdateInterval_SpinBox.value())
 
             self._controller.change_task_name(self._ui.TaskName_LineEdit.text())
             self._controller.change_sample_rate(self._ui.SampleRate_SpinBox.value())
             self._controller.change_frame_duration(self._ui.FrameDuration_SpinBox.value())
             self._controller.change_buffer_rate(self._ui.BufferRate_SpinBox.value())
-            self._controller.change_update_interval(self._ui.UpdateInterval_SpinBox.value())
+            self._controller.change_update_interval(self._ui.ChartUpdateInterval_SpinBox.value())
             self._controller.change_downsample(self._ui.DownSample_SpinBox.value())
-            channels, sensor_types = self.add_channels()
-            self._controller.change_channels(channels)
-            self._controller.change_sensor_types(sensor_types)
+            self.add_channels()
+            self._controller.change_channels(self.active_channel_num_list)
+            self._controller.change_sensor_types(self.sensor_type_list)
             self._model.create()
-            self.reset_wave_chart_axis()
+            self.reset_wave_chart()
 
     @Slot()
     def on_clear_task_button_clicked(self):
@@ -219,6 +221,7 @@ class NI9234View(QWidget, Ui_NI9234):
         self._ui.WriteFile_GroupBox.setDisabled(True)
         self._ui.WriteFile_CheckBox.setChecked(False)
         self._model.clear()
+        self.reset_wave_chart()
 
     @Slot()
     def on_start_button_clicked(self):
@@ -267,11 +270,11 @@ class NI9234View(QWidget, Ui_NI9234):
             return `True`
         """
         error_channels = list()
-        if set([checkbox.isChecked() for checkbox in self._channel_checkbox_list]) == {False}:
+        if set([checkbox.isChecked() for checkbox in self._channel_checkboxes]) == {False}:
             QMessageBox.critical(None, "Channel error", "Please select channels!!")
             return False
 
-        for i, (checkbox, combox) in enumerate(zip(self._channel_checkbox_list, self._channel_combox_list)):
+        for i, (checkbox, combox) in enumerate(zip(self._channel_checkboxes, self._channel_comboxes)):
             if checkbox.isChecked() and combox.currentText() == '':
                 error_channels.append(i)
 
@@ -283,17 +286,22 @@ class NI9234View(QWidget, Ui_NI9234):
             return False
 
     def add_channels(self):
-        channels = list()
-        sensor_types = list()
-        for i, (checkbox, combox) in enumerate(zip(self._channel_checkbox_list, self._channel_combox_list)):
-            if checkbox.isChecked():
-                channels.append(i)
-                sensor_types.append(combox.currentText())
-        return channels, sensor_types
+        self.active_channel_num_list = list()
+        self.sensor_type_list = list()
 
-    def reset_wave_chart_axis(self):
-        self.Channel0_WaveChart.reset_axis(
-            self._model.buffer_duration, buffer_len=self._model.buffer_len)
+        for i, (checkbox, combox) in enumerate(zip(self._channel_checkboxes, self._channel_comboxes)):
+            if checkbox.isChecked():
+                self.active_channel_num_list.append(i)
+                self.sensor_type_list.append(combox.currentText())
+
+    # def activate_wave_chart(self):
+
+    def reset_wave_chart(self):
+        for num in self.active_channel_num_list:
+            self.channel_wave_charts[num].reset_axis(
+                self._model.buffer_duration, buffer_len=self._model._buffer_len)
+            # TODO : 改一下 _buffer_len -> buffer_len
 
     def update_wave_chart(self):
-        self.Channel0_WaveChart.set_y(self.wave_data_buffer[0])
+        for i, num in enumerate(self.active_channel_num_list):
+            self.channel_wave_charts[num].set_y(self.wave_data_buffer[i])
