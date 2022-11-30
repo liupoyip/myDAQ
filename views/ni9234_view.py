@@ -10,7 +10,8 @@ from .chart import WaveChart, SpectrumChart
 
 class NI9234View(QWidget, Ui_NI9234):
     # def __init__(self, model: NIDAQModel, controller: NI9234Controller):
-    _downsample_rate: Optional[int] = None
+    _wave_downsample_rate: Optional[int] = None
+    _spectrum_downsample_rate: Optional[int] = None
 
     def __init__(self, model, controller):
         super().__init__()
@@ -18,6 +19,8 @@ class NI9234View(QWidget, Ui_NI9234):
         self._controller = controller
 
         # setup view
+        self.setFixedWidth(1600)
+        self.setFixedHeight(900)
         self._ui = Ui_NI9234()
         self._ui.setupUi(self)
         self.Channel0_WaveChart = WaveChart()
@@ -134,18 +137,31 @@ class NI9234View(QWidget, Ui_NI9234):
         self._ui.ChartUpdateInterval_HorizontalSlider.setValue(
             self._ui.FrameDuration_SpinBox.value())
 
-        self._ui.DownSample_SpinBox.setMinimum(
-            self._model._default_settings['min_graph_downsample'])
-        self._ui.DownSample_SpinBox.setMaximum(
-            self._model._default_settings['max_graph_downsample'])
-        self._ui.DownSample_SpinBox.setValue(
-            self._model._default_settings['default_graph_downsample'])
-        self._ui.DownSample_HorizontalSlider.setMinimum(
-            self._model._default_settings['min_graph_downsample'])
-        self._ui.DownSample_HorizontalSlider.setMaximum(
-            self._model._default_settings['max_graph_downsample'])
-        self._ui.DownSample_HorizontalSlider.setValue(
-            self._model._default_settings['default_graph_downsample'])
+        self._ui.WaveDownSample_SpinBox.setMinimum(
+            self._model._default_settings['min_wave_downsample'])
+        self._ui.WaveDownSample_SpinBox.setMaximum(
+            self._model._default_settings['max_wave_downsample'])
+        self._ui.WaveDownSample_SpinBox.setValue(
+            self._model._default_settings['default_wave_downsample'])
+        self._ui.WaveDownSample_HorizontalSlider.setMinimum(
+            self._model._default_settings['min_wave_downsample'])
+        self._ui.WaveDownSample_HorizontalSlider.setMaximum(
+            self._model._default_settings['max_wave_downsample'])
+        self._ui.WaveDownSample_HorizontalSlider.setValue(
+            self._model._default_settings['default_wave_downsample'])
+
+        self._ui.SpectrumDownSample_SpinBox.setMinimum(
+            self._model._default_settings['min_spectrum_downsample'])
+        self._ui.SpectrumDownSample_SpinBox.setMaximum(
+            self._model._default_settings['max_spectrum_downsample'])
+        self._ui.SpectrumDownSample_SpinBox.setValue(
+            self._model._default_settings['default_spectrum_downsample'])
+        self._ui.SpectrumDownSample_HorizontalSlider.setMinimum(
+            self._model._default_settings['min_spectrum_downsample'])
+        self._ui.SpectrumDownSample_HorizontalSlider.setMaximum(
+            self._model._default_settings['max_spectrum_downsample'])
+        self._ui.SpectrumDownSample_HorizontalSlider.setValue(
+            self._model._default_settings['default_spectrum_downsample'])
 
         self._ui.WriteFileType_ComboBox.addItems(
             self._model._default_settings['write_file_type'])
@@ -200,7 +216,8 @@ class NI9234View(QWidget, Ui_NI9234):
                 f'Frame Duration: {self._ui.FrameDuration_SpinBox.value()} ms\n'
                 f'Buffer Rate: {self._ui.BufferRate_SpinBox.value()}\n')
             self.graph_update_timer.setInterval(self._ui.ChartUpdateInterval_SpinBox.value())
-            self._downsample_rate = self._ui.DownSample_SpinBox.value()
+            self._wave_downsample_rate = self._ui.WaveDownSample_SpinBox.value()
+            self._spectrum_downsample_rate = self._ui.SpectrumDownSample_SpinBox.value()
 
             self.add_channels()
             self._controller.change_task_name(self._ui.TaskName_LineEdit.text())
@@ -208,7 +225,6 @@ class NI9234View(QWidget, Ui_NI9234):
             self._controller.change_frame_duration(self._ui.FrameDuration_SpinBox.value())
             self._controller.change_buffer_rate(self._ui.BufferRate_SpinBox.value())
             self._controller.change_update_interval(self._ui.ChartUpdateInterval_SpinBox.value())
-            self._controller.change_downsample(self._ui.DownSample_SpinBox.value())
             self._controller.change_channels(self.active_channel_num_list)
             self._controller.change_sensor_types(self.sensor_type_list)
 
@@ -226,6 +242,7 @@ class NI9234View(QWidget, Ui_NI9234):
         self._ui.WriteFile_CheckBox.setChecked(False)
         self._model.clear()
         self.reset_wave_chart()
+        self.reset_spectrum_chart()
 
     @Slot()
     def on_start_button_clicked(self):
@@ -302,22 +319,22 @@ class NI9234View(QWidget, Ui_NI9234):
     def reset_wave_chart(self):
         time_limit = self._model.buffer_duration
         wave_len = self._model.get_wave_buffer_len()
-        wave_tail = wave_len % self._downsample_rate
+        wave_tail = wave_len % self._wave_downsample_rate
         if wave_tail == 0:
-            wave_len = wave_len // self._downsample_rate
+            wave_len = wave_len // self._wave_downsample_rate
         else:
-            wave_len = wave_len // self._downsample_rate + 1
+            wave_len = wave_len // self._wave_downsample_rate + 1
 
         for num in self.active_channel_num_list:
             self.channel_wave_charts[num].reset_axis(time_limit, wave_len)
 
     def reset_spectrum_chart(self):
         spectrum_len = len(self._model.get_spectrum_freqs())
-        freqs_tail = spectrum_len % self._downsample_rate
+        freqs_tail = spectrum_len % self._spectrum_downsample_rate
         if freqs_tail == 0:
-            spectrum_len = spectrum_len // self._downsample_rate
+            spectrum_len = spectrum_len // self._spectrum_downsample_rate
         else:
-            spectrum_len = spectrum_len // self._downsample_rate + 1
+            spectrum_len = spectrum_len // self._spectrum_downsample_rate + 1
         freqs_tail += 1
         self.freq_limit = self._model.get_spectrum_freqs()[-freqs_tail]
 
@@ -326,15 +343,16 @@ class NI9234View(QWidget, Ui_NI9234):
 
     def update_wave_chart(self):
         for i, num in enumerate(self.active_channel_num_list):
-            wave_downsample = self.wave_data_buffer[i, ::self._downsample_rate]
-            self.channel_wave_charts[num].set_y(wave_downsample)
+            wave_data_downsample = self.wave_data_buffer[i, ::self._wave_downsample_rate]
+            self.channel_wave_charts[num].set_y(wave_data_downsample)
 
     def update_spectrum_chart(self):
         for i, num in enumerate(self.active_channel_num_list):
             mean_spectrum = np.mean(self.spectrum_data_buffer[i], axis=0)
-            mean_spectrum = mean_spectrum / np.max(mean_spectrum)   # normalize 0~1
-            spectrum_downsample = mean_spectrum[::self._downsample_rate]
-            self.channel_spectrum_charts[num].set_y(spectrum_downsample)
+            # mean_spectrum = mean_spectrum / np.max(mean_spectrum)   # normalize 0~1
+            spectrum_data_downsample = mean_spectrum[::self._spectrum_downsample_rate]
+            spectrum_data_downsample = spectrum_data_downsample / np.max(spectrum_data_downsample)
+            self.channel_spectrum_charts[num].set_y(spectrum_data_downsample)
 
     def activate_wave_chart(self):
         ...

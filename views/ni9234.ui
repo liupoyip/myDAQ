@@ -20,7 +20,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>760</y>
+     <y>790</y>
      <width>341</width>
      <height>80</height>
     </rect>
@@ -57,7 +57,7 @@
    <widget class="QPushButton" name="Reset_PushButton">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>210</x>
       <y>50</y>
       <width>91</width>
       <height>24</height>
@@ -100,14 +100,14 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>550</y>
+     <x>20</x>
+     <y>580</y>
      <width>191</width>
-     <height>101</height>
+     <height>61</height>
     </rect>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Parameters!!&lt;/p&gt;&lt;p&gt;Will show at here!!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Parameters!!&lt;br/&gt;Will show at here!!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -159,7 +159,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>460</y>
+     <y>490</y>
      <width>341</width>
      <height>81</height>
     </rect>
@@ -227,7 +227,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>870</y>
+     <y>880</y>
      <width>201</width>
      <height>16</height>
     </rect>
@@ -242,7 +242,7 @@
      <x>0</x>
      <y>10</y>
      <width>361</width>
-     <height>441</height>
+     <height>481</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -284,9 +284,9 @@
      <widget class="QSlider" name="SampleRate_HorizontalSlider">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>160</x>
         <y>5</y>
-        <width>100</width>
+        <width>80</width>
         <height>20</height>
        </rect>
       </property>
@@ -336,7 +336,7 @@
        <rect>
         <x>10</x>
         <y>5</y>
-        <width>120</width>
+        <width>140</width>
         <height>20</height>
        </rect>
       </property>
@@ -372,9 +372,9 @@
      <widget class="QSlider" name="FrameDuration_HorizontalSlider">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>160</x>
         <y>5</y>
-        <width>100</width>
+        <width>80</width>
         <height>20</height>
        </rect>
       </property>
@@ -424,7 +424,7 @@
        <rect>
         <x>10</x>
         <y>5</y>
-        <width>120</width>
+        <width>140</width>
         <height>20</height>
        </rect>
       </property>
@@ -444,7 +444,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>290</y>
+      <y>320</y>
       <width>221</width>
       <height>151</height>
      </rect>
@@ -615,13 +615,13 @@
       <x>10</x>
       <y>160</y>
       <width>341</width>
-      <height>121</height>
+      <height>151</height>
      </rect>
     </property>
     <property name="title">
      <string>Chart Parameters</string>
     </property>
-    <widget class="QFrame" name="DownSample_Frame">
+    <widget class="QFrame" name="WaveDownSample_Frame">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -639,12 +639,12 @@
      <property name="frameShadow">
       <enum>QFrame::Plain</enum>
      </property>
-     <widget class="QSlider" name="DownSample_HorizontalSlider">
+     <widget class="QSlider" name="WaveDownSample_HorizontalSlider">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>160</x>
         <y>5</y>
-        <width>100</width>
+        <width>80</width>
         <height>20</height>
        </rect>
       </property>
@@ -664,7 +664,7 @@
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
-     <widget class="QSpinBox" name="DownSample_SpinBox">
+     <widget class="QSpinBox" name="WaveDownSample_SpinBox">
       <property name="geometry">
        <rect>
         <x>250</x>
@@ -686,17 +686,17 @@
        <number>100</number>
       </property>
      </widget>
-     <widget class="QLabel" name="DownSample_Label">
+     <widget class="QLabel" name="WaveDownSample_Label">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>5</y>
-        <width>120</width>
+        <width>140</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
-       <string>Graph Down Sample</string>
+       <string>Wave Down Sample</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -727,9 +727,9 @@
      <widget class="QSlider" name="ChartUpdateInterval_HorizontalSlider">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>160</x>
         <y>5</y>
-        <width>100</width>
+        <width>80</width>
         <height>20</height>
        </rect>
       </property>
@@ -782,7 +782,7 @@
        <rect>
         <x>10</x>
         <y>5</y>
-        <width>120</width>
+        <width>140</width>
         <height>20</height>
        </rect>
       </property>
@@ -818,9 +818,9 @@
      <widget class="QSlider" name="BufferRate_HorizontalSlider">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>160</x>
         <y>5</y>
-        <width>100</width>
+        <width>80</width>
         <height>20</height>
        </rect>
       </property>
@@ -870,12 +870,97 @@
        <rect>
         <x>10</x>
         <y>5</y>
-        <width>120</width>
+        <width>140</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
        <string>Buffer Rate</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+      <property name="indent">
+       <number>-1</number>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="SpectrumDownSample_Frame">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>110</y>
+       <width>320</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <widget class="QSlider" name="SpectrumDownSample_HorizontalSlider">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>5</y>
+        <width>80</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="minimum">
+       <number>0</number>
+      </property>
+      <property name="maximum">
+       <number>5</number>
+      </property>
+      <property name="value">
+       <number>0</number>
+      </property>
+      <property name="sliderPosition">
+       <number>0</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="SpectrumDownSample_SpinBox">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>5</y>
+        <width>60</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+      <property name="specialValueText">
+       <string notr="true"/>
+      </property>
+      <property name="minimum">
+       <number>0</number>
+      </property>
+      <property name="maximum">
+       <number>100</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="SpectrumDownSample_Label">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>5</y>
+        <width>140</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Spectrum Down Sample</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -925,6 +1010,31 @@
      </property>
     </widget>
    </widget>
+  </widget>
+  <widget class="QLabel" name="Info_Label">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>670</y>
+     <width>321</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Notice!!&lt;br/&gt;If value &amp;quot;Buffer Rate&amp;quot; and &amp;quot;Frame Duration&amp;quot; too high,&lt;br/&gt;line of chart may encount huge data to update and &lt;br/&gt;occur app clock slower than NI9234 clock.&lt;/p&gt;&lt;p&gt;When this phenomenon arise, adjust &amp;quot;Down Sample&amp;quot;&lt;br/&gt;to reduce the loading on updating charts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+   </property>
+   <property name="wordWrap">
+    <bool>false</bool>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+   </property>
   </widget>
  </widget>
  <resources/>
@@ -1026,9 +1136,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>DownSample_HorizontalSlider</sender>
+   <sender>WaveDownSample_HorizontalSlider</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>DownSample_SpinBox</receiver>
+   <receiver>WaveDownSample_SpinBox</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1042,9 +1152,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>DownSample_SpinBox</sender>
+   <sender>WaveDownSample_SpinBox</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>DownSample_HorizontalSlider</receiver>
+   <receiver>WaveDownSample_HorizontalSlider</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">

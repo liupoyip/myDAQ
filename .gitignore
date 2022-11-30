@@ -1,4 +1,5 @@
 __pycache__
+dev-doc
 .mypy_cache
 test.csv
 foo.csv

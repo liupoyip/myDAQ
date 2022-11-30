@@ -58,7 +58,6 @@ class NIDAQModel(QObject):
     sensor_types_changed = Signal(list)
     write_file_flag_changed = Signal(bool)
     buffer_duration_changed = Signal(int)
-    #buffer_duration_changed = Signal(int)
 
     def __init__(self):
         super().__init__()
@@ -118,15 +117,6 @@ class NIDAQModel(QObject):
     def update_interval(self, value: int):
         self._update_interval = value
         self.update_interval_changed.emit(value)
-
-    @property
-    def downsample(self):
-        return self._downsample
-
-    @downsample.setter
-    def downsample(self, value: int):
-        self._downsample = value
-        self.downsample_changed.emit(value)
 
     @property
     def channels(self):
@@ -230,6 +220,8 @@ class NIDAQModel(QObject):
         self._spectrum_data_buffer = np.roll(self._spectrum_data_buffer, 1, axis=1)
         for i in range(self._spectrum_data.shape[0]):
             self._spectrum_data_buffer[i, 0, :] = self._spectrum_data[i]
+
+        # TODO: 需要新增spectrum的開關嗎??
 
     def get_wave_data_buffer(self):
         return self._wave_data_buffer
