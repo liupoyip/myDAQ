@@ -24,9 +24,9 @@ class NIDAQModel(QObject):
     _frame_duration: int = _default_settings['default_frame_duration']
     _max_frame_duration: int = _default_settings['default_frame_duration']
     _min_frame_duration: int = _default_settings['min_frame_duration']
-    _downsample: int = _default_settings['default_graph_downsample']
-    _min_downsample: int = _default_settings['min_graph_downsample']
-    _max_downsample: int = _default_settings['max_graph_downsample']
+    _downsample: int = _default_settings['default_wave_downsample']
+    _min_downsample: int = _default_settings['min_wave_downsample']
+    _max_downsample: int = _default_settings['max_wave_downsample']
     _update_interval: int = _frame_duration
     _min_update_interval: int = _frame_duration
     _max_update_interval: int = _default_settings['max_update_interval']
