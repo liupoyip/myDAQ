@@ -79,90 +79,90 @@ class NI9234View(QWidget, Ui_NI9234):
     def set_default_values(self):
 
         self._ui.TaskName_LineEdit.setText(
-            self._model._default_settings['default_task_name'])
+            self._model.default_settings['default_task_name'])
 
         self._ui.SampleRate_SpinBox.setMinimum(
-            self._model._default_settings['min_sample_rate'])
+            self._model.default_settings['min_sample_rate'])
         self._ui.SampleRate_SpinBox.setMaximum(
-            self._model._default_settings['max_sample_rate'])
+            self._model.default_settings['max_sample_rate'])
         self._ui.SampleRate_SpinBox.setValue(
-            self._model._default_settings['default_sample_rate'])
+            self._model.default_settings['default_sample_rate'])
         self._ui.SampleRate_HorizontalSlider.setMinimum(
-            self._model._default_settings['min_sample_rate'])
+            self._model.default_settings['min_sample_rate'])
         self._ui.SampleRate_HorizontalSlider.setMaximum(
-            self._model._default_settings['max_sample_rate'])
+            self._model.default_settings['max_sample_rate'])
         self._ui.SampleRate_HorizontalSlider.setValue(
-            self._model._default_settings['default_sample_rate'])
+            self._model.default_settings['default_sample_rate'])
 
         self._ui.FrameDuration_SpinBox.setMinimum(
-            self._model._default_settings['min_frame_duration'])
+            self._model.default_settings['min_frame_duration'])
         self._ui.FrameDuration_SpinBox.setMaximum(
-            self._model._default_settings['max_frame_duration'])
+            self._model.default_settings['max_frame_duration'])
         self._ui.FrameDuration_SpinBox.setValue(
-            self._model._default_settings['default_frame_duration'])
+            self._model.default_settings['default_frame_duration'])
         self._ui.FrameDuration_HorizontalSlider.setMinimum(
-            self._model._default_settings['min_frame_duration'])
+            self._model.default_settings['min_frame_duration'])
         self._ui.FrameDuration_HorizontalSlider.setMaximum(
-            self._model._default_settings['max_frame_duration'])
+            self._model.default_settings['max_frame_duration'])
         self._ui.FrameDuration_HorizontalSlider.setValue(
-            self._model._default_settings['default_frame_duration'])
+            self._model.default_settings['default_frame_duration'])
 
         self._ui.BufferRate_SpinBox.setMinimum(
-            self._model._default_settings['min_buffer_rate'])
+            self._model.default_settings['min_buffer_rate'])
         self._ui.BufferRate_SpinBox.setMaximum(
-            self._model._default_settings['max_buffer_rate'])
+            self._model.default_settings['max_buffer_rate'])
         self._ui.BufferRate_SpinBox.setValue(
-            self._model._default_settings['default_buffer_rate'])
+            self._model.default_settings['default_buffer_rate'])
         self._ui.BufferRate_HorizontalSlider.setMinimum(
-            self._model._default_settings['min_buffer_rate'])
+            self._model.default_settings['min_buffer_rate'])
         self._ui.BufferRate_HorizontalSlider.setMaximum(
-            self._model._default_settings['max_buffer_rate'])
+            self._model.default_settings['max_buffer_rate'])
         self._ui.BufferRate_HorizontalSlider.setValue(
-            self._model._default_settings['default_buffer_rate'])
+            self._model.default_settings['default_buffer_rate'])
 
         self._ui.ChartUpdateInterval_SpinBox.setMinimum(
             self._ui.FrameDuration_SpinBox.value())
         self._ui.ChartUpdateInterval_SpinBox.setMaximum(
-            self._model._default_settings['max_update_interval'])
+            self._model.default_settings['max_update_interval'])
         self._ui.ChartUpdateInterval_SpinBox.setValue(
             self._ui.FrameDuration_SpinBox.value())
         self._ui.ChartUpdateInterval_HorizontalSlider.setMinimum(
             self._ui.FrameDuration_SpinBox.value())
         self._ui.ChartUpdateInterval_HorizontalSlider.setMaximum(
-            self._model._default_settings['max_update_interval'])
+            self._model.default_settings['max_update_interval'])
         self._ui.ChartUpdateInterval_HorizontalSlider.setValue(
             self._ui.FrameDuration_SpinBox.value())
 
         self._ui.WaveDownSample_SpinBox.setMinimum(
-            self._model._default_settings['min_wave_downsample'])
+            self._model.default_settings['min_wave_downsample'])
         self._ui.WaveDownSample_SpinBox.setMaximum(
-            self._model._default_settings['max_wave_downsample'])
+            self._model.default_settings['max_wave_downsample'])
         self._ui.WaveDownSample_SpinBox.setValue(
-            self._model._default_settings['default_wave_downsample'])
+            self._model.default_settings['default_wave_downsample'])
         self._ui.WaveDownSample_HorizontalSlider.setMinimum(
-            self._model._default_settings['min_wave_downsample'])
+            self._model.default_settings['min_wave_downsample'])
         self._ui.WaveDownSample_HorizontalSlider.setMaximum(
-            self._model._default_settings['max_wave_downsample'])
+            self._model.default_settings['max_wave_downsample'])
         self._ui.WaveDownSample_HorizontalSlider.setValue(
-            self._model._default_settings['default_wave_downsample'])
+            self._model.default_settings['default_wave_downsample'])
 
         self._ui.SpectrumDownSample_SpinBox.setMinimum(
-            self._model._default_settings['min_spectrum_downsample'])
+            self._model.default_settings['min_spectrum_downsample'])
         self._ui.SpectrumDownSample_SpinBox.setMaximum(
-            self._model._default_settings['max_spectrum_downsample'])
+            self._model.default_settings['max_spectrum_downsample'])
         self._ui.SpectrumDownSample_SpinBox.setValue(
-            self._model._default_settings['default_spectrum_downsample'])
+            self._model.default_settings['default_spectrum_downsample'])
         self._ui.SpectrumDownSample_HorizontalSlider.setMinimum(
-            self._model._default_settings['min_spectrum_downsample'])
+            self._model.default_settings['min_spectrum_downsample'])
         self._ui.SpectrumDownSample_HorizontalSlider.setMaximum(
-            self._model._default_settings['max_spectrum_downsample'])
+            self._model.default_settings['max_spectrum_downsample'])
         self._ui.SpectrumDownSample_HorizontalSlider.setValue(
-            self._model._default_settings['default_spectrum_downsample'])
+            self._model.default_settings['default_spectrum_downsample'])
 
         self._ui.WriteFileType_ComboBox.addItems(
-            self._model._default_settings['write_file_type'])
+            self._model.default_settings['write_file_type'])
         self._ui.WriteFile_LineEdit.setText(
-            self._model._default_settings['default_write_file_dir'])
+            self._model.default_settings['default_write_file_dir'])
 
         self._ui.Parameters_Label.setText(
             'Parameters will show in here \n'
@@ -181,7 +181,7 @@ class NI9234View(QWidget, Ui_NI9234):
         for checkbox, combox in zip(self._channel_checkboxes, self._channel_comboxes):
             checkbox.setChecked(False)
             combox.clear()
-            combox.addItems(self._model._default_settings["sensor_type"])
+            combox.addItems(self._model.default_settings["sensor_type"])
             combox.setDisabled(True)
 
     def on_task_name_changed(self, value):
@@ -194,7 +194,7 @@ class NI9234View(QWidget, Ui_NI9234):
         self._ui.ChartUpdateInterval_HorizontalSlider.setPageStep(value)
 
     def on_create_task_button_clicked(self):
-        if self.check_channel_options():
+        if self.channel_is_seleted():
             self._ui.Start_PushButton.setEnabled(True)
             self._ui.ClearTask_PushButton.setEnabled(True)
             self._ui.WriteFile_GroupBox.setEnabled(True)
@@ -261,7 +261,7 @@ class NI9234View(QWidget, Ui_NI9234):
         self.update_wave_chart()
         self.update_spectrum_chart()
 
-    def check_channel_options(self):
+    def channel_is_seleted(self):
         """
         Depend on Channel_Checkbox and SensorType_Combox
 

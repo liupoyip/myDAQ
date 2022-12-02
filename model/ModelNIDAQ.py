@@ -5,7 +5,7 @@ from datetime import datetime
 
 import numpy as np
 import numpy.typing as npt
-from PySide6.QtCore import Signal, QObject, QTimer
+from PySide6.QtCore import QObject, QTimer
 
 from .utils import CSVStreamWriter
 from . import NIDAQ
@@ -14,25 +14,25 @@ from . import NIDAQ
 class NIDAQModel(QObject):
     _cfg_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cfg_ni9234.json')
     _cfg_file = open(_cfg_path)
-    _default_settings = json.load(_cfg_file)
+    default_settings = json.load(_cfg_file)
 
-    _device_name: str = _default_settings['device_name']
-    _task_name: str = _default_settings['default_task_name']
-    _sample_rate: int = _default_settings['default_sample_rate']
-    _min_sample_rate: int = _default_settings['min_sample_rate']
-    _max_sample_rate: int = _default_settings['max_sample_rate']
-    _frame_duration: int = _default_settings['default_frame_duration']
-    _max_frame_duration: int = _default_settings['default_frame_duration']
-    _min_frame_duration: int = _default_settings['min_frame_duration']
-    _downsample: int = _default_settings['default_wave_downsample']
-    _min_downsample: int = _default_settings['min_wave_downsample']
-    _max_downsample: int = _default_settings['max_wave_downsample']
+    _device_name: str = default_settings['device_name']
+    _task_name: str = default_settings['default_task_name']
+    _sample_rate: int = default_settings['default_sample_rate']
+    _min_sample_rate: int = default_settings['min_sample_rate']
+    _max_sample_rate: int = default_settings['max_sample_rate']
+    _frame_duration: int = default_settings['default_frame_duration']
+    _max_frame_duration: int = default_settings['default_frame_duration']
+    _min_frame_duration: int = default_settings['min_frame_duration']
+    _downsample: int = default_settings['default_wave_downsample']
+    _min_downsample: int = default_settings['min_wave_downsample']
+    _max_downsample: int = default_settings['max_wave_downsample']
     _update_interval: int = _frame_duration
     _min_update_interval: int = _frame_duration
-    _max_update_interval: int = _default_settings['max_update_interval']
-    _buffer_rate: int = _default_settings['min_buffer_rate']
-    _min_buffer_rate: int = _default_settings['min_buffer_rate']
-    _max_buffer_rate: int = _default_settings['max_buffer_rate']
+    _max_update_interval: int = default_settings['max_update_interval']
+    _buffer_rate: int = default_settings['min_buffer_rate']
+    _min_buffer_rate: int = default_settings['min_buffer_rate']
+    _max_buffer_rate: int = default_settings['max_buffer_rate']
     _chunk_len = int(_sample_rate * _frame_duration * 0.001)
     _buffer_duration: int = _frame_duration * _buffer_rate
     _wave_buffer_len: int = int(_sample_rate * _buffer_duration * 0.001)
@@ -41,7 +41,7 @@ class NIDAQModel(QObject):
     _write_file_flag: bool = False
     _nidaq: NIDAQ.NI9234 = None
     _stream_writer: CSVStreamWriter = None
-    _write_file_directory = _default_settings['default_write_file_dir']
+    _write_file_directory = default_settings['default_write_file_dir']
 
     # buffer for visualize data
     _data_buffer_update_timer = QTimer()
@@ -51,7 +51,6 @@ class NIDAQModel(QObject):
     def __init__(self):
         super().__init__()
         self._data_buffer_update_timer.timeout.connect(self._update_plot_data_buffer)
-        # self.sample_rate_changed.connect(self._update_plot_data_buffer)
 
     @property
     def task_name(self):
