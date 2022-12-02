@@ -213,13 +213,21 @@ class NI9234View(QWidget, Ui_NI9234):
             self._spectrum_downsample_rate = self._ui.SpectrumDownSample_SpinBox.value()
 
             self.add_channels()
-            self._controller.change_task_name(self._ui.TaskName_LineEdit.text())
-            self._controller.change_sample_rate(self._ui.SampleRate_SpinBox.value())
-            self._controller.change_frame_duration(self._ui.FrameDuration_SpinBox.value())
-            self._controller.change_buffer_rate(self._ui.BufferRate_SpinBox.value())
-            self._controller.change_update_interval(self._ui.ChartUpdateInterval_SpinBox.value())
-            self._controller.change_channels(self.active_channel_num_list)
-            self._controller.change_sensor_types(self.sensor_type_list)
+            self._model.task_name = self._ui.TaskName_LineEdit.text()
+            self._model.sample_rate = self._ui.SampleRate_SpinBox.value()
+            self._model.frame_duration = self._ui.FrameDuration_SpinBox.value()
+            self._model.buffer_rate = self._ui.BufferRate_SpinBox.value()
+            self._model.update_interval = self._ui.ChartUpdateInterval_SpinBox.value()
+            self._model.channels = self.active_channel_num_list
+            self._model.sensor_types = self.sensor_type_list
+
+            # self._controller.change_task_name(self._ui.TaskName_LineEdit.text())
+            # self._controller.change_sample_rate(self._ui.SampleRate_SpinBox.value())
+            # self._controller.change_frame_duration(self._ui.FrameDuration_SpinBox.value())
+            # self._controller.change_buffer_rate(self._ui.BufferRate_SpinBox.value())
+            # self._controller.change_update_interval(self._ui.ChartUpdateInterval_SpinBox.value())
+            # self._controller.change_channels(self.active_channel_num_list)
+            # self._controller.change_sensor_types(self.sensor_type_list)
 
             self._model.create()
             self.reset_wave_chart()
