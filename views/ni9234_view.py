@@ -188,7 +188,7 @@ class NI9234View(QWidget, Ui_NI9234):
             combox.addItems(self._model._default_settings["sensor_type"])
             combox.setDisabled(True)
 
-    @Slot(str)
+    # @Slot(str)
     def on_task_name_changed(self, value):
         self._ui.TaskName_LineEdit.setText(value)
 
@@ -196,14 +196,14 @@ class NI9234View(QWidget, Ui_NI9234):
     # def on_sample_rate_changed(self, value):
     #     self._ui.SampleRate_SpinBox.setValue(value)
 
-    @Slot(int)
+    # @Slot(int)
     def on_frame_duration_changed(self, value):
         self._ui.ChartUpdateInterval_SpinBox.setMinimum(value)
         self._ui.ChartUpdateInterval_SpinBox.setSingleStep(value)
         self._ui.ChartUpdateInterval_HorizontalSlider.setSingleStep(value)
         self._ui.ChartUpdateInterval_HorizontalSlider.setPageStep(value)
 
-    @Slot()
+    # @Slot()
     def on_create_task_button_clicked(self):
         if self.check_channel_options():
             self._ui.Start_PushButton.setEnabled(True)
@@ -232,7 +232,7 @@ class NI9234View(QWidget, Ui_NI9234):
             self.reset_wave_chart()
             self.reset_spectrum_chart()
 
-    @Slot()
+    # @Slot()
     def on_clear_task_button_clicked(self):
         self._ui.PreparationSetting_Frame.setEnabled(True)
         self._ui.CreateTask_PushButton.setEnabled(True)
@@ -244,7 +244,7 @@ class NI9234View(QWidget, Ui_NI9234):
         self.reset_wave_chart()
         self.reset_spectrum_chart()
 
-    @Slot()
+    # @Slot()
     def on_start_button_clicked(self):
         self._ui.Stop_PushButton.setEnabled(True)
         self._ui.Start_PushButton.setDisabled(True)
@@ -253,7 +253,7 @@ class NI9234View(QWidget, Ui_NI9234):
         self.graph_update_timer.start()
         self._model.start()
 
-    @Slot()
+    # @Slot()
     def on_stop_button_clicked(self):
         self._ui.Start_PushButton.setEnabled(True)
         self._ui.ClearTask_PushButton.setEnabled(True)
@@ -262,16 +262,16 @@ class NI9234View(QWidget, Ui_NI9234):
         self.graph_update_timer.stop()
         self._model.stop()
 
-    @Slot()
+    # @Slot()
     def on_write_file_checkbox_toggled(self):
         self._controller.change_write_file_flag(self._ui.WriteFile_CheckBox.isChecked())
         self._model.ready_write_file()
 
-    @Slot()
+    # @Slot()
     def on_reset_button_clicked(self):
         self.set_default_values()
 
-    @Slot()
+    # @Slot()
     def on_graph_update_timer_timeout(self):
         self.wave_data_buffer = self._controller.read_wave_data_buffer()
         self.spectrum_data_buffer = self._controller.read_spectrum_data_buffer()
