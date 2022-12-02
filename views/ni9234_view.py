@@ -261,15 +261,18 @@ class NI9234View(QWidget, Ui_NI9234):
         self._model.stop()
 
     def on_write_file_checkbox_toggled(self):
-        self._controller.change_write_file_flag(self._ui.WriteFile_CheckBox.isChecked())
+        self._model.write_file_flag = self._ui.WriteFile_CheckBox.isChecked()
+        # self._controller.change_write_file_flag(self._ui.WriteFile_CheckBox.isChecked())
         self._model.ready_write_file()
 
     def on_reset_button_clicked(self):
         self.set_default_values()
 
     def on_graph_update_timer_timeout(self):
-        self.wave_data_buffer = self._controller.read_wave_data_buffer()
-        self.spectrum_data_buffer = self._controller.read_spectrum_data_buffer()
+        # self.wave_data_buffer = self._controller.read_wave_data_buffer()
+        self.wave_data_buffer = self._model.get_wave_data_buffer()
+        # self.spectrum_data_buffer = self._controller.read_spectrum_data_buffer()
+        self.spectrum_data_buffer = self._model.get_spectrum_data_buffer()
         self.update_wave_chart()
         self.update_spectrum_chart()
 

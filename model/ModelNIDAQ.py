@@ -48,14 +48,6 @@ class NIDAQModel(QObject):
     _wave_data_buffer: Optional[npt.NDArray[np.float64]]
     _spectrum_data_buffer: Optional[npt.NDArray[np.float64]]
 
-    task_name_changed = Signal(str)
-    sample_rate_changed = Signal(int)
-    frame_duration_changed = Signal(int)
-    buffer_rate_changed = Signal(int)
-    update_interval_changed = Signal(int)
-    downsample_changed = Signal(int)
-    channels_changed = Signal(list)
-    sensor_types_changed = Signal(list)
     write_file_flag_changed = Signal(bool)
     buffer_duration_changed = Signal(int)
 
@@ -71,7 +63,6 @@ class NIDAQModel(QObject):
     @task_name.setter
     def task_name(self, value: str):
         self._task_name = value
-        self.task_name_changed.emit(value)
 
     @property
     def sample_rate(self):
@@ -80,7 +71,6 @@ class NIDAQModel(QObject):
     @sample_rate.setter
     def sample_rate(self, value: int):
         self._sample_rate = value
-        self.sample_rate_changed.emit(value)
 
     @property
     def frame_duration(self):
@@ -89,7 +79,6 @@ class NIDAQModel(QObject):
     @frame_duration.setter
     def frame_duration(self, value: int):
         self._frame_duration = value
-        self.frame_duration_changed.emit(value)
 
     @property
     def buffer_rate(self):
@@ -98,7 +87,6 @@ class NIDAQModel(QObject):
     @buffer_rate.setter
     def buffer_rate(self, value: int):
         self._buffer_rate = value
-        self.buffer_rate_changed.emit(value)
 
     @property
     def buffer_duration(self):
@@ -116,7 +104,6 @@ class NIDAQModel(QObject):
     @update_interval.setter
     def update_interval(self, value: int):
         self._update_interval = value
-        self.update_interval_changed.emit(value)
 
     @property
     def channels(self):
@@ -125,7 +112,6 @@ class NIDAQModel(QObject):
     @channels.setter
     def channels(self, value: list[int]):
         self._channels = value
-        self.channels_changed.emit(value)
 
     @property
     def sensor_types(self):
@@ -134,7 +120,6 @@ class NIDAQModel(QObject):
     @sensor_types.setter
     def sensor_types(self, value: list[str]):
         self._sensor_types = value
-        self.sensor_types_changed.emit(value)
 
     @property
     def write_file_flag(self):
