@@ -158,7 +158,6 @@ class NIDAQModel(QObject):
     def start(self):
         if self._write_file_flag:
             self.write_file()
-
         self._nidaq.set_stream_enable()
         self._nidaq.start_task()
         self._data_buffer_update_timer.start()

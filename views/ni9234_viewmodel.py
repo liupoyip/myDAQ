@@ -6,7 +6,7 @@ from PySide6.QtCore import QTimer
 from .chart import WaveChart, SpectrumChart
 
 
-class NI9234View(QWidget, Ui_NI9234):
+class NI9234ViewModel(QWidget, Ui_NI9234):
     _wave_downsample_rate: Optional[int] = None
     _spectrum_downsample_rate: Optional[int] = None
 
@@ -47,8 +47,8 @@ class NI9234View(QWidget, Ui_NI9234):
         self.graph_update_timer = QTimer()
         self.graph_update_timer.setInterval(100)
 
-        # listen for model event signals
-        self._ui.TaskName_LineEdit.textChanged.connect(self.on_task_name_changed)
+        # listen for model event
+        # self._ui.TaskName_LineEdit.textChanged.connect(self.on_task_name_changed)
         self._ui.FrameDuration_SpinBox.valueChanged.connect(self.on_frame_duration_changed)
         self._ui.Reset_PushButton.clicked.connect(self.on_reset_button_clicked)
         self._ui.Start_PushButton.clicked.connect(self.on_start_button_clicked)
@@ -184,8 +184,8 @@ class NI9234View(QWidget, Ui_NI9234):
             combox.addItems(self._model.default_settings["sensor_type"])
             combox.setDisabled(True)
 
-    def on_task_name_changed(self, value):
-        self._ui.TaskName_LineEdit.setText(value)
+    # def on_task_name_changed(self, value):
+        # self._ui.TaskName_LineEdit.setText(value)
 
     def on_frame_duration_changed(self, value):
         self._ui.ChartUpdateInterval_SpinBox.setMinimum(value)
