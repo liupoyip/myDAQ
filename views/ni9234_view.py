@@ -188,22 +188,15 @@ class NI9234View(QWidget, Ui_NI9234):
             combox.addItems(self._model._default_settings["sensor_type"])
             combox.setDisabled(True)
 
-    # @Slot(str)
     def on_task_name_changed(self, value):
         self._ui.TaskName_LineEdit.setText(value)
 
-    # @Slot(int)
-    # def on_sample_rate_changed(self, value):
-    #     self._ui.SampleRate_SpinBox.setValue(value)
-
-    # @Slot(int)
     def on_frame_duration_changed(self, value):
         self._ui.ChartUpdateInterval_SpinBox.setMinimum(value)
         self._ui.ChartUpdateInterval_SpinBox.setSingleStep(value)
         self._ui.ChartUpdateInterval_HorizontalSlider.setSingleStep(value)
         self._ui.ChartUpdateInterval_HorizontalSlider.setPageStep(value)
 
-    # @Slot()
     def on_create_task_button_clicked(self):
         if self.check_channel_options():
             self._ui.Start_PushButton.setEnabled(True)
@@ -232,7 +225,6 @@ class NI9234View(QWidget, Ui_NI9234):
             self.reset_wave_chart()
             self.reset_spectrum_chart()
 
-    # @Slot()
     def on_clear_task_button_clicked(self):
         self._ui.PreparationSetting_Frame.setEnabled(True)
         self._ui.CreateTask_PushButton.setEnabled(True)
@@ -244,7 +236,6 @@ class NI9234View(QWidget, Ui_NI9234):
         self.reset_wave_chart()
         self.reset_spectrum_chart()
 
-    # @Slot()
     def on_start_button_clicked(self):
         self._ui.Stop_PushButton.setEnabled(True)
         self._ui.Start_PushButton.setDisabled(True)
@@ -253,7 +244,6 @@ class NI9234View(QWidget, Ui_NI9234):
         self.graph_update_timer.start()
         self._model.start()
 
-    # @Slot()
     def on_stop_button_clicked(self):
         self._ui.Start_PushButton.setEnabled(True)
         self._ui.ClearTask_PushButton.setEnabled(True)
@@ -262,16 +252,13 @@ class NI9234View(QWidget, Ui_NI9234):
         self.graph_update_timer.stop()
         self._model.stop()
 
-    # @Slot()
     def on_write_file_checkbox_toggled(self):
         self._controller.change_write_file_flag(self._ui.WriteFile_CheckBox.isChecked())
         self._model.ready_write_file()
 
-    # @Slot()
     def on_reset_button_clicked(self):
         self.set_default_values()
 
-    # @Slot()
     def on_graph_update_timer_timeout(self):
         self.wave_data_buffer = self._controller.read_wave_data_buffer()
         self.spectrum_data_buffer = self._controller.read_spectrum_data_buffer()
@@ -349,8 +336,9 @@ class NI9234View(QWidget, Ui_NI9234):
     def update_spectrum_chart(self):
         for i, num in enumerate(self.active_channel_num_list):
             mean_spectrum = np.mean(self.spectrum_data_buffer[i], axis=0)
-            # mean_spectrum = mean_spectrum / np.max(mean_spectrum)   # normalize 0~1
+            # mean_spectrum = mean_spectrum / np.max(mean_spectrum) # normalize 0~1
             spectrum_data_downsample = mean_spectrum[::self._spectrum_downsample_rate]
+            # normalize 0~1
             spectrum_data_downsample = spectrum_data_downsample / np.max(spectrum_data_downsample)
             self.channel_spectrum_charts[num].set_y(spectrum_data_downsample)
 
