@@ -13,10 +13,12 @@ class NI9234View(QWidget, Ui_NI9234):
     _wave_downsample_rate: Optional[int] = None
     _spectrum_downsample_rate: Optional[int] = None
 
-    def __init__(self, model, controller):
+    # def __init__(self, model, controller):
+
+    def __init__(self, model):
         super().__init__()
         self._model = model
-        self._controller = controller
+        #self._controller = controller
 
         # setup view
         self.setFixedWidth(1600)
