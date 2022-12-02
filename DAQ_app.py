@@ -1,14 +1,14 @@
 import sys
 from PySide6.QtWidgets import QApplication
 from model.ModelNIDAQ import NIDAQModel
-from views.ni9234_view import NI9234View
+from views.ni9234_viewmodel import NI9234ViewModel
 
 
 class App(QApplication):
     def __init__(self, sys_argv=None):
         super(App, self).__init__()
         self.model = NIDAQModel()
-        self.main_view = NI9234View(self.model)
+        self.main_view = NI9234ViewModel(self.model)
         self.main_view.show()
 
 
