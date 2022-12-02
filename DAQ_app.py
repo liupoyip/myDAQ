@@ -12,6 +12,5 @@ class App(QApplication):
         self.main_view.show()
 
 
-if __name__ == '__main__':
-    app = App()
-    sys.exit(app.exec())
+app = App()
+sys.exit(app.exec())
