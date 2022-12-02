@@ -2,23 +2,17 @@ from typing import Optional
 import numpy as np
 from .ui_ni9234 import Ui_NI9234
 from PySide6.QtWidgets import QWidget, QMessageBox
-from PySide6.QtCore import Slot, QTimer
+from PySide6.QtCore import QTimer
 from .chart import WaveChart, SpectrumChart
-#from ..model.ModelNIDAQ import NIDAQModel
-#from ..controllers.ni9234_crtl import NI9234Controller
 
 
 class NI9234View(QWidget, Ui_NI9234):
-    # def __init__(self, model: NIDAQModel, controller: NI9234Controller):
     _wave_downsample_rate: Optional[int] = None
     _spectrum_downsample_rate: Optional[int] = None
-
-    # def __init__(self, model, controller):
 
     def __init__(self, model):
         super().__init__()
         self._model = model
-        #self._controller = controller
 
         # setup view
         self.setFixedWidth(1600)
@@ -223,14 +217,6 @@ class NI9234View(QWidget, Ui_NI9234):
             self._model.channels = self.active_channel_num_list
             self._model.sensor_types = self.sensor_type_list
 
-            # self._controller.change_task_name(self._ui.TaskName_LineEdit.text())
-            # self._controller.change_sample_rate(self._ui.SampleRate_SpinBox.value())
-            # self._controller.change_frame_duration(self._ui.FrameDuration_SpinBox.value())
-            # self._controller.change_buffer_rate(self._ui.BufferRate_SpinBox.value())
-            # self._controller.change_update_interval(self._ui.ChartUpdateInterval_SpinBox.value())
-            # self._controller.change_channels(self.active_channel_num_list)
-            # self._controller.change_sensor_types(self.sensor_type_list)
-
             self._model.create()
             self.reset_wave_chart()
             self.reset_spectrum_chart()
@@ -264,16 +250,13 @@ class NI9234View(QWidget, Ui_NI9234):
 
     def on_write_file_checkbox_toggled(self):
         self._model.write_file_flag = self._ui.WriteFile_CheckBox.isChecked()
-        # self._controller.change_write_file_flag(self._ui.WriteFile_CheckBox.isChecked())
         self._model.ready_write_file()
 
     def on_reset_button_clicked(self):
         self.set_default_values()
 
     def on_graph_update_timer_timeout(self):
-        # self.wave_data_buffer = self._controller.read_wave_data_buffer()
         self.wave_data_buffer = self._model.get_wave_data_buffer()
-        # self.spectrum_data_buffer = self._controller.read_spectrum_data_buffer()
         self.spectrum_data_buffer = self._model.get_spectrum_data_buffer()
         self.update_wave_chart()
         self.update_spectrum_chart()

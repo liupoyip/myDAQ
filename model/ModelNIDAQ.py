@@ -48,9 +48,6 @@ class NIDAQModel(QObject):
     _wave_data_buffer: Optional[npt.NDArray[np.float64]]
     _spectrum_data_buffer: Optional[npt.NDArray[np.float64]]
 
-    write_file_flag_changed = Signal(bool)
-    buffer_duration_changed = Signal(int)
-
     def __init__(self):
         super().__init__()
         self._data_buffer_update_timer.timeout.connect(self._update_plot_data_buffer)
@@ -95,7 +92,6 @@ class NIDAQModel(QObject):
     @buffer_duration.setter
     def buffer_duration(self, value: int):
         self._buffer_duration = value
-        self.buffer_duration_changed.emit(value)
 
     @property
     def update_interval(self):
@@ -128,7 +124,6 @@ class NIDAQModel(QObject):
     @write_file_flag.setter
     def write_file_flag(self, value: bool):
         self._write_file_flag = value
-        self.write_file_flag_changed.emit(value)
 
     def create(self):
         try:
