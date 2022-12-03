@@ -1,9 +1,11 @@
 from typing import Optional
 import numpy as np
+import numpy.typing as npt
 from .ui_ni9234 import Ui_NI9234
 from PySide6.QtWidgets import QWidget, QMessageBox
 from PySide6.QtCore import QTimer
 from .chart import WaveChart, SpectrumChart
+from datetime import datetime
 
 
 class NI9234ViewModel(QWidget, Ui_NI9234):
@@ -28,8 +30,8 @@ class NI9234ViewModel(QWidget, Ui_NI9234):
             self.Channel1_WaveChart,
             self.Channel2_WaveChart,
             self.Channel3_WaveChart]
-        for wave_chart in self.channel_wave_charts:
-            self._ui.WaveCharts_VBoxLayout.addWidget(wave_chart.chart_view)
+        # for i, wave_chart in enumerate(self.channel_wave_charts):
+        #     self._ui.WaveCharts_VBoxLayout.addWidget(wave_chart.chart_view)
 
         self.Channel0_SpectrumChart = SpectrumChart()
         self.Channel1_SpectrumChart = SpectrumChart()
@@ -40,12 +42,18 @@ class NI9234ViewModel(QWidget, Ui_NI9234):
             self.Channel1_SpectrumChart,
             self.Channel2_SpectrumChart,
             self.Channel3_SpectrumChart]
-        for spectrum_chart in self.channel_spectrum_charts:
-            self._ui.SpectrumCharts_VBoxLayout.addWidget(spectrum_chart.chart_view)
+        # for i, spectrum_chart in enumerate(self.channel_spectrum_charts):
+        #     self._ui.SpectrumCharts_VBoxLayout.addWidget(spectrum_chart.chart_view)
 
-        # graph update timer
+        for i, (wave_chart, spectrum_chart) in enumerate(zip(self.channel_wave_charts, self.channel_spectrum_charts)):
+            self._ui.Charts_GridLayout.addWidget(wave_chart.chart_view, i, 1)
+            self._ui.Charts_GridLayout.addWidget(spectrum_chart.chart_view, i, 2)
+
+        # Timers
         self.graph_update_timer = QTimer()
         self.graph_update_timer.setInterval(100)
+        self.now_time_timer = QTimer()
+        self.now_time_timer.setInterval(1000)
 
         # listen for model event
         # self._ui.TaskName_LineEdit.textChanged.connect(self.on_task_name_changed)
@@ -55,9 +63,6 @@ class NI9234ViewModel(QWidget, Ui_NI9234):
         self._ui.Stop_PushButton.clicked.connect(self.on_stop_button_clicked)
         self._ui.CreateTask_PushButton.clicked.connect(self.on_create_task_button_clicked)
         self._ui.ClearTask_PushButton.clicked.connect(self.on_clear_task_button_clicked)
-        self.graph_update_timer.timeout.connect(self.on_graph_update_timer_timeout)
-        self.wave_data_buffer = None
-
         self._channel_checkboxes = [
             self._ui.Channel0_CheckBox,
             self._ui.Channel1_CheckBox,
@@ -68,13 +73,18 @@ class NI9234ViewModel(QWidget, Ui_NI9234):
             self._ui.Channel1_ComboBox,
             self._ui.Channel2_ComboBox,
             self._ui.Channel3_ComboBox]
-
         for checkbox, combox in zip(self._channel_checkboxes, self._channel_comboxes):
             checkbox.toggled.connect(combox.setEnabled)
-
         self._ui.WriteFile_CheckBox.toggled.connect(self.on_write_file_checkbox_toggled)
 
+        self.graph_update_timer.timeout.connect(self.on_graph_update_timer_timeout)
+        self.now_time_timer.timeout.connect(self.on_now_time_timer_timeout)
+
+        self.wave_data_buffer: Optional[npt.NDArray] = None
+        self.spectrum_data_buffer: Optional[npt.NDArray] = None
+
         self.set_default_values()
+        self.now_time_timer.start()
 
     def set_default_values(self):
 
@@ -260,6 +270,9 @@ class NI9234ViewModel(QWidget, Ui_NI9234):
         self.spectrum_data_buffer = self._model.get_spectrum_data_buffer()
         self.update_wave_chart()
         self.update_spectrum_chart()
+
+    def on_now_time_timer_timeout(self):
+        self._ui.NowTime_Label.setText(datetime.now().isoformat(sep=' ', timespec='seconds'))
 
     def channel_is_seleted(self):
         """

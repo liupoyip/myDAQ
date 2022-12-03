@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'ni9234.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.1
+## Created by: Qt User Interface Compiler version 6.4.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -16,9 +16,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
-    QGroupBox, QLabel, QLayout, QLineEdit,
-    QPushButton, QSizePolicy, QSlider, QSpinBox,
-    QVBoxLayout, QWidget)
+    QGridLayout, QGroupBox, QLabel, QLayout,
+    QLineEdit, QPushButton, QSizePolicy, QSlider,
+    QSpinBox, QVBoxLayout, QWidget)
 
 class Ui_NI9234(object):
     def setupUi(self, NI9234):
@@ -47,29 +47,13 @@ class Ui_NI9234(object):
         self.Parameters_Label = QLabel(NI9234)
         self.Parameters_Label.setObjectName(u"Parameters_Label")
         self.Parameters_Label.setEnabled(True)
-        self.Parameters_Label.setGeometry(QRect(20, 610, 191, 51))
+        self.Parameters_Label.setGeometry(QRect(20, 620, 191, 41))
         self.Parameters_Label.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
         self.Parameters_Label.setWordWrap(False)
         self.Parameters_Label.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextSelectableByMouse)
-        self.layoutWidget = QWidget(NI9234)
-        self.layoutWidget.setObjectName(u"layoutWidget")
-        self.layoutWidget.setGeometry(QRect(1010, 10, 581, 881))
-        self.SpectrumCharts_VBoxLayout = QVBoxLayout(self.layoutWidget)
-        self.SpectrumCharts_VBoxLayout.setSpacing(0)
-        self.SpectrumCharts_VBoxLayout.setObjectName(u"SpectrumCharts_VBoxLayout")
-        self.SpectrumCharts_VBoxLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.SpectrumCharts_VBoxLayout.setContentsMargins(0, 0, 0, 0)
-        self.layoutWidget1 = QWidget(NI9234)
-        self.layoutWidget1.setObjectName(u"layoutWidget1")
-        self.layoutWidget1.setGeometry(QRect(390, 10, 611, 881))
-        self.WaveCharts_VBoxLayout = QVBoxLayout(self.layoutWidget1)
-        self.WaveCharts_VBoxLayout.setSpacing(0)
-        self.WaveCharts_VBoxLayout.setObjectName(u"WaveCharts_VBoxLayout")
-        self.WaveCharts_VBoxLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.WaveCharts_VBoxLayout.setContentsMargins(0, 0, 0, 0)
         self.WriteFile_GroupBox = QGroupBox(NI9234)
         self.WriteFile_GroupBox.setObjectName(u"WriteFile_GroupBox")
-        self.WriteFile_GroupBox.setGeometry(QRect(10, 520, 341, 81))
+        self.WriteFile_GroupBox.setGeometry(QRect(10, 530, 341, 81))
         self.WriteFile_CheckBox = QCheckBox(self.WriteFile_GroupBox)
         self.WriteFile_CheckBox.setObjectName(u"WriteFile_CheckBox")
         self.WriteFile_CheckBox.setGeometry(QRect(10, 20, 76, 20))
@@ -97,13 +81,13 @@ class Ui_NI9234(object):
         self.DAQParameters_GroupBox = QGroupBox(self.PreparationSetting_Frame)
         self.DAQParameters_GroupBox.setObjectName(u"DAQParameters_GroupBox")
         self.DAQParameters_GroupBox.setGeometry(QRect(10, 60, 340, 101))
-        self.layoutWidget2 = QWidget(self.DAQParameters_GroupBox)
-        self.layoutWidget2.setObjectName(u"layoutWidget2")
-        self.layoutWidget2.setGeometry(QRect(10, 20, 321, 71))
-        self.DAQParameters_VerticalLayout = QVBoxLayout(self.layoutWidget2)
+        self.layoutWidget = QWidget(self.DAQParameters_GroupBox)
+        self.layoutWidget.setObjectName(u"layoutWidget")
+        self.layoutWidget.setGeometry(QRect(10, 20, 321, 71))
+        self.DAQParameters_VerticalLayout = QVBoxLayout(self.layoutWidget)
         self.DAQParameters_VerticalLayout.setObjectName(u"DAQParameters_VerticalLayout")
         self.DAQParameters_VerticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.SampleRate_Frame = QFrame(self.layoutWidget2)
+        self.SampleRate_Frame = QFrame(self.layoutWidget)
         self.SampleRate_Frame.setObjectName(u"SampleRate_Frame")
         self.SampleRate_Frame.setEnabled(True)
         self.SampleRate_Frame.setFrameShape(QFrame.NoFrame)
@@ -133,7 +117,7 @@ class Ui_NI9234(object):
 
         self.DAQParameters_VerticalLayout.addWidget(self.SampleRate_Frame)
 
-        self.FrameDuration_Frame = QFrame(self.layoutWidget2)
+        self.FrameDuration_Frame = QFrame(self.layoutWidget)
         self.FrameDuration_Frame.setObjectName(u"FrameDuration_Frame")
         self.FrameDuration_Frame.setEnabled(True)
         self.FrameDuration_Frame.setFrameShape(QFrame.NoFrame)
@@ -166,14 +150,14 @@ class Ui_NI9234(object):
         self.ChannelOption_GroupBox = QGroupBox(self.PreparationSetting_Frame)
         self.ChannelOption_GroupBox.setObjectName(u"ChannelOption_GroupBox")
         self.ChannelOption_GroupBox.setGeometry(QRect(10, 340, 271, 161))
-        self.layoutWidget3 = QWidget(self.ChannelOption_GroupBox)
-        self.layoutWidget3.setObjectName(u"layoutWidget3")
-        self.layoutWidget3.setGeometry(QRect(10, 20, 231, 131))
-        self.ChannelOption_VerticalLayout = QVBoxLayout(self.layoutWidget3)
+        self.layoutWidget1 = QWidget(self.ChannelOption_GroupBox)
+        self.layoutWidget1.setObjectName(u"layoutWidget1")
+        self.layoutWidget1.setGeometry(QRect(10, 20, 231, 131))
+        self.ChannelOption_VerticalLayout = QVBoxLayout(self.layoutWidget1)
         self.ChannelOption_VerticalLayout.setSpacing(0)
         self.ChannelOption_VerticalLayout.setObjectName(u"ChannelOption_VerticalLayout")
         self.ChannelOption_VerticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.Channel0_Frame = QFrame(self.layoutWidget3)
+        self.Channel0_Frame = QFrame(self.layoutWidget1)
         self.Channel0_Frame.setObjectName(u"Channel0_Frame")
         self.Channel0_Frame.setFrameShape(QFrame.NoFrame)
         self.Channel0_Frame.setFrameShadow(QFrame.Plain)
@@ -187,7 +171,7 @@ class Ui_NI9234(object):
 
         self.ChannelOption_VerticalLayout.addWidget(self.Channel0_Frame)
 
-        self.Channel1_Frame = QFrame(self.layoutWidget3)
+        self.Channel1_Frame = QFrame(self.layoutWidget1)
         self.Channel1_Frame.setObjectName(u"Channel1_Frame")
         self.Channel1_Frame.setFrameShape(QFrame.NoFrame)
         self.Channel1_Frame.setFrameShadow(QFrame.Plain)
@@ -201,7 +185,7 @@ class Ui_NI9234(object):
 
         self.ChannelOption_VerticalLayout.addWidget(self.Channel1_Frame)
 
-        self.Channel2_Frame = QFrame(self.layoutWidget3)
+        self.Channel2_Frame = QFrame(self.layoutWidget1)
         self.Channel2_Frame.setObjectName(u"Channel2_Frame")
         self.Channel2_Frame.setFrameShape(QFrame.NoFrame)
         self.Channel2_Frame.setFrameShadow(QFrame.Plain)
@@ -215,7 +199,7 @@ class Ui_NI9234(object):
 
         self.ChannelOption_VerticalLayout.addWidget(self.Channel2_Frame)
 
-        self.Channel3_Frame = QFrame(self.layoutWidget3)
+        self.Channel3_Frame = QFrame(self.layoutWidget1)
         self.Channel3_Frame.setObjectName(u"Channel3_Frame")
         self.Channel3_Frame.setFrameShape(QFrame.NoFrame)
         self.Channel3_Frame.setFrameShadow(QFrame.Plain)
@@ -232,14 +216,14 @@ class Ui_NI9234(object):
         self.ChartParameters_GroupBox = QGroupBox(self.PreparationSetting_Frame)
         self.ChartParameters_GroupBox.setObjectName(u"ChartParameters_GroupBox")
         self.ChartParameters_GroupBox.setGeometry(QRect(10, 170, 341, 161))
-        self.layoutWidget4 = QWidget(self.ChartParameters_GroupBox)
-        self.layoutWidget4.setObjectName(u"layoutWidget4")
-        self.layoutWidget4.setGeometry(QRect(10, 20, 321, 131))
-        self.ChartParameters_VerticalLayout = QVBoxLayout(self.layoutWidget4)
+        self.layoutWidget2 = QWidget(self.ChartParameters_GroupBox)
+        self.layoutWidget2.setObjectName(u"layoutWidget2")
+        self.layoutWidget2.setGeometry(QRect(10, 20, 321, 131))
+        self.ChartParameters_VerticalLayout = QVBoxLayout(self.layoutWidget2)
         self.ChartParameters_VerticalLayout.setSpacing(0)
         self.ChartParameters_VerticalLayout.setObjectName(u"ChartParameters_VerticalLayout")
         self.ChartParameters_VerticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.BufferRate_Frame = QFrame(self.layoutWidget4)
+        self.BufferRate_Frame = QFrame(self.layoutWidget2)
         self.BufferRate_Frame.setObjectName(u"BufferRate_Frame")
         self.BufferRate_Frame.setEnabled(True)
         self.BufferRate_Frame.setFrameShape(QFrame.NoFrame)
@@ -269,7 +253,7 @@ class Ui_NI9234(object):
 
         self.ChartParameters_VerticalLayout.addWidget(self.BufferRate_Frame)
 
-        self.ChartUpdateInterval_Frame = QFrame(self.layoutWidget4)
+        self.ChartUpdateInterval_Frame = QFrame(self.layoutWidget2)
         self.ChartUpdateInterval_Frame.setObjectName(u"ChartUpdateInterval_Frame")
         self.ChartUpdateInterval_Frame.setEnabled(True)
         self.ChartUpdateInterval_Frame.setFrameShape(QFrame.NoFrame)
@@ -300,7 +284,7 @@ class Ui_NI9234(object):
 
         self.ChartParameters_VerticalLayout.addWidget(self.ChartUpdateInterval_Frame)
 
-        self.WaveDownSample_Frame = QFrame(self.layoutWidget4)
+        self.WaveDownSample_Frame = QFrame(self.layoutWidget2)
         self.WaveDownSample_Frame.setObjectName(u"WaveDownSample_Frame")
         self.WaveDownSample_Frame.setEnabled(True)
         self.WaveDownSample_Frame.setFrameShape(QFrame.NoFrame)
@@ -329,7 +313,7 @@ class Ui_NI9234(object):
 
         self.ChartParameters_VerticalLayout.addWidget(self.WaveDownSample_Frame)
 
-        self.SpectrumDownSample_Frame = QFrame(self.layoutWidget4)
+        self.SpectrumDownSample_Frame = QFrame(self.layoutWidget2)
         self.SpectrumDownSample_Frame.setObjectName(u"SpectrumDownSample_Frame")
         self.SpectrumDownSample_Frame.setEnabled(True)
         self.SpectrumDownSample_Frame.setFrameShape(QFrame.NoFrame)
@@ -376,6 +360,14 @@ class Ui_NI9234(object):
         self.Info_Label.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
         self.Info_Label.setWordWrap(False)
         self.Info_Label.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextSelectableByMouse)
+        self.gridLayoutWidget = QWidget(NI9234)
+        self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
+        self.gridLayoutWidget.setGeometry(QRect(380, 10, 1211, 881))
+        self.Charts_GridLayout = QGridLayout(self.gridLayoutWidget)
+        self.Charts_GridLayout.setSpacing(3)
+        self.Charts_GridLayout.setObjectName(u"Charts_GridLayout")
+        self.Charts_GridLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
+        self.Charts_GridLayout.setContentsMargins(0, 0, 0, 0)
 
         self.retranslateUi(NI9234)
         self.SampleRate_HorizontalSlider.valueChanged.connect(self.SampleRate_SpinBox.setValue)

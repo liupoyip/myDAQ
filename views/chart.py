@@ -102,7 +102,7 @@ class SpectrumChart(LineChart):
         self._axis_y.setRange(0, 1)
         self._axis_y.setLabelFormat('%.2f')
         self._axis_y.setLabelsEditable(True)
-        self._axis_y.setTitleText("power(normalize 0~1)")
+        self._axis_y.setTitleText("power (norm 0~1)")
 
         self._x = np.linspace(0, 1600, 512)
         self._y = np.zeros(512)
