@@ -7,7 +7,6 @@ import numpy as np
 import numpy.typing as npt
 from PySide6.QtCore import QObject, QTimer
 
-from .utils import CSVStreamWriter
 from . import NIDAQ
 
 
@@ -40,7 +39,6 @@ class NIDAQModel(QObject):
     _sensor_types: list[str] = list()
     _write_file_flag: bool = False
     _nidaq: NIDAQ.NI9234 = None
-    _stream_writer: CSVStreamWriter = None
     _write_file_directory = default_settings['default_write_file_dir']
 
     # buffer for visualize data
@@ -139,8 +137,8 @@ class NIDAQModel(QObject):
         self._nidaq.set_sample_rate(self._sample_rate)
         self._nidaq.set_frame_duration(self._frame_duration)
         self._nidaq.show_daq_params()
-        NIDAQ.callback_obj_ptr = self._nidaq.self_ptr
-        self._nidaq.ready_read(callback_method=NIDAQ.callback_method)
+        self._nidaq.ready_read(callback_method=lambda foo1, foo2, foo3, foo4: self._nidaq.callback_method(
+            self._nidaq.task._handle, self._nidaq.every_n_samples_event_type, self._nidaq.frame_size, callback_data=self._nidaq))
         self._nidaq.stream_writer.set_directory(self._write_file_directory)
 
         self._data_buffer_update_timer.setInterval(self._frame_duration)

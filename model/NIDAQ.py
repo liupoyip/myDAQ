@@ -1,5 +1,4 @@
 from typing import Optional, Union
-import ctypes
 import asyncio
 from datetime import datetime
 import dataclasses
@@ -16,7 +15,8 @@ from nidaqmx.constants import (AcquisitionType,
                                AccelUnits,
                                AccelSensitivityUnits,
                                SoundPressureUnits,
-                               ExcitationSource)
+                               ExcitationSource,
+                               EveryNSamplesEventType)
 import numpy as np
 import numpy.typing as npt
 
@@ -34,7 +34,7 @@ class GeneralDAQParams:
 
 class NIDAQ(GeneralDAQParams):
     system: Optional[nidaqmx.system.system.System] = None
-    stream_trig: Optional[bool] = None
+    stream_switch_flag: Optional[bool] = None
     task: Optional[nidaqmx.task.Task] = None
     device: Optional[nidaqmx.system.device.Device] = None
     device_name: Optional[str] = None
@@ -43,6 +43,7 @@ class NIDAQ(GeneralDAQParams):
     stream_reader: Optional[NiStreamReaders.AnalogMultiChannelReader] = None
     stream_writer: Optional[CSVStreamWriter] = None
     write_file_flag: Optional[bool] = None
+    chunk: Optional[npt.NDArray[np.float64]] = None
 
     def __init__(self) -> None:
         super(NIDAQ, self).__init__()
@@ -57,6 +58,12 @@ class NIDAQ(GeneralDAQParams):
     def check_device_is_exsit(self) -> None:
         if len(self.system.devices) == 0:
             raise BaseException('Cannot find local device.')
+
+    def start_task(self) -> None:
+        pass
+
+    def stop_task(self) -> None:
+        pass
 
     def show_daq_params(self) -> None:
         self.show_daq_chassis_device_name()
@@ -94,8 +101,6 @@ class NIDAQ(GeneralDAQParams):
 
 class NI9234(NIDAQ):
     channel_num_list: tuple = (0, 1, 2, 3, '0', '1', '2', '3')
-    chunk: npt.NDArray[np.float64]
-    ptr: Optional[ctypes.py_object]
 
     def __init__(self, device_name) -> None:
         super(NI9234, self).__init__()
@@ -112,13 +117,13 @@ class NI9234(NIDAQ):
         self.frame_size = int(self.sample_rate * self.frame_duration * 0.001)
         self.buffer_size = self.frame_size * 10
 
+        self.every_n_samples_event_type = EveryNSamplesEventType.ACQUIRED_INTO_BUFFER
         self.write_file_flag = False
         self.write_file_dir = '.'
 
         self.stream_writer = CSVStreamWriter(directory=self.write_file_dir)
 
-        self.self_ptr = ctypes.py_object(self)
-        self.stream_trig = False
+        self.stream_switch_flag = False
 
     def create_task(self, task_name: str) -> None:
         if self.task == None:
@@ -186,10 +191,10 @@ class NI9234(NIDAQ):
         self.task.in_stream.input_buf_size = self.buffer_size
 
     def set_stream_enable(self) -> None:
-        self.stream_trig = True
+        self.stream_switch_flag = True
 
     def set_stream_disable(self) -> None:
-        self.stream_trig = False
+        self.stream_switch_flag = False
 
     def set_write_file_enable(self) -> None:
         self.write_file_flag = True
@@ -240,7 +245,7 @@ class NI9234(NIDAQ):
         while True:
 
             await asyncio.sleep(0.1)
-            if keyboard.is_pressed('s') and not self.stream_trig:
+            if keyboard.is_pressed('s') and not self.stream_switch_flag:
                 self.set_stream_enable()
                 self.start_task()
                 print('start streaming')
@@ -253,30 +258,28 @@ class NI9234(NIDAQ):
                 print('close task')
                 break
 
+    @staticmethod
+    def callback_method(task_handle, every_n_samples_event_type,
+                        num_of_samples, callback_data: NIDAQ):
+        daq = callback_data
+        daq.stream_reader.read_many_sample(daq.chunk)
 
-def callback_method(task_handle, every_n_samples_event_type,
-                    number_of_samples, _):
-    global callback_obj_ptr
-    callback_obj_ptr.value.stream_reader.read_many_sample(callback_obj_ptr.value.chunk)
+        if daq.write_file_flag:
+            daq.stream_writer.write(chunk=daq.chunk, transpose=True)
 
-    if callback_obj_ptr.value.write_file_flag:
-        callback_obj_ptr.value.stream_writer.write(
-            chunk=callback_obj_ptr.value.chunk, transpose=True)
+        current_time = datetime.now().isoformat(timespec='milliseconds')
+        print(f'Now time: {current_time} / Recording..., buffer size: {num_of_samples}')
+        #print( f'task_handle: {task_handle}, event type: {every_n_samples_event_type}, callback data :{callback_data}')
 
-    current_time = datetime.now().isoformat(sep=' ', timespec='milliseconds')
-    print(
-        f'Current time: {current_time} / Recording... every {number_of_samples} Samples callback invoked.')
-
-    if not callback_obj_ptr.value.stream_trig:
-        callback_obj_ptr.value.stop_task()
-    return 0
+        if not daq.stream_switch_flag:
+            daq.stop_task()
+        return 0
 
 
 callback_obj_ptr = None
 
 if __name__ == '__main__':
     nidaq = NI9234(device_name='NI_9234')
-    callback_obj_ptr = nidaq.self_ptr
     nidaq.create_task(task_name='myTask')
     nidaq.add_accel_channel(0)
     nidaq.add_accel_channel(1)
@@ -285,7 +288,12 @@ if __name__ == '__main__':
     nidaq.set_sample_rate(25600)
     nidaq.set_frame_duration(100)
 
-    nidaq.ready_read(callback_method=callback_method)
+    #callback_data = 'hello'
+
+    nidaq.ready_read(
+        callback_method=lambda task_handle, every_n_samples_event_type,
+        number_of_samples, callback_data: nidaq.callback_method(
+            nidaq.task._handle, nidaq.every_n_samples_event_type, nidaq.frame_size, callback_data=nidaq))
     nidaq.show_control_manual()
     # method 1 async function with event loop
     # loop = asyncio.get_event_loop()
