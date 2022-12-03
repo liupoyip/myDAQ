@@ -364,7 +364,7 @@ class Ui_NI9234(object):
         self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
         self.gridLayoutWidget.setGeometry(QRect(380, 10, 1211, 881))
         self.Charts_GridLayout = QGridLayout(self.gridLayoutWidget)
-        self.Charts_GridLayout.setSpacing(3)
+        self.Charts_GridLayout.setSpacing(0)
         self.Charts_GridLayout.setObjectName(u"Charts_GridLayout")
         self.Charts_GridLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
         self.Charts_GridLayout.setContentsMargins(0, 0, 0, 0)
