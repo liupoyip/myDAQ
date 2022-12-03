@@ -101,9 +101,9 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>580</y>
+     <y>610</y>
      <width>191</width>
-     <height>61</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="text">
@@ -159,7 +159,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>490</y>
+     <y>520</y>
      <width>341</width>
      <height>81</height>
     </rect>
@@ -221,6 +221,9 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="frame">
+     <bool>false</bool>
+    </property>
    </widget>
   </widget>
   <widget class="QLabel" name="NowTime_Label">
@@ -239,10 +242,10 @@
   <widget class="QFrame" name="PreparationSetting_Frame">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>10</x>
      <y>10</y>
      <width>361</width>
-     <height>481</height>
+     <height>511</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -257,718 +260,730 @@
       <x>10</x>
       <y>60</y>
       <width>340</width>
-      <height>91</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="title">
      <string>DAQ Parameters</string>
     </property>
-    <widget class="QFrame" name="SampleRate_Frame">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>320</width>
-       <height>30</height>
+       <width>321</width>
+       <height>71</height>
       </rect>
      </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <widget class="QSlider" name="SampleRate_HorizontalSlider">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>5</y>
-        <width>80</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="minimum">
-       <number>0</number>
-      </property>
-      <property name="maximum">
-       <number>99</number>
-      </property>
-      <property name="value">
-       <number>0</number>
-      </property>
-      <property name="sliderPosition">
-       <number>0</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSpinBox" name="SampleRate_SpinBox">
-      <property name="geometry">
-       <rect>
-        <x>250</x>
-        <y>5</y>
-        <width>60</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="specialValueText">
-       <string notr="true"/>
-      </property>
-      <property name="minimum">
-       <number>0</number>
-      </property>
-      <property name="maximum">
-       <number>99</number>
-      </property>
-      <property name="value">
-       <number>0</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="SampleRate_Label">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>5</y>
-        <width>140</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Sampling Rate (Hz)</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="indent">
-       <number>-1</number>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QFrame" name="FrameDuration_Frame">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>50</y>
-       <width>320</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <widget class="QSlider" name="FrameDuration_HorizontalSlider">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>5</y>
-        <width>80</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="minimum">
-       <number>0</number>
-      </property>
-      <property name="maximum">
-       <number>99</number>
-      </property>
-      <property name="value">
-       <number>0</number>
-      </property>
-      <property name="sliderPosition">
-       <number>0</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSpinBox" name="FrameDuration_SpinBox">
-      <property name="geometry">
-       <rect>
-        <x>250</x>
-        <y>5</y>
-        <width>60</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="specialValueText">
-       <string notr="true"/>
-      </property>
-      <property name="minimum">
-       <number>0</number>
-      </property>
-      <property name="maximum">
-       <number>99</number>
-      </property>
-      <property name="value">
-       <number>0</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="FrameDuration_Label">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>5</y>
-        <width>140</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Frame Duration (ms)</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="indent">
-       <number>-1</number>
-      </property>
-     </widget>
+     <layout class="QVBoxLayout" name="DAQParameters_VerticalLayout">
+      <item>
+       <widget class="QFrame" name="SampleRate_Frame">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <widget class="QSlider" name="SampleRate_HorizontalSlider">
+         <property name="geometry">
+          <rect>
+           <x>160</x>
+           <y>5</y>
+           <width>80</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>99</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+         <property name="sliderPosition">
+          <number>0</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+        <widget class="QSpinBox" name="SampleRate_SpinBox">
+         <property name="geometry">
+          <rect>
+           <x>250</x>
+           <y>5</y>
+           <width>60</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="frame">
+          <bool>false</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="specialValueText">
+          <string notr="true"/>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>99</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+        <widget class="QLabel" name="SampleRate_Label">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>5</y>
+           <width>140</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Sampling Rate (Hz)</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="indent">
+          <number>-1</number>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="FrameDuration_Frame">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <widget class="QSlider" name="FrameDuration_HorizontalSlider">
+         <property name="geometry">
+          <rect>
+           <x>160</x>
+           <y>5</y>
+           <width>80</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>99</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+         <property name="sliderPosition">
+          <number>0</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+        <widget class="QSpinBox" name="FrameDuration_SpinBox">
+         <property name="geometry">
+          <rect>
+           <x>250</x>
+           <y>5</y>
+           <width>60</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="frame">
+          <bool>false</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="specialValueText">
+          <string notr="true"/>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>99</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+        <widget class="QLabel" name="FrameDuration_Label">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>5</y>
+           <width>140</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Frame Duration (ms)</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="indent">
+          <number>-1</number>
+         </property>
+        </widget>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QGroupBox" name="ChannelOption_GroupBox">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>320</y>
-      <width>221</width>
-      <height>151</height>
+      <y>340</y>
+      <width>271</width>
+      <height>161</height>
      </rect>
     </property>
     <property name="title">
      <string>Channel Option</string>
     </property>
-    <widget class="QFrame" name="Channel3_Frame">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>110</y>
-       <width>201</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <widget class="QCheckBox" name="Channel3_CheckBox">
-      <property name="geometry">
-       <rect>
-        <x>5</x>
-        <y>5</y>
-        <width>75</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Channel 4</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="Channel3_ComboBox">
-      <property name="geometry">
-       <rect>
-        <x>85</x>
-        <y>5</y>
-        <width>110</width>
-        <height>22</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QFrame" name="Channel1_Frame">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>50</y>
-       <width>201</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <widget class="QCheckBox" name="Channel1_CheckBox">
-      <property name="geometry">
-       <rect>
-        <x>5</x>
-        <y>5</y>
-        <width>75</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Channel 2</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="Channel1_ComboBox">
-      <property name="geometry">
-       <rect>
-        <x>85</x>
-        <y>5</y>
-        <width>110</width>
-        <height>22</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QFrame" name="Channel2_Frame">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>80</y>
-       <width>201</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <widget class="QCheckBox" name="Channel2_CheckBox">
-      <property name="geometry">
-       <rect>
-        <x>5</x>
-        <y>5</y>
-        <width>75</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Channel 3</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="Channel2_ComboBox">
-      <property name="geometry">
-       <rect>
-        <x>85</x>
-        <y>5</y>
-        <width>110</width>
-        <height>22</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QFrame" name="Channel0_Frame">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>200</width>
-       <height>32</height>
+       <width>231</width>
+       <height>131</height>
       </rect>
      </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <widget class="QCheckBox" name="Channel0_CheckBox">
-      <property name="geometry">
-       <rect>
-        <x>5</x>
-        <y>5</y>
-        <width>75</width>
-        <height>22</height>
-       </rect>
+     <layout class="QVBoxLayout" name="ChannelOption_VerticalLayout">
+      <property name="spacing">
+       <number>0</number>
       </property>
-      <property name="text">
-       <string>Channel 1</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="Channel0_ComboBox">
-      <property name="geometry">
-       <rect>
-        <x>85</x>
-        <y>5</y>
-        <width>110</width>
-        <height>22</height>
-       </rect>
-      </property>
-     </widget>
+      <item>
+       <widget class="QFrame" name="Channel0_Frame">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <widget class="QCheckBox" name="Channel0_CheckBox">
+         <property name="geometry">
+          <rect>
+           <x>5</x>
+           <y>5</y>
+           <width>75</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Channel 1</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="Channel0_ComboBox">
+         <property name="geometry">
+          <rect>
+           <x>100</x>
+           <y>5</y>
+           <width>110</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="frame">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="Channel1_Frame">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <widget class="QCheckBox" name="Channel1_CheckBox">
+         <property name="geometry">
+          <rect>
+           <x>5</x>
+           <y>5</y>
+           <width>75</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Channel 2</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="Channel1_ComboBox">
+         <property name="geometry">
+          <rect>
+           <x>100</x>
+           <y>5</y>
+           <width>110</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="frame">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="Channel2_Frame">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <widget class="QCheckBox" name="Channel2_CheckBox">
+         <property name="geometry">
+          <rect>
+           <x>5</x>
+           <y>5</y>
+           <width>75</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Channel 3</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="Channel2_ComboBox">
+         <property name="geometry">
+          <rect>
+           <x>100</x>
+           <y>5</y>
+           <width>110</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="frame">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="Channel3_Frame">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <widget class="QCheckBox" name="Channel3_CheckBox">
+         <property name="geometry">
+          <rect>
+           <x>5</x>
+           <y>5</y>
+           <width>75</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Channel 4</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="Channel3_ComboBox">
+         <property name="geometry">
+          <rect>
+           <x>100</x>
+           <y>5</y>
+           <width>110</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="frame">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QGroupBox" name="ChartParameters_GroupBox">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>160</y>
+      <y>170</y>
       <width>341</width>
-      <height>151</height>
+      <height>161</height>
      </rect>
     </property>
     <property name="title">
      <string>Chart Parameters</string>
     </property>
-    <widget class="QFrame" name="WaveDownSample_Frame">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>80</y>
-       <width>320</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <widget class="QSlider" name="WaveDownSample_HorizontalSlider">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>5</y>
-        <width>80</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="minimum">
-       <number>0</number>
-      </property>
-      <property name="maximum">
-       <number>5</number>
-      </property>
-      <property name="value">
-       <number>0</number>
-      </property>
-      <property name="sliderPosition">
-       <number>0</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSpinBox" name="WaveDownSample_SpinBox">
-      <property name="geometry">
-       <rect>
-        <x>250</x>
-        <y>5</y>
-        <width>60</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="specialValueText">
-       <string notr="true"/>
-      </property>
-      <property name="minimum">
-       <number>0</number>
-      </property>
-      <property name="maximum">
-       <number>100</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="WaveDownSample_Label">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>5</y>
-        <width>140</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Wave Down Sample</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="indent">
-       <number>-1</number>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QFrame" name="ChartUpdateInterval_Frame">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>50</y>
-       <width>320</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <widget class="QSlider" name="ChartUpdateInterval_HorizontalSlider">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>5</y>
-        <width>80</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="minimum">
-       <number>0</number>
-      </property>
-      <property name="maximum">
-       <number>100</number>
-      </property>
-      <property name="singleStep">
-       <number>1</number>
-      </property>
-      <property name="pageStep">
-       <number>1</number>
-      </property>
-      <property name="value">
-       <number>0</number>
-      </property>
-      <property name="sliderPosition">
-       <number>0</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSpinBox" name="ChartUpdateInterval_SpinBox">
-      <property name="geometry">
-       <rect>
-        <x>250</x>
-        <y>5</y>
-        <width>60</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="specialValueText">
-       <string notr="true"/>
-      </property>
-      <property name="minimum">
-       <number>0</number>
-      </property>
-      <property name="maximum">
-       <number>100</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="ChartUpdateInterval_Label">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>5</y>
-        <width>140</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Update Interval (ms)</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="indent">
-       <number>-1</number>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QFrame" name="BufferRate_Frame">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>320</width>
-       <height>30</height>
+       <width>321</width>
+       <height>131</height>
       </rect>
      </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <widget class="QSlider" name="BufferRate_HorizontalSlider">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>5</y>
-        <width>80</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="minimum">
+     <layout class="QVBoxLayout" name="ChartParameters_VerticalLayout">
+      <property name="spacing">
        <number>0</number>
       </property>
-      <property name="maximum">
-       <number>99</number>
-      </property>
-      <property name="value">
-       <number>0</number>
-      </property>
-      <property name="sliderPosition">
-       <number>0</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSpinBox" name="BufferRate_SpinBox">
-      <property name="geometry">
-       <rect>
-        <x>250</x>
-        <y>5</y>
-        <width>60</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="specialValueText">
-       <string notr="true"/>
-      </property>
-      <property name="minimum">
-       <number>0</number>
-      </property>
-      <property name="maximum">
-       <number>99</number>
-      </property>
-      <property name="value">
-       <number>0</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="BufferRate_Label">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>5</y>
-        <width>140</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Buffer Rate</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="indent">
-       <number>-1</number>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QFrame" name="SpectrumDownSample_Frame">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>110</y>
-       <width>320</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <widget class="QSlider" name="SpectrumDownSample_HorizontalSlider">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>5</y>
-        <width>80</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="minimum">
-       <number>0</number>
-      </property>
-      <property name="maximum">
-       <number>5</number>
-      </property>
-      <property name="value">
-       <number>0</number>
-      </property>
-      <property name="sliderPosition">
-       <number>0</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSpinBox" name="SpectrumDownSample_SpinBox">
-      <property name="geometry">
-       <rect>
-        <x>250</x>
-        <y>5</y>
-        <width>60</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="specialValueText">
-       <string notr="true"/>
-      </property>
-      <property name="minimum">
-       <number>0</number>
-      </property>
-      <property name="maximum">
-       <number>100</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="SpectrumDownSample_Label">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>5</y>
-        <width>140</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Spectrum Down Sample</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="indent">
-       <number>-1</number>
-      </property>
-     </widget>
+      <item>
+       <widget class="QFrame" name="BufferRate_Frame">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <widget class="QSlider" name="BufferRate_HorizontalSlider">
+         <property name="geometry">
+          <rect>
+           <x>160</x>
+           <y>5</y>
+           <width>80</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>99</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+         <property name="sliderPosition">
+          <number>0</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+        <widget class="QSpinBox" name="BufferRate_SpinBox">
+         <property name="geometry">
+          <rect>
+           <x>250</x>
+           <y>5</y>
+           <width>60</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="frame">
+          <bool>false</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="specialValueText">
+          <string notr="true"/>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>99</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+        <widget class="QLabel" name="BufferRate_Label">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>5</y>
+           <width>140</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Buffer Rate</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="indent">
+          <number>-1</number>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="ChartUpdateInterval_Frame">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <widget class="QSlider" name="ChartUpdateInterval_HorizontalSlider">
+         <property name="geometry">
+          <rect>
+           <x>160</x>
+           <y>5</y>
+           <width>80</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>100</number>
+         </property>
+         <property name="singleStep">
+          <number>1</number>
+         </property>
+         <property name="pageStep">
+          <number>1</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+         <property name="sliderPosition">
+          <number>0</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+        <widget class="QSpinBox" name="ChartUpdateInterval_SpinBox">
+         <property name="geometry">
+          <rect>
+           <x>250</x>
+           <y>5</y>
+           <width>60</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="frame">
+          <bool>false</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="specialValueText">
+          <string notr="true"/>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>100</number>
+         </property>
+        </widget>
+        <widget class="QLabel" name="ChartUpdateInterval_Label">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>5</y>
+           <width>140</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Update Interval (ms)</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="indent">
+          <number>-1</number>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="WaveDownSample_Frame">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <widget class="QSlider" name="WaveDownSample_HorizontalSlider">
+         <property name="geometry">
+          <rect>
+           <x>160</x>
+           <y>5</y>
+           <width>80</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>5</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+         <property name="sliderPosition">
+          <number>0</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+        <widget class="QSpinBox" name="WaveDownSample_SpinBox">
+         <property name="geometry">
+          <rect>
+           <x>250</x>
+           <y>5</y>
+           <width>60</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="frame">
+          <bool>false</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="specialValueText">
+          <string notr="true"/>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>100</number>
+         </property>
+        </widget>
+        <widget class="QLabel" name="WaveDownSample_Label">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>5</y>
+           <width>140</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Wave Down Sample</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="indent">
+          <number>-1</number>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="SpectrumDownSample_Frame">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <widget class="QSlider" name="SpectrumDownSample_HorizontalSlider">
+         <property name="geometry">
+          <rect>
+           <x>160</x>
+           <y>5</y>
+           <width>80</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>5</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+         <property name="sliderPosition">
+          <number>0</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+        <widget class="QSpinBox" name="SpectrumDownSample_SpinBox">
+         <property name="geometry">
+          <rect>
+           <x>250</x>
+           <y>5</y>
+           <width>60</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="frame">
+          <bool>false</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="specialValueText">
+          <string notr="true"/>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>100</number>
+         </property>
+        </widget>
+        <widget class="QLabel" name="SpectrumDownSample_Label">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>5</y>
+           <width>140</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Spectrum Down Sample</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="indent">
+          <number>-1</number>
+         </property>
+        </widget>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QGroupBox" name="Task_GroupBox">
@@ -1007,6 +1022,9 @@
        <width>251</width>
        <height>22</height>
       </rect>
+     </property>
+     <property name="frame">
+      <bool>false</bool>
      </property>
     </widget>
    </widget>

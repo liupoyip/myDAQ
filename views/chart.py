@@ -1,19 +1,16 @@
 import numpy as np
 from PySide6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis, QSplineSeries
 from PySide6.QtCore import QPointF, Slot, Qt
-from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QWidget, QGraphicsView, QGraphicsScene, QSizePolicy, QRubberBand, QVBoxLayout, QFormLayout, QHBoxLayout, QSizePolicy
-from PySide6.QtGui import QPen, QColor
+from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QWidget, QGraphicsView, QGraphicsScene, QSizePolicy, QRubberBand, QVBoxLayout, QFormLayout, QHBoxLayout, QSizePolicy, QPushButton
+from PySide6.QtGui import QPen, QColor, QPalette, QBrush, qRgb
 
 
 class LineChart(QWidget):
     def __init__(self):
         super().__init__()
         self._chart = QChart()
-        self._pen = QPen()
-        self._pen.setWidth(1)
-        self._pen.setColor(QColor('blue'))
+
         self._series = QLineSeries()
-        self._series.setPen(self._pen)
 
         self._chart.addSeries(self._series)
         self._axis_x = QValueAxis()
@@ -39,12 +36,26 @@ class LineChart(QWidget):
         self._buffer = [QPointF(x, y) for x, y in zip(self._x, self._y)]
         self._series.append(self._buffer)
 
+        self.set_dark_theme()
+
     def set_y(self, y_line):
         if len(self._buffer) != y_line.shape[0]:
             raise BaseException('Length of buffer and y-line is not match!')
         for i in range(y_line.shape[0]):
             self._buffer[i].setY(y_line[i])
         self._series.replace(self._buffer)
+
+    def set_dark_theme(self):
+        self._pen = QPen()
+        self._pen.setWidth(1)
+        self._pen.setColor(QColor(Qt.cyan))
+        self._series.setPen(self._pen)
+
+        self._chart.setBackgroundBrush(QBrush(QColor(qRgb(35, 35, 45))))
+        self._axis_x.setTitleBrush(QBrush(QColor(Qt.white)))
+        self._axis_y.setTitleBrush(QBrush(QColor(Qt.white)))
+        self._axis_x.setLabelsBrush(QBrush(QColor(Qt.white)))
+        self._axis_y.setLabelsBrush(QBrush(QColor(Qt.white)))
 
 
 class WaveChart(LineChart):
@@ -114,11 +125,13 @@ if __name__ == "__main__":
 
     layout.addWidget(wave_chart_1.chart_view, 1)
     layout.addWidget(wave_chart_2.chart_view, 3)
+    layout.setSpacing(0)
     window = QWidget()
 
     window.setAutoFillBackground(True)
     window.setLayout(layout)
     window.layout().setContentsMargins(0, 0, 0, 0)
+    window.setFixedSize(640, 360)
     window.show()
 
     app.exec()
