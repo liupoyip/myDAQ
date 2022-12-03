@@ -63,16 +63,16 @@ class WaveChart(LineChart):
         super(WaveChart, self).__init__()
 
         self._axis_x.setRange(0, 100)
-        # self._axis_x.setLabelFormat("%g")
-        self._axis_x.setTitleText("time (ms)")
+        self._axis_x.setLabelFormat('%d')
         self._axis_x.setLabelsEditable(True)
-        #self._axis_x.append('hello', '10')
+        self._axis_x.setTitleText("time (ms)")
         # self._axis_x.setTitleVisible(False)
         self._axis_x.setGridLineVisible(False)
 
         self._axis_y.setRange(-0.1, 0.1)
-        self._axis_y.setTitleText("value")
+        self._axis_y.setLabelFormat('%.2f')
         self._axis_y.setLabelsEditable(True)
+        self._axis_y.setTitleText("value")
         # self._axis_y.setTitleVisible(False)
         self._axis_y.setGridLineVisible(True)
 
@@ -94,11 +94,14 @@ class SpectrumChart(LineChart):
         super(SpectrumChart, self).__init__()
 
         self._axis_x.setRange(0, 1600)
-        self._axis_x.setTitleText("Hz")
+        self._axis_x.setLabelFormat('%d')
         self._axis_x.setLabelsEditable(True)
+        self._axis_x.setTitleText("Hz")
         self._axis_x.setGridLineVisible(False)
 
         self._axis_y.setRange(0, 1)
+        self._axis_y.setLabelFormat('%.2f')
+        self._axis_y.setLabelsEditable(True)
         self._axis_y.setTitleText("power(normalize 0~1)")
 
         self._x = np.linspace(0, 1600, 512)
@@ -123,12 +126,11 @@ if __name__ == "__main__":
     wave_chart_1 = WaveChart()
     wave_chart_2 = SpectrumChart()
 
-    layout.addWidget(wave_chart_1.chart_view, 1)
-    layout.addWidget(wave_chart_2.chart_view, 3)
+    layout.addWidget(wave_chart_1.chart_view, 3)
+    layout.addWidget(wave_chart_2.chart_view, 2)
     layout.setSpacing(0)
     window = QWidget()
 
-    window.setAutoFillBackground(True)
     window.setLayout(layout)
     window.layout().setContentsMargins(0, 0, 0, 0)
     window.setFixedSize(640, 360)
