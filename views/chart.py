@@ -1,16 +1,24 @@
 import numpy as np
 from PySide6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis, QSplineSeries
-from PySide6.QtCore import QPointF, Slot, Qt
-from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QWidget, QGraphicsView, QGraphicsScene, QSizePolicy, QRubberBand, QVBoxLayout, QFormLayout, QHBoxLayout, QSizePolicy, QPushButton
-from PySide6.QtGui import QPen, QColor, QPalette, QBrush, qRgb
+from PySide6.QtCore import QPointF, Slot, Qt, Signal, QPoint
+from PySide6.QtWidgets import (QApplication, QMainWindow, QMessageBox, QWidget,
+                               QGraphicsView, QGraphicsScene, QSizePolicy, QRubberBand,
+                               QVBoxLayout, QFormLayout, QHBoxLayout, QSizePolicy, QPushButton)
+from PySide6.QtGui import QPen, QColor, QPalette, QBrush, QWheelEvent, qRgb, QMouseEvent
+
+
+class ChartView(QChartView):
+    pass
 
 
 class LineChart(QWidget):
+    mouse_moved = Signal(QPoint)
+
     def __init__(self):
         super().__init__()
         self._chart = QChart()
-
         self._series = QLineSeries()
+        self.PushButton = QPushButton()
 
         self._chart.addSeries(self._series)
         self._axis_x = QValueAxis()
@@ -29,7 +37,7 @@ class LineChart(QWidget):
 
         self._chart.setBackgroundRoundness(0)
         self._chart.layout().setContentsMargins(0, 0, 0, 0)
-        self.chart_view = QChartView()
+        self.chart_view = ChartView()
         self.chart_view.setChart(self._chart)
         self._x = np.linspace(0, 100, 512)
         self._y = np.zeros(512)
@@ -37,6 +45,13 @@ class LineChart(QWidget):
         self._series.append(self._buffer)
 
         self.set_dark_theme()
+
+    # @Slot()
+    def mouseMoveEvent(self, event) -> None:
+        self.mouse_moved.emit(event.pos())
+        print(event.x(), event.y())
+        # return QChartView.mouseMoveEvent(self, event)
+        # return QChartView.mouseMoveEvent(self, event)
 
     def set_y(self, y_line):
         if len(self._buffer) != y_line.shape[0]:
@@ -81,6 +96,9 @@ class WaveChart(LineChart):
         self._buffer = [QPointF(x, y) for x, y in zip(self._x, self._y)]
         self._series.append(self._buffer)
 
+        #self.mouse_moved = Signal(QPoint)
+        # self.mouse_moved.connect(self.mouseMoveEvent)
+
     def reset_axis(self, end_point, buffer_len):
         self._axis_x.setRange(0, end_point)
         self._x = np.linspace(0, end_point, buffer_len)
@@ -109,6 +127,9 @@ class SpectrumChart(LineChart):
 
         self._buffer = [QPointF(x, y) for x, y in zip(self._x, self._y)]
         self._series.append(self._buffer)
+
+        #self.mouse_moved = Signal(QPoint)
+        # self.mouse_moved.connect(self.mouseMoveEvent)
 
     def reset_axis(self, end_point, buffer_len):
         self._axis_x.setRange(0, end_point)

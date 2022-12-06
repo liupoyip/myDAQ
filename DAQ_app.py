@@ -11,8 +11,10 @@ class App(QApplication):
     def __init__(self, sys_argv=None):
         super(App, self).__init__()
         self.model = NIDAQModel()
-        self.main_view = NI9234ViewModel(self.model)
-        self.main_view.show()
+        self.view = NI9234ViewModel(self.model)
+        self.focusChanged.connect(self.view.on_focus_changed)
+
+        self.view.show()
 
 
 app = App()

@@ -3,7 +3,8 @@ import numpy as np
 import numpy.typing as npt
 from .ui_ni9234 import Ui_NI9234
 from PySide6.QtWidgets import QWidget, QMessageBox
-from PySide6.QtCore import QTimer
+from PySide6.QtCore import QTimer, Qt
+from PySide6.QtGui import QFocusEvent, QWindow
 from .chart import WaveChart, SpectrumChart
 from datetime import datetime
 
@@ -15,6 +16,10 @@ class NI9234ViewModel(QWidget, Ui_NI9234):
     def __init__(self, model):
         super().__init__()
         self._model = model
+        # set focus status
+        # self.focusInEvent(self.setMouseTracking(True))
+        # self.focusOutEvent(self.setMouseTracking(False))
+        # self.setFocusPolicy(Qt.StrongFocus)
 
         # setup view
         self.setFixedWidth(1600)
@@ -56,6 +61,7 @@ class NI9234ViewModel(QWidget, Ui_NI9234):
         self.now_time_timer.setInterval(1000)
 
         # listen for model event
+
         # self._ui.TaskName_LineEdit.textChanged.connect(self.on_task_name_changed)
         self._ui.FrameDuration_SpinBox.valueChanged.connect(self.on_frame_duration_changed)
         self._ui.Reset_PushButton.clicked.connect(self.on_reset_button_clicked)
@@ -194,8 +200,13 @@ class NI9234ViewModel(QWidget, Ui_NI9234):
             combox.addItems(self._model.default_settings["sensor_type"])
             combox.setDisabled(True)
 
-    # def on_task_name_changed(self, value):
-        # self._ui.TaskName_LineEdit.setText(value)
+    def on_focus_changed(self):
+        if self.isActiveWindow():
+            self.setMouseTracking(True)
+            print('focus in!!')
+        else:
+            self.setMouseTracking(False)
+            print('focus out!!')
 
     def on_frame_duration_changed(self, value):
         self._ui.ChartUpdateInterval_SpinBox.setMinimum(value)
