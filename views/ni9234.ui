@@ -430,7 +430,7 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>231</width>
+       <width>251</width>
        <height>131</height>
       </rect>
      </property>
@@ -462,7 +462,7 @@
         <widget class="QComboBox" name="Channel0_ComboBox">
          <property name="geometry">
           <rect>
-           <x>100</x>
+           <x>110</x>
            <y>5</y>
            <width>110</width>
            <height>22</height>
@@ -498,7 +498,7 @@
         <widget class="QComboBox" name="Channel1_ComboBox">
          <property name="geometry">
           <rect>
-           <x>100</x>
+           <x>110</x>
            <y>5</y>
            <width>110</width>
            <height>22</height>
@@ -534,7 +534,7 @@
         <widget class="QComboBox" name="Channel2_ComboBox">
          <property name="geometry">
           <rect>
-           <x>100</x>
+           <x>110</x>
            <y>5</y>
            <width>110</width>
            <height>22</height>
@@ -570,7 +570,7 @@
         <widget class="QComboBox" name="Channel3_ComboBox">
          <property name="geometry">
           <rect>
-           <x>100</x>
+           <x>110</x>
            <y>5</y>
            <width>110</width>
            <height>22</height>

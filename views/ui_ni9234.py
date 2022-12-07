@@ -152,7 +152,7 @@ class Ui_NI9234(object):
         self.ChannelOption_GroupBox.setGeometry(QRect(10, 340, 271, 161))
         self.layoutWidget1 = QWidget(self.ChannelOption_GroupBox)
         self.layoutWidget1.setObjectName(u"layoutWidget1")
-        self.layoutWidget1.setGeometry(QRect(10, 20, 231, 131))
+        self.layoutWidget1.setGeometry(QRect(10, 20, 251, 131))
         self.ChannelOption_VerticalLayout = QVBoxLayout(self.layoutWidget1)
         self.ChannelOption_VerticalLayout.setSpacing(0)
         self.ChannelOption_VerticalLayout.setObjectName(u"ChannelOption_VerticalLayout")
@@ -166,7 +166,7 @@ class Ui_NI9234(object):
         self.Channel0_CheckBox.setGeometry(QRect(5, 5, 80, 22))
         self.Channel0_ComboBox = QComboBox(self.Channel0_Frame)
         self.Channel0_ComboBox.setObjectName(u"Channel0_ComboBox")
-        self.Channel0_ComboBox.setGeometry(QRect(100, 5, 110, 22))
+        self.Channel0_ComboBox.setGeometry(QRect(110, 5, 110, 22))
         self.Channel0_ComboBox.setFrame(False)
 
         self.ChannelOption_VerticalLayout.addWidget(self.Channel0_Frame)
@@ -180,7 +180,7 @@ class Ui_NI9234(object):
         self.Channel1_CheckBox.setGeometry(QRect(5, 5, 80, 22))
         self.Channel1_ComboBox = QComboBox(self.Channel1_Frame)
         self.Channel1_ComboBox.setObjectName(u"Channel1_ComboBox")
-        self.Channel1_ComboBox.setGeometry(QRect(100, 5, 110, 22))
+        self.Channel1_ComboBox.setGeometry(QRect(110, 5, 110, 22))
         self.Channel1_ComboBox.setFrame(False)
 
         self.ChannelOption_VerticalLayout.addWidget(self.Channel1_Frame)
@@ -194,7 +194,7 @@ class Ui_NI9234(object):
         self.Channel2_CheckBox.setGeometry(QRect(5, 5, 80, 22))
         self.Channel2_ComboBox = QComboBox(self.Channel2_Frame)
         self.Channel2_ComboBox.setObjectName(u"Channel2_ComboBox")
-        self.Channel2_ComboBox.setGeometry(QRect(100, 5, 110, 22))
+        self.Channel2_ComboBox.setGeometry(QRect(110, 5, 110, 22))
         self.Channel2_ComboBox.setFrame(False)
 
         self.ChannelOption_VerticalLayout.addWidget(self.Channel2_Frame)
@@ -208,7 +208,7 @@ class Ui_NI9234(object):
         self.Channel3_CheckBox.setGeometry(QRect(5, 5, 80, 22))
         self.Channel3_ComboBox = QComboBox(self.Channel3_Frame)
         self.Channel3_ComboBox.setObjectName(u"Channel3_ComboBox")
-        self.Channel3_ComboBox.setGeometry(QRect(100, 5, 110, 22))
+        self.Channel3_ComboBox.setGeometry(QRect(110, 5, 110, 22))
         self.Channel3_ComboBox.setFrame(False)
 
         self.ChannelOption_VerticalLayout.addWidget(self.Channel3_Frame)
