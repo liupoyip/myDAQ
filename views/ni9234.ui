@@ -456,7 +456,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>Channel 1</string>
+          <string>Channel 0</string>
          </property>
         </widget>
         <widget class="QComboBox" name="Channel0_ComboBox">
@@ -492,7 +492,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>Channel 2</string>
+          <string>Channel 1</string>
          </property>
         </widget>
         <widget class="QComboBox" name="Channel1_ComboBox">
@@ -528,7 +528,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>Channel 3</string>
+          <string>Channel 2</string>
          </property>
         </widget>
         <widget class="QComboBox" name="Channel2_ComboBox">
@@ -564,7 +564,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>Channel 4</string>
+          <string>Channel 3</string>
          </property>
         </widget>
         <widget class="QComboBox" name="Channel3_ComboBox">

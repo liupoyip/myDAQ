@@ -106,6 +106,12 @@ class WaveChart(LineChart):
         self._buffer = [QPointF(x, y) for x, y in zip(self._x, self._y)]
         self._series.replace(self._buffer)
 
+    def set_y_range(self, low_limit: float, high_limit: float):
+        self._axis_y.setRange(low_limit, high_limit)
+
+    def set_y_label(self, label: str):
+        self._axis_y.setTitleText(label)
+
 
 class SpectrumChart(LineChart):
     def __init__(self):
