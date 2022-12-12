@@ -1,15 +1,17 @@
 from typing import Optional
+from datetime import datetime
+
 import numpy as np
 import numpy.typing as npt
-from .ui_ni9234 import Ui_NI9234
 from PySide6.QtWidgets import QWidget, QMessageBox
 from PySide6.QtCore import QTimer, Qt
 from PySide6.QtGui import QFocusEvent, QWindow
+
+from .ui_ni9234 import Ui_NI9234
 from .chart import WaveChart, SpectrumChart
-from datetime import datetime
 
 
-class NI9234ViewModel(QWidget, Ui_NI9234):
+class NI9234ViewModel(QWidget):
     _wave_downsample_rate: Optional[int] = None
     _spectrum_downsample_rate: Optional[int] = None
 
