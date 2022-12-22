@@ -103,7 +103,7 @@
      <x>20</x>
      <y>620</y>
      <width>191</width>
-     <height>41</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="text">
@@ -150,9 +150,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>130</x>
       <y>50</y>
-      <width>231</width>
+      <width>201</width>
       <height>20</height>
      </rect>
     </property>
@@ -162,7 +162,7 @@
      <rect>
       <x>10</x>
       <y>50</y>
-      <width>81</width>
+      <width>101</width>
       <height>20</height>
      </rect>
     </property>
@@ -170,7 +170,7 @@
      <string>Data Directory</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QComboBox" name="WriteFileType_ComboBox">
@@ -1000,7 +1000,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>670</y>
+     <y>680</y>
      <width>321</width>
      <height>111</height>
     </rect>

@@ -244,10 +244,10 @@ class NI9234ViewModel(QWidget, Ui_NI9234):
 
             for num, sensor_type in zip(self.active_channel_num_list, self.sensor_type_list):
                 if sensor_type == 'Accelerometer':
-                    self.channel_wave_charts[num].set_y_range(-0.1, 0.1)
+                    self.channel_wave_charts[num].set_y_range(-0.3, 0.3)
                     self.channel_wave_charts[num].set_y_label('value (g)')
                 elif sensor_type == 'Microphone':
-                    self.channel_wave_charts[num].set_y_range(-30, 30)
+                    self.channel_wave_charts[num].set_y_range(-10, 10)
                     self.channel_wave_charts[num].set_y_label('value (pa)')
 
     def on_clear_task_button_clicked(self):
