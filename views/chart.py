@@ -122,6 +122,7 @@ class SpectrumChart(LineChart):
         self._axis_x.setLabelsEditable(True)
         self._axis_x.setTitleText("Hz")
         self._axis_x.setGridLineVisible(False)
+        self._axis_x.setTickCount(11)
 
         self._axis_y.setRange(0, 1)
         self._axis_y.setLabelFormat('%.2f')
@@ -144,6 +145,9 @@ class SpectrumChart(LineChart):
         self._y = np.zeros(buffer_len)
         self._buffer = [QPointF(x, y) for x, y in zip(self._x, self._y)]
         self._series.replace(self._buffer)
+
+    def set_x_range(self, low_limit: float, high_limit: float):
+        self._axis_x.setRange(low_limit, high_limit)
 
 
 if __name__ == "__main__":
