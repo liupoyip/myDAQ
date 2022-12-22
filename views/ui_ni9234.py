@@ -1,24 +1,25 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'ni9234.ui'
+# Form generated from reading UI file 'ni9234.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.1
+# Created by: Qt User Interface Compiler version 6.4.1
 ##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
+# WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
+                            QMetaObject, QObject, QPoint, QRect,
+                            QSize, QTime, QUrl, Qt)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
+                           QFont, QFontDatabase, QGradient, QIcon,
+                           QImage, QKeySequence, QLinearGradient, QPainter,
+                           QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
-    QGridLayout, QGroupBox, QLabel, QLayout,
-    QLineEdit, QPushButton, QSizePolicy, QSlider,
-    QSpinBox, QVBoxLayout, QWidget)
+                               QGridLayout, QGroupBox, QLabel, QLayout,
+                               QLineEdit, QPushButton, QSizePolicy, QSlider,
+                               QSpinBox, QVBoxLayout, QWidget)
+
 
 class Ui_NI9234(object):
     def setupUi(self, NI9234):
@@ -47,10 +48,11 @@ class Ui_NI9234(object):
         self.Parameters_Label = QLabel(NI9234)
         self.Parameters_Label.setObjectName(u"Parameters_Label")
         self.Parameters_Label.setEnabled(True)
-        self.Parameters_Label.setGeometry(QRect(20, 620, 191, 51))
-        self.Parameters_Label.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.Parameters_Label.setGeometry(QRect(20, 620, 191, 41))
+        self.Parameters_Label.setAlignment(Qt.AlignLeading | Qt.AlignLeft | Qt.AlignTop)
         self.Parameters_Label.setWordWrap(False)
-        self.Parameters_Label.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextSelectableByMouse)
+        self.Parameters_Label.setTextInteractionFlags(
+            Qt.LinksAccessibleByMouse | Qt.TextSelectableByMouse)
         self.WriteFile_GroupBox = QGroupBox(NI9234)
         self.WriteFile_GroupBox.setObjectName(u"WriteFile_GroupBox")
         self.WriteFile_GroupBox.setGeometry(QRect(10, 530, 341, 81))
@@ -63,8 +65,8 @@ class Ui_NI9234(object):
         self.WriteFile_LineEdit.setGeometry(QRect(130, 50, 201, 20))
         self.WriteFile_Label = QLabel(self.WriteFile_GroupBox)
         self.WriteFile_Label.setObjectName(u"WriteFile_Label")
-        self.WriteFile_Label.setGeometry(QRect(10, 50, 101, 20))
-        self.WriteFile_Label.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.WriteFile_Label.setGeometry(QRect(10, 50, 81, 20))
+        self.WriteFile_Label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.WriteFileType_ComboBox = QComboBox(self.WriteFile_GroupBox)
         self.WriteFileType_ComboBox.setObjectName(u"WriteFileType_ComboBox")
         self.WriteFileType_ComboBox.setEnabled(False)
@@ -104,7 +106,7 @@ class Ui_NI9234(object):
         self.SampleRate_SpinBox.setObjectName(u"SampleRate_SpinBox")
         self.SampleRate_SpinBox.setGeometry(QRect(250, 5, 60, 20))
         self.SampleRate_SpinBox.setFrame(False)
-        self.SampleRate_SpinBox.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.SampleRate_SpinBox.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.SampleRate_SpinBox.setSpecialValueText(u"")
         self.SampleRate_SpinBox.setMinimum(0)
         self.SampleRate_SpinBox.setMaximum(99)
@@ -112,7 +114,7 @@ class Ui_NI9234(object):
         self.SampleRate_Label = QLabel(self.SampleRate_Frame)
         self.SampleRate_Label.setObjectName(u"SampleRate_Label")
         self.SampleRate_Label.setGeometry(QRect(10, 5, 140, 20))
-        self.SampleRate_Label.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.SampleRate_Label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.SampleRate_Label.setIndent(-1)
 
         self.DAQParameters_VerticalLayout.addWidget(self.SampleRate_Frame)
@@ -134,7 +136,7 @@ class Ui_NI9234(object):
         self.FrameDuration_SpinBox.setObjectName(u"FrameDuration_SpinBox")
         self.FrameDuration_SpinBox.setGeometry(QRect(250, 5, 60, 20))
         self.FrameDuration_SpinBox.setFrame(False)
-        self.FrameDuration_SpinBox.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.FrameDuration_SpinBox.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.FrameDuration_SpinBox.setSpecialValueText(u"")
         self.FrameDuration_SpinBox.setMinimum(0)
         self.FrameDuration_SpinBox.setMaximum(99)
@@ -142,7 +144,7 @@ class Ui_NI9234(object):
         self.FrameDuration_Label = QLabel(self.FrameDuration_Frame)
         self.FrameDuration_Label.setObjectName(u"FrameDuration_Label")
         self.FrameDuration_Label.setGeometry(QRect(10, 5, 140, 20))
-        self.FrameDuration_Label.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.FrameDuration_Label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.FrameDuration_Label.setIndent(-1)
 
         self.DAQParameters_VerticalLayout.addWidget(self.FrameDuration_Frame)
@@ -240,7 +242,7 @@ class Ui_NI9234(object):
         self.BufferRate_SpinBox.setObjectName(u"BufferRate_SpinBox")
         self.BufferRate_SpinBox.setGeometry(QRect(250, 5, 60, 20))
         self.BufferRate_SpinBox.setFrame(False)
-        self.BufferRate_SpinBox.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.BufferRate_SpinBox.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.BufferRate_SpinBox.setSpecialValueText(u"")
         self.BufferRate_SpinBox.setMinimum(0)
         self.BufferRate_SpinBox.setMaximum(99)
@@ -248,7 +250,7 @@ class Ui_NI9234(object):
         self.BufferRate_Label = QLabel(self.BufferRate_Frame)
         self.BufferRate_Label.setObjectName(u"BufferRate_Label")
         self.BufferRate_Label.setGeometry(QRect(10, 5, 140, 20))
-        self.BufferRate_Label.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.BufferRate_Label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.BufferRate_Label.setIndent(-1)
 
         self.ChartParameters_VerticalLayout.addWidget(self.BufferRate_Frame)
@@ -259,7 +261,8 @@ class Ui_NI9234(object):
         self.ChartUpdateInterval_Frame.setFrameShape(QFrame.NoFrame)
         self.ChartUpdateInterval_Frame.setFrameShadow(QFrame.Plain)
         self.ChartUpdateInterval_HorizontalSlider = QSlider(self.ChartUpdateInterval_Frame)
-        self.ChartUpdateInterval_HorizontalSlider.setObjectName(u"ChartUpdateInterval_HorizontalSlider")
+        self.ChartUpdateInterval_HorizontalSlider.setObjectName(
+            u"ChartUpdateInterval_HorizontalSlider")
         self.ChartUpdateInterval_HorizontalSlider.setGeometry(QRect(160, 5, 80, 20))
         self.ChartUpdateInterval_HorizontalSlider.setMinimum(0)
         self.ChartUpdateInterval_HorizontalSlider.setMaximum(100)
@@ -272,14 +275,16 @@ class Ui_NI9234(object):
         self.ChartUpdateInterval_SpinBox.setObjectName(u"ChartUpdateInterval_SpinBox")
         self.ChartUpdateInterval_SpinBox.setGeometry(QRect(250, 5, 60, 20))
         self.ChartUpdateInterval_SpinBox.setFrame(False)
-        self.ChartUpdateInterval_SpinBox.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.ChartUpdateInterval_SpinBox.setAlignment(
+            Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.ChartUpdateInterval_SpinBox.setSpecialValueText(u"")
         self.ChartUpdateInterval_SpinBox.setMinimum(0)
         self.ChartUpdateInterval_SpinBox.setMaximum(100)
         self.ChartUpdateInterval_Label = QLabel(self.ChartUpdateInterval_Frame)
         self.ChartUpdateInterval_Label.setObjectName(u"ChartUpdateInterval_Label")
         self.ChartUpdateInterval_Label.setGeometry(QRect(10, 5, 140, 20))
-        self.ChartUpdateInterval_Label.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.ChartUpdateInterval_Label.setAlignment(
+            Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.ChartUpdateInterval_Label.setIndent(-1)
 
         self.ChartParameters_VerticalLayout.addWidget(self.ChartUpdateInterval_Frame)
@@ -301,14 +306,14 @@ class Ui_NI9234(object):
         self.WaveDownSample_SpinBox.setObjectName(u"WaveDownSample_SpinBox")
         self.WaveDownSample_SpinBox.setGeometry(QRect(250, 5, 60, 20))
         self.WaveDownSample_SpinBox.setFrame(False)
-        self.WaveDownSample_SpinBox.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.WaveDownSample_SpinBox.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.WaveDownSample_SpinBox.setSpecialValueText(u"")
         self.WaveDownSample_SpinBox.setMinimum(0)
         self.WaveDownSample_SpinBox.setMaximum(100)
         self.WaveDownSample_Label = QLabel(self.WaveDownSample_Frame)
         self.WaveDownSample_Label.setObjectName(u"WaveDownSample_Label")
         self.WaveDownSample_Label.setGeometry(QRect(10, 5, 140, 20))
-        self.WaveDownSample_Label.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.WaveDownSample_Label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.WaveDownSample_Label.setIndent(-1)
 
         self.ChartParameters_VerticalLayout.addWidget(self.WaveDownSample_Frame)
@@ -319,7 +324,8 @@ class Ui_NI9234(object):
         self.SpectrumDownSample_Frame.setFrameShape(QFrame.NoFrame)
         self.SpectrumDownSample_Frame.setFrameShadow(QFrame.Plain)
         self.SpectrumDownSample_HorizontalSlider = QSlider(self.SpectrumDownSample_Frame)
-        self.SpectrumDownSample_HorizontalSlider.setObjectName(u"SpectrumDownSample_HorizontalSlider")
+        self.SpectrumDownSample_HorizontalSlider.setObjectName(
+            u"SpectrumDownSample_HorizontalSlider")
         self.SpectrumDownSample_HorizontalSlider.setGeometry(QRect(160, 5, 80, 20))
         self.SpectrumDownSample_HorizontalSlider.setMinimum(0)
         self.SpectrumDownSample_HorizontalSlider.setMaximum(5)
@@ -330,14 +336,16 @@ class Ui_NI9234(object):
         self.SpectrumDownSample_SpinBox.setObjectName(u"SpectrumDownSample_SpinBox")
         self.SpectrumDownSample_SpinBox.setGeometry(QRect(250, 5, 60, 20))
         self.SpectrumDownSample_SpinBox.setFrame(False)
-        self.SpectrumDownSample_SpinBox.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.SpectrumDownSample_SpinBox.setAlignment(
+            Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.SpectrumDownSample_SpinBox.setSpecialValueText(u"")
         self.SpectrumDownSample_SpinBox.setMinimum(0)
         self.SpectrumDownSample_SpinBox.setMaximum(100)
         self.SpectrumDownSample_Label = QLabel(self.SpectrumDownSample_Frame)
         self.SpectrumDownSample_Label.setObjectName(u"SpectrumDownSample_Label")
         self.SpectrumDownSample_Label.setGeometry(QRect(10, 5, 140, 20))
-        self.SpectrumDownSample_Label.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.SpectrumDownSample_Label.setAlignment(
+            Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.SpectrumDownSample_Label.setIndent(-1)
 
         self.ChartParameters_VerticalLayout.addWidget(self.SpectrumDownSample_Frame)
@@ -348,7 +356,7 @@ class Ui_NI9234(object):
         self.TaskName_Label = QLabel(self.Task_GroupBox)
         self.TaskName_Label.setObjectName(u"TaskName_Label")
         self.TaskName_Label.setGeometry(QRect(10, 20, 60, 22))
-        self.TaskName_Label.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.TaskName_Label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.TaskName_LineEdit = QLineEdit(self.Task_GroupBox)
         self.TaskName_LineEdit.setObjectName(u"TaskName_LineEdit")
         self.TaskName_LineEdit.setGeometry(QRect(80, 20, 251, 22))
@@ -356,10 +364,11 @@ class Ui_NI9234(object):
         self.Info_Label = QLabel(NI9234)
         self.Info_Label.setObjectName(u"Info_Label")
         self.Info_Label.setEnabled(True)
-        self.Info_Label.setGeometry(QRect(20, 680, 321, 111))
-        self.Info_Label.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.Info_Label.setGeometry(QRect(20, 670, 321, 111))
+        self.Info_Label.setAlignment(Qt.AlignLeading | Qt.AlignLeft | Qt.AlignTop)
         self.Info_Label.setWordWrap(False)
-        self.Info_Label.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextSelectableByMouse)
+        self.Info_Label.setTextInteractionFlags(
+            Qt.LinksAccessibleByMouse | Qt.TextSelectableByMouse)
         self.gridLayoutWidget = QWidget(NI9234)
         self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
         self.gridLayoutWidget.setGeometry(QRect(380, 10, 1211, 881))
@@ -372,12 +381,18 @@ class Ui_NI9234(object):
         self.retranslateUi(NI9234)
         self.SampleRate_HorizontalSlider.valueChanged.connect(self.SampleRate_SpinBox.setValue)
         self.SampleRate_SpinBox.valueChanged.connect(self.SampleRate_HorizontalSlider.setValue)
-        self.FrameDuration_HorizontalSlider.valueChanged.connect(self.FrameDuration_SpinBox.setValue)
-        self.FrameDuration_SpinBox.valueChanged.connect(self.FrameDuration_HorizontalSlider.setValue)
-        self.ChartUpdateInterval_HorizontalSlider.valueChanged.connect(self.ChartUpdateInterval_SpinBox.setValue)
-        self.ChartUpdateInterval_SpinBox.valueChanged.connect(self.ChartUpdateInterval_HorizontalSlider.setValue)
-        self.WaveDownSample_HorizontalSlider.valueChanged.connect(self.WaveDownSample_SpinBox.setValue)
-        self.WaveDownSample_SpinBox.valueChanged.connect(self.WaveDownSample_HorizontalSlider.setValue)
+        self.FrameDuration_HorizontalSlider.valueChanged.connect(
+            self.FrameDuration_SpinBox.setValue)
+        self.FrameDuration_SpinBox.valueChanged.connect(
+            self.FrameDuration_HorizontalSlider.setValue)
+        self.ChartUpdateInterval_HorizontalSlider.valueChanged.connect(
+            self.ChartUpdateInterval_SpinBox.setValue)
+        self.ChartUpdateInterval_SpinBox.valueChanged.connect(
+            self.ChartUpdateInterval_HorizontalSlider.setValue)
+        self.WaveDownSample_HorizontalSlider.valueChanged.connect(
+            self.WaveDownSample_SpinBox.setValue)
+        self.WaveDownSample_SpinBox.valueChanged.connect(
+            self.WaveDownSample_HorizontalSlider.setValue)
         self.BufferRate_HorizontalSlider.valueChanged.connect(self.BufferRate_SpinBox.setValue)
         self.BufferRate_SpinBox.valueChanged.connect(self.BufferRate_HorizontalSlider.setValue)
 
@@ -386,32 +401,42 @@ class Ui_NI9234(object):
 
     def retranslateUi(self, NI9234):
         NI9234.setWindowTitle(QCoreApplication.translate("NI9234", u"NI9234", None))
-        self.ControlButtons_GroupBox.setTitle(QCoreApplication.translate("NI9234", u"Control", None))
+        self.ControlButtons_GroupBox.setTitle(
+            QCoreApplication.translate("NI9234", u"Control", None))
         self.Start_PushButton.setText(QCoreApplication.translate("NI9234", u"Start", None))
         self.Stop_PushButton.setText(QCoreApplication.translate("NI9234", u"Stop", None))
         self.Reset_PushButton.setText(QCoreApplication.translate("NI9234", u"Reset", None))
-        self.CreateTask_PushButton.setText(QCoreApplication.translate("NI9234", u"Create Task", None))
+        self.CreateTask_PushButton.setText(
+            QCoreApplication.translate("NI9234", u"Create Task", None))
         self.ClearTask_PushButton.setText(QCoreApplication.translate("NI9234", u"Clear Task", None))
-        self.Parameters_Label.setText(QCoreApplication.translate("NI9234", u"<html><head/><body><p>Parameters!!<br/>Will show at here!!</p></body></html>", None))
+        self.Parameters_Label.setText(QCoreApplication.translate(
+            "NI9234", u"<html><head/><body><p>Parameters!!<br/>Will show at here!!</p></body></html>", None))
         self.WriteFile_GroupBox.setTitle(QCoreApplication.translate("NI9234", u"Write File", None))
         self.WriteFile_CheckBox.setText(QCoreApplication.translate("NI9234", u"On/Off", None))
         self.WriteFile_Label.setText(QCoreApplication.translate("NI9234", u"Data Directory", None))
         self.NowTime_Label.setText(QCoreApplication.translate("NI9234", u"Now Time", None))
-        self.DAQParameters_GroupBox.setTitle(QCoreApplication.translate("NI9234", u"DAQ Parameters", None))
-        self.SampleRate_Label.setText(QCoreApplication.translate("NI9234", u"Sampling Rate (Hz)", None))
-        self.FrameDuration_Label.setText(QCoreApplication.translate("NI9234", u"Frame Duration (ms)", None))
-        self.ChannelOption_GroupBox.setTitle(QCoreApplication.translate("NI9234", u"Channel Option", None))
+        self.DAQParameters_GroupBox.setTitle(
+            QCoreApplication.translate("NI9234", u"DAQ Parameters", None))
+        self.SampleRate_Label.setText(QCoreApplication.translate(
+            "NI9234", u"Sampling Rate (Hz)", None))
+        self.FrameDuration_Label.setText(QCoreApplication.translate(
+            "NI9234", u"Frame Duration (ms)", None))
+        self.ChannelOption_GroupBox.setTitle(
+            QCoreApplication.translate("NI9234", u"Channel Option", None))
         self.Channel0_CheckBox.setText(QCoreApplication.translate("NI9234", u"Channel 0", None))
         self.Channel1_CheckBox.setText(QCoreApplication.translate("NI9234", u"Channel 1", None))
         self.Channel2_CheckBox.setText(QCoreApplication.translate("NI9234", u"Channel 2", None))
         self.Channel3_CheckBox.setText(QCoreApplication.translate("NI9234", u"Channel 3", None))
-        self.ChartParameters_GroupBox.setTitle(QCoreApplication.translate("NI9234", u"Chart Parameters", None))
+        self.ChartParameters_GroupBox.setTitle(
+            QCoreApplication.translate("NI9234", u"Chart Parameters", None))
         self.BufferRate_Label.setText(QCoreApplication.translate("NI9234", u"Buffer Rate", None))
-        self.ChartUpdateInterval_Label.setText(QCoreApplication.translate("NI9234", u"Update Interval (ms)", None))
-        self.WaveDownSample_Label.setText(QCoreApplication.translate("NI9234", u"Wave Down Sample", None))
-        self.SpectrumDownSample_Label.setText(QCoreApplication.translate("NI9234", u"Spectrum Down Sample", None))
+        self.ChartUpdateInterval_Label.setText(
+            QCoreApplication.translate("NI9234", u"Update Interval (ms)", None))
+        self.WaveDownSample_Label.setText(
+            QCoreApplication.translate("NI9234", u"Wave Down Sample", None))
+        self.SpectrumDownSample_Label.setText(
+            QCoreApplication.translate("NI9234", u"Spectrum Down Sample", None))
         self.Task_GroupBox.setTitle(QCoreApplication.translate("NI9234", u"Task", None))
         self.TaskName_Label.setText(QCoreApplication.translate("NI9234", u"Task Name", None))
         self.Info_Label.setText(QCoreApplication.translate("NI9234", u"<html><head/><body><p>Notice!!<br/>If value &quot;Buffer Rate&quot; and &quot;Frame Duration&quot; too high,<br/>line of chart may encount huge data to update and <br/>occur app clock slower than NI9234 clock.</p><p>When this phenomenon arise, adjust &quot;Down Sample&quot;<br/>to reduce the loading on updating charts.</p></body></html>", None))
     # retranslateUi
-
