@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import QFile, QTextStream, Qt
 from PySide6.QtGui import QPen, QColor, QPalette, QGuiApplication
 
-from model.ModelNIDAQ import NIDAQModel
+from models.ModelNIDAQ import NIDAQModel
 from views.ni9234_viewmodel import NI9234ViewModel
 import qdarktheme
 
