@@ -4,9 +4,9 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import QFile, QTextStream, Qt
 from PySide6.QtGui import QPen, QColor, QPalette, QGuiApplication
 
-from models.ModelNIDAQ import NIDAQModel
+from models.NIDAQModel import NIDAQModel
 from views.ni9234_viewmodel import NI9234ViewModel
-# import qdarktheme
+import qdarktheme
 
 
 class App(QApplication):
@@ -20,5 +20,5 @@ class App(QApplication):
 
 
 app = App()
-# app.setStyleSheet(qdarktheme.load_stylesheet())
+app.setStyleSheet(qdarktheme.load_stylesheet())
 sys.exit(app.exec())

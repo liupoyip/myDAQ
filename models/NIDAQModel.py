@@ -7,7 +7,7 @@ import numpy as np
 import numpy.typing as npt
 from PySide6.QtCore import QObject, QTimer
 
-from . import NIDAQ
+from sdk.NIDAQ import NI9234
 
 
 class NIDAQModel(QObject):
@@ -38,13 +38,18 @@ class NIDAQModel(QObject):
     _channels: list[int] = list()
     _sensor_types: list[str] = list()
     _write_file_flag: bool = False
-    _nidaq: NIDAQ.NI9234 = None
+    _nidaq: NI9234 = None
     _write_file_directory = default_settings['default_write_file_dir']
 
     # buffer for visualize data
     _data_buffer_update_timer = QTimer()
     _wave_data_buffer: Optional[npt.NDArray[np.float64]]
     _spectrum_data_buffer: Optional[npt.NDArray[np.float64]]
+
+    _wave_data_buffer_mean: float = 0.0
+    _wave_data_buffer_count: int = 0
+    _wave_mean_threshold: float = 0.0
+    _abnormal_flag: bool = False
 
     def __init__(self):
         super().__init__()
@@ -127,7 +132,7 @@ class NIDAQModel(QObject):
             self.clear()
         except:
             pass
-        self._nidaq = NIDAQ.NI9234(device_name=self._device_name)
+        self._nidaq = NI9234(device_name=self._device_name)
         self._nidaq.create_task(task_name=self.task_name)
         for channel, sensor_type in zip(self.channels, self.sensor_types):
             if sensor_type == 'Accelerometer':
@@ -159,6 +164,7 @@ class NIDAQModel(QObject):
         self._nidaq.set_stream_enable()
         self._nidaq.start_task()
         self._data_buffer_update_timer.start()
+        self._wave_data_cycle_count = 0
 
     def stop(self):
         self._nidaq.set_stream_disable()
@@ -210,6 +216,27 @@ class NIDAQModel(QObject):
 
     def get_wave_buffer_len(self):
         return self._wave_buffer_len
+
+    def get_wave_buffer_mean(self):
+        self._wave_data_buffer_mean = np.mean(self._wave_data_buffer)
+        if np.abs(self._wave_data_buffer_mean) > self._wave_mean_threshold:
+            self._wave_data_cycle_count += 1
+        else:
+            self._wave_data_cycle_count -= 1
+
+        if self._wave_data_cycle_count >= 10:
+            self._wave_data_cycle_count = 10
+        elif self._wave_data_cycle_count <= 0:
+            self._wave_data_cycle_count = 0
+
+        return self._wave_data_buffer_mean
+
+    def get_abnormal_flag(self):
+        if self._wave_data_cycle_count == 10:
+            self._abnormal_flag = True
+        else:
+            self._abnormal_flag = False
+        return self._abnormal_flag
 
     def interval_split_write_file():
         ...

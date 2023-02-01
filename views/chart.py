@@ -96,7 +96,7 @@ class WaveChart(LineChart):
         self._buffer = [QPointF(x, y) for x, y in zip(self._x, self._y)]
         self._series.append(self._buffer)
 
-        #self.mouse_moved = Signal(QPoint)
+        # self.mouse_moved = Signal(QPoint)
         # self.mouse_moved.connect(self.mouseMoveEvent)
 
     def reset_axis(self, end_point, buffer_len):
@@ -135,7 +135,7 @@ class SpectrumChart(LineChart):
         self._buffer = [QPointF(x, y) for x, y in zip(self._x, self._y)]
         self._series.append(self._buffer)
 
-        #self.mouse_moved = Signal(QPoint)
+        # self.mouse_moved = Signal(QPoint)
         # self.mouse_moved.connect(self.mouseMoveEvent)
 
     def reset_axis(self, end_point, buffer_len):

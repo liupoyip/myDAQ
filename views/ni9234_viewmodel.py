@@ -9,6 +9,7 @@ from PySide6.QtGui import QFocusEvent, QWindow
 
 from .ui_ni9234 import Ui_NI9234
 from .chart import WaveChart, SpectrumChart
+from models.NIDAQModel import NIDAQModel
 
 
 class NI9234ViewModel(QWidget):
@@ -17,7 +18,7 @@ class NI9234ViewModel(QWidget):
 
     def __init__(self, model):
         super().__init__()
-        self._model = model
+        self._model: NIDAQModel = model
         # set focus status
         # self.focusInEvent(self.setMouseTracking(True))
         # self.focusOutEvent(self.setMouseTracking(False))
@@ -270,6 +271,7 @@ class NI9234ViewModel(QWidget):
         self._ui.Start_PushButton.setDisabled(True)
         self._ui.Reset_PushButton.setDisabled(True)
         self._ui.ClearTask_PushButton.setDisabled(True)
+        self.wave_data_buffer_count = 0
         self.graph_update_timer.start()
         self._model.start()
 
@@ -291,6 +293,7 @@ class NI9234ViewModel(QWidget):
     def on_graph_update_timer_timeout(self):
         self.wave_data_buffer = self._model.get_wave_data_buffer()
         self.spectrum_data_buffer = self._model.get_spectrum_data_buffer()
+        self.wave_data_buffer_mean = np.mean(self.wave_data_buffer)
         self.update_wave_chart()
         self.update_spectrum_chart()
 
@@ -366,12 +369,18 @@ class NI9234ViewModel(QWidget):
             self.channel_wave_charts[num].set_y(wave_data_downsample)
 
     def update_spectrum_chart(self):
+
         for i, num in enumerate(self.active_channel_num_list):
             mean_spectrum = np.mean(self.spectrum_data_buffer[i], axis=0)
             # mean_spectrum = mean_spectrum / np.max(mean_spectrum) # normalize 0~1
             spectrum_data_downsample = mean_spectrum[::self._spectrum_downsample_rate]
             # normalize 0~1
             spectrum_data_downsample = spectrum_data_downsample / np.max(spectrum_data_downsample)
+
+            abnormal_flag = self._model.get_abnormal_flag()
+
+            # TODO: if abnormal_flag = True, get max(mean_spectrum) then mark
+
             self.channel_spectrum_charts[num].set_y(spectrum_data_downsample)
 
     def activate_wave_chart(self):
