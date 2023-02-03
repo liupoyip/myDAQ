@@ -48,7 +48,7 @@ class NIDAQModel(QObject):
 
     _wave_data_buffer_mean: float = 0.0
     _wave_data_buffer_count: int = 0
-    _wave_mean_threshold: float = 0.0
+    _wave_mean_threshold: float = 0.005   # 上線前做調整
     _abnormal_flag: bool = False
 
     def __init__(self):
@@ -196,13 +196,12 @@ class NIDAQModel(QObject):
             self._wave_data_buffer, self._chunk_len)
         self._wave_data_buffer[:, :self._chunk_len] = self._nidaq.chunk
 
-        # if _spectrum_flag == True:
         self._spectrum_data = np.abs(np.fft.rfft(self._nidaq.chunk))
         self._spectrum_data[:, 0] = 0  # suppress 0 Hz to 0
         self._spectrum_data_buffer = np.roll(self._spectrum_data_buffer, 1, axis=1)
         for i in range(self._spectrum_data.shape[0]):
             self._spectrum_data_buffer[i, 0, :] = self._spectrum_data[i]
-
+        self._wave_data_buffer_mean = np.mean(np.abs(self._wave_data_buffer))
         # TODO: 需要新增spectrum的開關嗎??
 
     def get_wave_data_buffer(self):
@@ -218,21 +217,20 @@ class NIDAQModel(QObject):
         return self._wave_buffer_len
 
     def get_wave_buffer_mean(self):
-        self._wave_data_buffer_mean = np.mean(self._wave_data_buffer)
+        print(f'wave mean:{np.abs(self._wave_data_buffer_mean)}')
+        return self._wave_data_buffer_mean
+
+    def get_abnormal_flag(self):
         if np.abs(self._wave_data_buffer_mean) > self._wave_mean_threshold:
             self._wave_data_cycle_count += 1
         else:
             self._wave_data_cycle_count -= 1
 
-        if self._wave_data_cycle_count >= 10:
-            self._wave_data_cycle_count = 10
+        if self._wave_data_cycle_count >= 5:
+            self._wave_data_cycle_count = 5
         elif self._wave_data_cycle_count <= 0:
             self._wave_data_cycle_count = 0
-
-        return self._wave_data_buffer_mean
-
-    def get_abnormal_flag(self):
-        if self._wave_data_cycle_count == 10:
+        if self._wave_data_cycle_count == 5:
             self._abnormal_flag = True
         else:
             self._abnormal_flag = False

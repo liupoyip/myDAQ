@@ -1,14 +1,40 @@
 import numpy as np
-from PySide6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis, QSplineSeries
+from PySide6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis, QSplineSeries, QScatterSeries
 from PySide6.QtCore import QPointF, Slot, Qt, Signal, QPoint
 from PySide6.QtWidgets import (QApplication, QMainWindow, QMessageBox, QWidget,
                                QGraphicsView, QGraphicsScene, QSizePolicy, QRubberBand,
                                QVBoxLayout, QFormLayout, QHBoxLayout, QSizePolicy, QPushButton)
-from PySide6.QtGui import QPen, QColor, QPalette, QBrush, QWheelEvent, qRgb, QMouseEvent
+from PySide6.QtGui import QPen, QColor, QPalette, QBrush, QWheelEvent, qRgb, QMouseEvent, QPainter
 
 
 class ChartView(QChartView):
-    pass
+    _vertical_line_x = None
+    # _vertical_line_pen = QPen(QColor('red'))
+    # _vertical_line_pen.setWidth(2)
+
+    @property
+    def vertical_line_x(self):
+        return self._vertical_line_x
+
+    @vertical_line_x.setter
+    def vertical_line_x(self, vertical_line_x):
+        self._vertical_line_x = vertical_line_x
+        self.update()
+
+    def drawForeground(self, painter, rect):
+        if self.vertical_line_x is None:
+            return
+        # painter.save()
+        # painter.setPen(self._vertical_line_pen)
+
+        pos = self.chart().mapToPosition(QPointF(self.vertical_line_x, 0))
+        plot_area = self.chart().plotArea()
+
+        pos_1 = QPointF(pos.x(), plot_area.top())
+        pos_2 = QPointF(pos.x(), plot_area.bottom())
+        painter.drawLine(pos_1, pos_2)
+
+        # painter.restore()
 
 
 class LineChart(QWidget):
@@ -43,10 +69,8 @@ class LineChart(QWidget):
         self._y = np.zeros(512)
         self._buffer = [QPointF(x, y) for x, y in zip(self._x, self._y)]
         self._series.append(self._buffer)
-
         self.set_dark_theme()
 
-    # @Slot()
     def mouseMoveEvent(self, event) -> None:
         self.mouse_moved.emit(event.pos())
         print(event.x(), event.y())
@@ -148,6 +172,9 @@ class SpectrumChart(LineChart):
 
     def set_x_range(self, low_limit: float, high_limit: float):
         self._axis_x.setRange(low_limit, high_limit)
+
+    def mark_max_x(self):
+        ...
 
 
 if __name__ == "__main__":

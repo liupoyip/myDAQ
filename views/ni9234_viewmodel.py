@@ -4,8 +4,8 @@ from datetime import datetime
 import numpy as np
 import numpy.typing as npt
 from PySide6.QtWidgets import QWidget, QMessageBox
-from PySide6.QtCore import QTimer, Qt
-from PySide6.QtGui import QFocusEvent, QWindow
+from PySide6.QtCore import QTimer, Qt,  QRectF
+from PySide6.QtGui import QFocusEvent, QWindow, QPainter, QPen, QColor
 
 from .ui_ni9234 import Ui_NI9234
 from .chart import WaveChart, SpectrumChart
@@ -15,6 +15,12 @@ from models.NIDAQModel import NIDAQModel
 class NI9234ViewModel(QWidget):
     _wave_downsample_rate: Optional[int] = None
     _spectrum_downsample_rate: Optional[int] = None
+    _abnormal_flags: npt.NDArray = np.array([False, False, False, False])
+    _vertical_line_painter = QPainter()
+    _vertical_line_rectf = QRectF()
+    _vertical_line_pen = QPen(QColor('red'))
+    _vertical_line_pen.setWidth(2)
+    _vertical_line_painter.setPen(_vertical_line_pen)
 
     def __init__(self, model):
         super().__init__()
@@ -249,11 +255,11 @@ class NI9234ViewModel(QWidget):
                 if sensor_type == 'Accelerometer':
                     self.channel_wave_charts[num].set_y_range(-0.3, 0.3)
                     self.channel_wave_charts[num].set_y_label('value (g)')
-                    self.channel_spectrum_charts[num].set_x_range(0, 2000)
+                    self.channel_spectrum_charts[num].set_x_range(0, 6000)
                 elif sensor_type == 'Microphone':
                     self.channel_wave_charts[num].set_y_range(-10, 10)
                     self.channel_wave_charts[num].set_y_label('value (pa)')
-                    self.channel_spectrum_charts[num].set_x_range(0, 2000)
+                    self.channel_spectrum_charts[num].set_x_range(0, 6000)
 
     def on_clear_task_button_clicked(self):
         self._ui.PreparationSetting_Frame.setEnabled(True)
@@ -348,40 +354,52 @@ class NI9234ViewModel(QWidget):
             wave_len = wave_len // self._wave_downsample_rate + 1
 
         for num in self.active_channel_num_list:
-            self.channel_wave_charts[num].reset_axis(time_limit, wave_len)
+            wave_chart: WaveChart = self.channel_wave_charts[num]
+            wave_chart.reset_axis(time_limit, wave_len)
 
     def reset_spectrum_chart(self):
-        spectrum_len = len(self._model.get_spectrum_freqs())
+        freqs = self._model.get_spectrum_freqs()
+        spectrum_len = len(freqs)
         freqs_tail = spectrum_len % self._spectrum_downsample_rate
         if freqs_tail == 0:
             spectrum_len = spectrum_len // self._spectrum_downsample_rate
         else:
             spectrum_len = spectrum_len // self._spectrum_downsample_rate + 1
         freqs_tail += 1
-        self.freq_limit = self._model.get_spectrum_freqs()[-freqs_tail]
+        self.freq_limit = freqs[-freqs_tail]
 
         for num in self.active_channel_num_list:
-            self.channel_spectrum_charts[num].reset_axis(self.freq_limit, spectrum_len)
+            spectrum_chart: SpectrumChart = self.channel_spectrum_charts[num]
+            spectrum_chart.reset_axis(self.freq_limit, spectrum_len)
 
     def update_wave_chart(self):
         for i, num in enumerate(self.active_channel_num_list):
+            wave_chart: WaveChart = self.channel_wave_charts[num]
             wave_data_downsample = self.wave_data_buffer[i, ::self._wave_downsample_rate]
-            self.channel_wave_charts[num].set_y(wave_data_downsample)
+            wave_chart.set_y(wave_data_downsample)
 
     def update_spectrum_chart(self):
-
         for i, num in enumerate(self.active_channel_num_list):
+            abnormal_flag = self._model.get_abnormal_flag()
+            spectrum_chart: SpectrumChart = self.channel_spectrum_charts[num]
             mean_spectrum = np.mean(self.spectrum_data_buffer[i], axis=0)
             # mean_spectrum = mean_spectrum / np.max(mean_spectrum) # normalize 0~1
             spectrum_data_downsample = mean_spectrum[::self._spectrum_downsample_rate]
             # normalize 0~1
             spectrum_data_downsample = spectrum_data_downsample / np.max(spectrum_data_downsample)
+            spectrum_chart.set_y(spectrum_data_downsample)
 
-            abnormal_flag = self._model.get_abnormal_flag()
-
-            # TODO: if abnormal_flag = True, get max(mean_spectrum) then mark
-
-            self.channel_spectrum_charts[num].set_y(spectrum_data_downsample)
+            if abnormal_flag:
+                max_power_idx = np.where(mean_spectrum == np.max(mean_spectrum))[0][0]
+                spectrum_chart.chart_view.vertical_line_x = self._model.get_spectrum_freqs()[
+                    max_power_idx]
+                spectrum_chart.chart_view.drawForeground(
+                    self._vertical_line_painter, self._vertical_line_rectf)
+                # TODO: if abnormal_flag = True, get max(mean_spectrum) then mark
+            if not abnormal_flag:
+                spectrum_chart.chart_view.vertical_line_x = None
+                spectrum_chart.chart_view.drawForeground(
+                    self._vertical_line_painter, self._vertical_line_rectf)
 
     def activate_wave_chart(self):
         ...
