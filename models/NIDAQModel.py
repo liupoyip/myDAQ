@@ -187,7 +187,8 @@ class NIDAQModel(QObject):
             self._nidaq.stream_writer.close_file()
 
     def write_file(self):
-        file_name = f'{self.task_name}_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
+        file_name = f'{self.task_name}_{datetime.now().isoformat()}.csv'
+        # file_name = f'{self.task_name}_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
         self._nidaq.stream_writer.set_file_name(file_name)
         self._nidaq.stream_writer.open_file()
 
