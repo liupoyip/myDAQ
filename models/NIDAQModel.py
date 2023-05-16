@@ -159,17 +159,19 @@ class NIDAQModel(QObject):
             (self._nidaq.task.number_of_channels, self._buffer_rate, self._spectrum_freqs.shape[0]))
 
     def start(self):
-        if self._write_file_flag:
-            self.write_file()
-        self._nidaq.set_stream_enable()
+        #if self._write_file_flag:
+        #    self.write_file()
+        self._nidaq.set_writer_type('stream')
+        self._nidaq.set_writer_enable()
         self._nidaq.start_task()
         self._data_buffer_update_timer.start()
         self._wave_data_cycle_count = 0
 
     def stop(self):
-        self._nidaq.set_stream_disable()
+        self._nidaq.set_writer_disable()
         self._nidaq.stop_task()
-        if self._write_file_flag:
+        if not self._write_file_flag:
+            self._write_file_flag = False
             self._nidaq.stream_writer.close_file()
         self._data_buffer_update_timer.stop()
 
@@ -182,20 +184,45 @@ class NIDAQModel(QObject):
         if mode=='stream':
             if self._write_file_flag:
                 self._nidaq.set_write_file_enable()
-                self.write_stream_file(mode)
+                self.write_stream_file()
             elif not self._write_file_flag:
                 self._nidaq.set_write_file_disable()
                 self._nidaq.stream_writer.close_file()
         
-        #if mode=='chunk':
-        #    ...
+        if mode=='segment':
+            if self._write_file_flag:
+                self._nidaq.set_write_file_enable()
+                self.write_segment_file()
+            elif not self._write_file_flag:
+                self._nidaq.set_write_file_disable()
+                #self._nidaq.stream_writer.close_file()
 
     
-    def write_stream_file(self,mode):
+    def write_stream_file(self):
+        '''
+        write all signal to one file while this function is working
+        '''        
         #file_name = f'{self.task_name}_{datetime.now().isoformat()}.csv'
         file_name = f'{self.task_name}_{datetime.now().strftime("%Y%m%dT%H%M%S")}.csv'
         self._nidaq.stream_writer.set_file_name(file_name)
         self._nidaq.stream_writer.open_file()
+        
+
+    def write_segment_file(self,period=10):
+        '''
+        period : seconds, define a time period for a file
+        '''
+        start_record_time = datetime.now().strftime("%Y%m%dT%H%M%S")
+        
+        task_path = os.path.join(self.task_name, self._write_file_directory)
+        if not os.path.isdir(task_path):
+            os.mkdir(task_path)
+        record_path = os.path.join(task_path,start_record_time)
+        if not os.path.isdir(record_path):
+            os.mkdir(record_path)
+        file_name = os.path.join(record_path,f'{self.task_name}_{datetime.now().strftime("%Y%m%dT%H%M%S")}.npy')
+        self._nidaq.segment_writer.set_file_name(file_name)
+        
 
     def _update_plot_data_buffer(self):
         self._wave_data_buffer = np.roll(

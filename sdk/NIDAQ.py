@@ -20,7 +20,7 @@ from nidaqmx.constants import (AcquisitionType,
 import numpy as np
 import numpy.typing as npt
 
-from .utils import CSVStreamWriter
+from .utils import CSVStreamWriter, NPYWriter
 
 
 @dataclasses.dataclass
@@ -42,8 +42,11 @@ class NIDAQ(GeneralDAQParams):
     max_sample_rate: Optional[float] = None
     stream_reader: Optional[NiStreamReaders.AnalogMultiChannelReader] = None
     stream_writer: Optional[CSVStreamWriter] = None
+    segment_writer: Optional[NPYWriter] = None
     write_file_flag: Optional[bool] = None
     chunk: Optional[npt.NDArray[np.float64]] = None
+    writer_type = None  # "stream" for *.csv / "segment" for *.npy
+    writer = Optional[Union[CSVStreamWriter, NPYWriter]]
 
     def __init__(self) -> None:
         super(NIDAQ, self).__init__()
@@ -75,25 +78,29 @@ class NIDAQ(GeneralDAQParams):
         print(f'Frame size: {self.frame_size}')
         print(f'Buffer Size: {self.buffer_size}')
         self.show_task_exist_channels()
-        print(f'Chunk size: [{self.task.number_of_channels}, {self.frame_size}]')
+        print(
+            f'Chunk size: [{self.task.number_of_channels}, {self.frame_size}]')
 
     def show_device_name(self) -> None:
         print(f'Device name: {self.device_name}')
 
     def show_device_channel_names(self) -> None:
         print(f'{self.device_name} channels:')
-        print(''.join(f'  {name}\n' for name in list(self.device.ai_physical_chans)))
+        print(''.join(f'  {name}\n' for name in list(
+            self.device.ai_physical_chans)))
 
     def show_task_exist_channels(self) -> None:
         print(f'Task exist channel num: {len(self.task.channel_names)}')
         print('Task exist_channels:')
-        print(''.join(f'  {channel_name}\n' for channel_name in self.task.channel_names))
+        print(
+            ''.join(f'  {channel_name}\n' for channel_name in self.task.channel_names))
 
     def show_sample_rate(self) -> None:
         print(f'Current sampling rate: {self.sample_rate} Hz')
 
     def show_sample_rate_range(self) -> None:
-        print(f'Sampling rate range: {self.min_sample_rate:.2f} ~ {self.max_sample_rate} Hz')
+        print(
+            f'Sampling rate range: {self.min_sample_rate:.2f} ~ {self.max_sample_rate} Hz')
 
     def show_daq_chassis_device_name(self) -> None:
         print(f'DAQ chassis name: {self.device.compact_daq_chassis_device}')
@@ -122,6 +129,7 @@ class NI9234(NIDAQ):
         self.write_file_dir = '.'
 
         self.stream_writer = CSVStreamWriter(directory=self.write_file_dir)
+        self.segment_writer = NPYWriter(directory=self.write_file_dir)
 
         self.stream_switch_flag = False
 
@@ -190,11 +198,18 @@ class NI9234(NIDAQ):
         self.buffer_size = self.frame_size * 10
         self.task.in_stream.input_buf_size = self.buffer_size
 
-    def set_stream_enable(self) -> None:
-        self.stream_switch_flag = True
+    def set_writer_type(self, writer_type) -> None:
+        self.writer_type = writer_type
+        if writer_type == 'stream':
+            self.writer = self.stream_writer
+        if writer_type == 'segment':
+            self.writer = self.segment_writer
 
-    def set_stream_disable(self) -> None:
-        self.stream_switch_flag = False
+    def set_writer_enable(self) -> None:
+        self.writer_switch_flag = True
+
+    def set_writer_disable(self) -> None:
+        self.writer_switch_flag = False
 
     def set_write_file_enable(self) -> None:
         self.write_file_flag = True
@@ -203,13 +218,13 @@ class NI9234(NIDAQ):
         self.write_file_flag = False
 
     def ready_read(self, callback_method) -> None:
-
         self.task.register_every_n_samples_acquired_into_buffer_event(
             sample_interval=self.frame_size,
             callback_method=callback_method)
 
         self.chunk = np.zeros((self.task.number_of_channels, self.frame_size))
-        self.stream_reader = NiStreamReaders.AnalogMultiChannelReader(self.task.in_stream)
+        self.stream_reader = NiStreamReaders.AnalogMultiChannelReader(
+            self.task.in_stream)
 
     def start_task(self) -> None:
         # self.stream_w0riter.set_file_name(
@@ -265,11 +280,12 @@ class NI9234(NIDAQ):
         daq.stream_reader.read_many_sample(daq.chunk)
 
         if daq.write_file_flag:
-            daq.stream_writer.write(chunk=daq.chunk, transpose=True)
+            daq.writer.write(chunk=daq.chunk, transpose=True)
 
         current_time = datetime.now().isoformat(timespec='milliseconds')
-        print(f'Now time: {current_time} / Recording..., buffer size: {num_of_samples}')
-        #print( f'task_handle: {task_handle}, event type: {every_n_samples_event_type}, callback data :{callback_data}')
+        print(
+            f'Now time: {current_time} / Recording..., buffer size: {num_of_samples}')
+        # print( f'task_handle: {task_handle}, event type: {every_n_samples_event_type}, callback data :{callback_data}')
 
         if not daq.stream_switch_flag:
             daq.stop_task()
@@ -288,7 +304,7 @@ if __name__ == '__main__':
     nidaq.set_sample_rate(25600)
     nidaq.set_frame_duration(100)
 
-    #callback_data = 'hello'
+    # callback_data = 'hello'
 
     nidaq.ready_read(
         callback_method=lambda task_handle, every_n_samples_event_type,

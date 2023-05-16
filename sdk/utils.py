@@ -2,6 +2,7 @@ import os
 import numpy as np
 from datetime import datetime
 
+
 class StorageTools:
     directory = None
     file_name = None
@@ -17,6 +18,12 @@ class StorageTools:
         self.check_file_extension()
         self.file_path = os.path.join(self.directory, self.file_name)
 
+    def check_file_extension(self):
+        name, extension = os.path.splitext(self.file_name)
+        if extension != '.csv':
+            raise BaseException('Illegal file extension, *.csv required.')
+
+
 class CSVStreamWriter(StorageTools):
     def __init__(self, directory: str):
         self.directory = directory
@@ -27,18 +34,14 @@ class CSVStreamWriter(StorageTools):
     def close_file(self):
         self.file.close()
 
-    def check_file_extension(self):
-        name, extension = os.path.splitext(self.file_name)
-        if extension != '.csv':
-            raise BaseException('Illegal file extension, *.csv required.')
-
     def write(self, chunk, transpose=False):
         if transpose:
             np.savetxt(fname=self.file, X=np.transpose(chunk), delimiter=',')
         else:
             np.savetxt(fname=self.file, X=chunk, delimiter=',')
 
-class NPYSave(StorageTools):
+
+class NPYWriter(StorageTools):
     def __init__(self, directory: str):
         self.directory = directory
 
@@ -46,11 +49,10 @@ class NPYSave(StorageTools):
         name, extension = os.path.splitext(self.file_name)
         if extension != '.csv':
             raise BaseException('Illegal file extension, *.npy required.')
-        
-    def write(self,chunk,transpose=False):
-        if transpose:
-            np.save(fname=self.file_path,arr=np.transpose(chunk))
-        else:
-            np.save(fname=self.file_path,arr=np.transpose(chunk))
-        
 
+    def write(self, chunk, transpose=False):
+        if transpose:
+            # np.save(fname=self.file_path,arr=np.transpose(chunk))
+            np.save(fname=self.file_path, arr=np.transpose(chunk))
+        else:
+            np.save(fname=self.file_path, arr=np.transpose(chunk))
