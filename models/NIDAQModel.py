@@ -178,17 +178,22 @@ class NIDAQModel(QObject):
         if self._nidaq.stream_writer.file != None:
             self._nidaq.stream_writer.close_file()
 
-    def ready_write_file(self):
-        if self._write_file_flag:
-            self._nidaq.set_write_file_enable()
-            self.write_file()
-        elif not self._write_file_flag:
-            self._nidaq.set_write_file_disable()
-            self._nidaq.stream_writer.close_file()
+    def ready_write_file(self,mode='stream'):
+        if mode=='stream':
+            if self._write_file_flag:
+                self._nidaq.set_write_file_enable()
+                self.write_stream_file(mode)
+            elif not self._write_file_flag:
+                self._nidaq.set_write_file_disable()
+                self._nidaq.stream_writer.close_file()
+        
+        #if mode=='chunk':
+        #    ...
 
-    def write_file(self):
-        file_name = f'{self.task_name}_{datetime.now().isoformat()}.csv'
-        # file_name = f'{self.task_name}_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
+    
+    def write_stream_file(self,mode):
+        #file_name = f'{self.task_name}_{datetime.now().isoformat()}.csv'
+        file_name = f'{self.task_name}_{datetime.now().strftime("%Y%m%dT%H%M%S")}.csv'
         self._nidaq.stream_writer.set_file_name(file_name)
         self._nidaq.stream_writer.open_file()
 
