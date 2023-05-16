@@ -4,7 +4,7 @@
     "default_sample_rate": 12800,
     "min_sample_rate": 3200,
     "max_sample_rate": 51200,
-    "default_frame_duration": 50,
+    "default_frame_duration": 250,
     "min_frame_duration": 50,
     "max_frame_duration": 1000,
     "default_wave_downsample": 5,

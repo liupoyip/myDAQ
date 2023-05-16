@@ -34,6 +34,11 @@ class CSVStreamWriter(StorageTools):
     def close_file(self):
         self.file.close()
 
+    def check_file_extension(self):
+        name, extension = os.path.splitext(self.file_name)
+        if extension != '.csv':
+            raise BaseException('Illegal file extension, *.csv required.')
+
     def write(self, chunk, transpose=False):
         if transpose:
             np.savetxt(fname=self.file, X=np.transpose(chunk), delimiter=',')
@@ -47,12 +52,12 @@ class NPYWriter(StorageTools):
 
     def check_file_extension(self):
         name, extension = os.path.splitext(self.file_name)
-        if extension != '.csv':
+        if extension != '.npy':
             raise BaseException('Illegal file extension, *.npy required.')
 
     def write(self, chunk, transpose=False):
         if transpose:
             # np.save(fname=self.file_path,arr=np.transpose(chunk))
-            np.save(fname=self.file_path, arr=np.transpose(chunk))
+            np.save(file=self.file_path, arr=np.transpose(chunk))
         else:
-            np.save(fname=self.file_path, arr=np.transpose(chunk))
+            np.save(file=self.file_path, arr=np.transpose(chunk))

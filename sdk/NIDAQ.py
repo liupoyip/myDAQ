@@ -246,7 +246,7 @@ class NI9234(NIDAQ):
         print('Task is stopped!!')
 
     def close_task(self) -> None:
-        self.set_stream_disable()
+        self.set_writer_disable()
         self.task.close()
         if self.stream_writer.file != None:
             self.stream_writer.close_file()
@@ -261,14 +261,14 @@ class NI9234(NIDAQ):
 
             await asyncio.sleep(0.1)
             if keyboard.is_pressed('s') and not self.stream_switch_flag:
-                self.set_stream_enable()
+                self.set_writer_enable()
                 self.start_task()
                 print('start streaming')
             elif keyboard.is_pressed('p'):
-                self.set_stream_disable()
+                self.set_writer_disable()
                 print('stop streamming')
             elif keyboard.is_pressed('q'):
-                self.set_stream_disable()
+                self.set_writer_disable()
                 self.close_task()
                 print('close task')
                 break
@@ -285,10 +285,9 @@ class NI9234(NIDAQ):
         current_time = datetime.now().isoformat(timespec='milliseconds')
         print(
             f'Now time: {current_time} / Recording..., buffer size: {num_of_samples}')
-        # print( f'task_handle: {task_handle}, event type: {every_n_samples_event_type}, callback data :{callback_data}')
 
-        if not daq.stream_switch_flag:
-            daq.stop_task()
+        # if not daq.stream_switch_flag:
+        #    daq.stop_task()
         return 0
 
 
