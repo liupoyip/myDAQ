@@ -196,14 +196,11 @@ class NIDAQModel(QObject):
                 self.write_segment_file()
             elif not self._write_file_flag:
                 self._nidaq.set_write_file_disable()
-                #self._nidaq.stream_writer.close_file()
 
-    
     def write_stream_file(self):
         '''
         write all signal to one file while this function is working
         '''
-        
         start_record_time = datetime.now().strftime("%Y%m%dT%H%M%S")
         task_path = os.path.join(self._write_file_directory,self.task_name)
         if not os.path.isdir(task_path):
@@ -215,7 +212,6 @@ class NIDAQModel(QObject):
         file_path = f'{self.task_name}_{datetime.now().strftime("%Y%m%dT%H%M%S")}.csv'
         self._nidaq.stream_writer.set_file_name(file_path)
         self._nidaq.stream_writer.open_file()
-        
 
     def write_segment_file(self,period=10):
         '''
@@ -229,13 +225,9 @@ class NIDAQModel(QObject):
         if not os.path.isdir(record_path):
             os.mkdir(record_path)
         file_path = os.path.join(record_path,f'{self.task_name}_{datetime.now().strftime("%Y%m%dT%H%M%S")}.npy')
-        
         self._nidaq.stream_writer.set_directory(record_path)
         self._nidaq.segment_writer.set_file_name(file_path)
-        
         #TODO: 要寫一個設定檔，內容包含錄製時間總長、錄製設備、採樣率...
-        
-        
 
     def _update_plot_data_buffer(self):
         self._wave_data_buffer = np.roll(

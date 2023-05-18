@@ -1,0 +1,8 @@
+{
+    "machine_ID": "dummy_machine",
+    "data_name": "dummy_data",
+    "sample_rate": "",
+    "physical_unit": "",
+    "DAQ_model": "ni9234",
+    "sensor_model": "35c233"
+}
