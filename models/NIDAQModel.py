@@ -37,7 +37,7 @@ class NIDAQModel(QObject):
     _wave_buffer_len: int = int(_sample_rate * _buffer_duration * 0.001)
     _channels: list[int] = list()
     _sensor_types: list[str] = list()
-    _write_file_flag: bool = False
+    _writer_switch_flag: bool = False
     _nidaq: NI9234 = None
     _write_file_directory = default_settings['default_write_file_dir']
 
@@ -120,12 +120,12 @@ class NIDAQModel(QObject):
         self._sensor_types = value
 
     @property
-    def write_file_flag(self):
-        return self._write_file_flag
+    def writer_switch_flag(self):
+        return self._writer_switch_flag
 
-    @write_file_flag.setter
-    def write_file_flag(self, value: bool):
-        self._write_file_flag = value
+    @writer_switch_flag.setter
+    def writer_switch_flag(self, value: bool):
+        self._writer_switch_flag = value
 
     def create(self):
         try:
@@ -145,7 +145,6 @@ class NIDAQModel(QObject):
         self._nidaq.show_daq_params()
         self._nidaq.ready_read(callback_method=lambda foo1, foo2, foo3, foo4: self._nidaq.callback_method(
             self._nidaq.task._handle, self._nidaq.every_n_samples_event_type, self._nidaq.frame_size, callback_data=self._nidaq))
-        # self._nidaq.stream_writer.set_directory(self._write_file_directory)
 
         self._data_buffer_update_timer.setInterval(self._frame_duration)
         self._chunk_len = int(self._sample_rate * self._frame_duration * 0.001)
@@ -160,42 +159,38 @@ class NIDAQModel(QObject):
             (self._nidaq.task.number_of_channels, self._buffer_rate, self._spectrum_freqs.shape[0]))
 
     def start(self):
-        #if self._write_file_flag:
-        #    self.write_file()
-        self._nidaq.set_writer_enable()
         self._nidaq.start_task()
         self._data_buffer_update_timer.start()
         self._wave_data_cycle_count = 0
 
     def stop(self):
-        self._nidaq.set_writer_disable()
+        if self._writer_switch_flag and self._nidaq.writer.file != None:
+            self._nidaq.set_writer_disable()
+            self._nidaq.writer
         self._nidaq.stop_task()
-        if self._write_file_flag:
-            self._write_file_flag = False
-            self._nidaq.stream_writer.close_file()
         self._data_buffer_update_timer.stop()
 
     def clear(self):
         self._nidaq.close_task()
-        if self._nidaq.stream_writer.file != None:
-            self._nidaq.stream_writer.close_file()
+        if self._nidaq.writer.file != None:
+            self._nidaq.writer.close_file()
 
     def ready_write_file(self,mode='segment'):
         self._nidaq.set_writer_type(mode)
         if mode=='stream':
-            if self._write_file_flag:
-                self._nidaq.set_write_file_enable()
+            if self._writer_switch_flag:
+                self._nidaq.set_writer_enable()
                 self.write_stream_file()
-            elif not self._write_file_flag:
-                self._nidaq.set_write_file_disable()
-                self._nidaq.stream_writer.close_file()
+            elif not self._writer_switch_flag:
+                self._nidaq.set_writer_disable()
+                self._nidaq.writer.close_file()
         
         if mode=='segment':
-            if self._write_file_flag:
-                self._nidaq.set_write_file_enable()
+            if self._writer_switch_flag:
+                self._nidaq.set_writer_enable()
                 self.write_segment_file()
-            elif not self._write_file_flag:
-                self._nidaq.set_write_file_disable()
+            elif not self._writer_switch_flag:
+                self._nidaq.set_writer_disable()
 
     def write_stream_file(self):
         '''
@@ -208,10 +203,10 @@ class NIDAQModel(QObject):
         record_path = os.path.join(task_path,start_record_time)
         if not os.path.isdir(record_path):
             os.mkdir(record_path)
-        self._nidaq.stream_writer.set_directory(record_path)
+        self._nidaq.writer.set_directory(record_path)
         file_path = f'{self.task_name}_{datetime.now().strftime("%Y%m%dT%H%M%S")}.csv'
-        self._nidaq.stream_writer.set_file_name(file_path)
-        self._nidaq.stream_writer.open_file()
+        self._nidaq.writer.set_file_name(file_path)
+        self._nidaq.writer.open_file()
 
     def write_segment_file(self,period=10):
         '''
@@ -224,9 +219,8 @@ class NIDAQModel(QObject):
         record_path = os.path.join(task_path,start_record_time)
         if not os.path.isdir(record_path):
             os.mkdir(record_path)
-        file_path = os.path.join(record_path,f'{self.task_name}_{datetime.now().strftime("%Y%m%dT%H%M%S")}.npy')
-        self._nidaq.stream_writer.set_directory(record_path)
-        self._nidaq.segment_writer.set_file_name(file_path)
+        self._nidaq.writer.set_directory(record_path)
+        self._nidaq.writer.reset_write_file_count()
         #TODO: 要寫一個設定檔，內容包含錄製時間總長、錄製設備、採樣率...
 
     def _update_plot_data_buffer(self):

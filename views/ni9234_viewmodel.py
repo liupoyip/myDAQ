@@ -288,9 +288,11 @@ class NI9234ViewModel(QWidget):
         self._ui.Stop_PushButton.setDisabled(True)
         self.graph_update_timer.stop()
         self._model.stop()
+        self._ui.WriteFile_CheckBox.setChecked(False)
 
     def on_write_file_checkbox_toggled(self):
-        self._model.write_file_flag = self._ui.WriteFile_CheckBox.isChecked()
+        print('write file checkbox toggled')
+        self._model.writer_switch_flag = self._ui.WriteFile_CheckBox.isChecked()
         self._model.ready_write_file()
 
     def on_reset_button_clicked(self):
