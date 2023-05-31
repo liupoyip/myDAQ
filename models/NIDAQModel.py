@@ -268,5 +268,32 @@ class NIDAQModel(QObject):
             self._abnormal_flag = False
         return self._abnormal_flag
 
+    def write_record_info(self):
+        '''
+        properties format: 
+        {
+            machine_ID,
+            [sensor_model_0, sensor_model_1, ...],
+            [data_name_0, data_name_1, ...],
+            [physical_unit_0, physical_unit_1, ],
+            DAQ_model,
+            start_time,
+            sampling_rate,
+            end_time,
+            chunk_length,
+            chunk_count,
+            
+        }
+        '''
+        {
+            'machine_ID':'dummy',
+            'sensor_model':'model_0',
+
+        }
+        
+        self._sample_rate
+
+        ...
+
     def interval_split_write_file():
         ...
