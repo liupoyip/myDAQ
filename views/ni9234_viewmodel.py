@@ -293,7 +293,7 @@ class NI9234ViewModel(QWidget):
     def on_write_file_checkbox_toggled(self):
         print('write file checkbox toggled')
         self._model.writer_switch_flag = self._ui.WriteFile_CheckBox.isChecked()
-        self._model.ready_write_file()
+        self._model.ready_write_file(mode='segment')    # TODO:之後需要加一個下拉式選單，直接讀選單裡面的值，選單內容是['stream','segment']
 
     def on_reset_button_clicked(self):
         self.set_default_values()
