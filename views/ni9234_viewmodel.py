@@ -33,13 +33,13 @@ class NI9234ViewModel(QWidget):
         # setup view
         self.setFixedWidth(1600)
         self.setFixedHeight(900)
-        self._ui = Ui_NI9234()
+        self._ui: Optional[Ui_NI9234] = Ui_NI9234()
         self._ui.setupUi(self)
-        self.Channel0_WaveChart = WaveChart()
-        self.Channel1_WaveChart = WaveChart()
-        self.Channel2_WaveChart = WaveChart()
-        self.Channel3_WaveChart = WaveChart()
-        self.channel_wave_charts = [
+        self.Channel0_WaveChart: Optional[WaveChart] = WaveChart()
+        self.Channel1_WaveChart: Optional[WaveChart] = WaveChart()
+        self.Channel2_WaveChart: Optional[WaveChart] = WaveChart()
+        self.Channel3_WaveChart: Optional[WaveChart] = WaveChart()
+        self.channel_wave_charts: Optional[list[WaveChart,WaveChart,WaveChart,WaveChart]] = [
             self.Channel0_WaveChart,
             self.Channel1_WaveChart,
             self.Channel2_WaveChart,
@@ -100,6 +100,8 @@ class NI9234ViewModel(QWidget):
 
         self.set_default_values()
         self.now_time_timer.start()
+        self.writer_type = self._ui.WriteFileType_ComboBox.currentIndex()
+        self._ui.WriteFileType_ComboBox.connect(self.on_write_file_type_combox_changed)
 
     def set_default_values(self):
 
@@ -290,10 +292,13 @@ class NI9234ViewModel(QWidget):
         self._model.stop()
         self._ui.WriteFile_CheckBox.setChecked(False)
 
+    def on_write_file_type_combox_changed(self):
+        self.writer_type = self._ui.WriteFileType_ComboBox.currentText()
+
     def on_write_file_checkbox_toggled(self):
         print('write file checkbox toggled')
         self._model.writer_switch_flag = self._ui.WriteFile_CheckBox.isChecked()
-        self._model.ready_write_file(mode='segment')    # TODO:之後需要加一個下拉式選單，直接讀選單裡面的值，選單內容是['stream','segment']
+        self._model.ready_write_file(mode=self.writer_type)    # TODO:之後需要加一個下拉式選單，直接讀選單裡面的值，選單內容是['stream','segment']
 
     def on_reset_button_clicked(self):
         self.set_default_values()

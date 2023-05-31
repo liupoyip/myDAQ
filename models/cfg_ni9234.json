@@ -20,7 +20,8 @@
     "default_task_name": "task",
     "default_write_file_dir": "./record_data",
     "write_file_type": [
-        "*.csv"
+        "stream",
+        "segment"
     ],
     "sensor_type": [
         "",
