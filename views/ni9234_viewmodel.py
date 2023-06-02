@@ -231,7 +231,6 @@ class NI9234ViewModel(QWidget):
         if self.channel_is_seleted():
             self._ui.Start_PushButton.setEnabled(True)
             self._ui.ClearTask_PushButton.setEnabled(True)
-            # self._ui.WriteFile_GroupBox.setEnabled(True)
             self._ui.CreateTask_PushButton.setDisabled(True)
             self._ui.PreparationSetting_Frame.setDisabled(True)
             self._ui.Parameters_Label.setText(
