@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QWidget, QMessageBox
 from PySide6.QtCore import QTimer, Qt,  QRectF
 from PySide6.QtGui import QFocusEvent, QWindow, QPainter, QPen, QColor
 
-from .ui_ni9234 import Ui_NI9234
+from .ni9234_ui import Ui_NI9234
 from .chart import WaveChart, SpectrumChart
 from models.NIDAQModel import NIDAQModel
 
@@ -39,7 +39,7 @@ class NI9234ViewModel(QWidget):
         self.Channel1_WaveChart: Optional[WaveChart] = WaveChart()
         self.Channel2_WaveChart: Optional[WaveChart] = WaveChart()
         self.Channel3_WaveChart: Optional[WaveChart] = WaveChart()
-        self.channel_wave_charts: Optional[list[WaveChart,WaveChart,WaveChart,WaveChart]] = [
+        self.channel_wave_charts: Optional[list[WaveChart, WaveChart, WaveChart, WaveChart]] = [
             self.Channel0_WaveChart,
             self.Channel1_WaveChart,
             self.Channel2_WaveChart,
@@ -99,9 +99,11 @@ class NI9234ViewModel(QWidget):
         self.spectrum_data_buffer: Optional[npt.NDArray] = None
 
         self.set_default_values()
+        self._ui.WriteFileStatus_Label.setText('Status: Off')
         self.now_time_timer.start()
         self.writer_type = self._ui.WriteFileType_ComboBox.currentIndex()
-        self._ui.WriteFileType_ComboBox.connect(self.on_write_file_type_combox_changed)
+        self._ui.WriteFileType_ComboBox.currentTextChanged.connect(
+            self.on_write_file_type_combox_current_text_changed)
 
     def set_default_values(self):
 
@@ -229,7 +231,7 @@ class NI9234ViewModel(QWidget):
         if self.channel_is_seleted():
             self._ui.Start_PushButton.setEnabled(True)
             self._ui.ClearTask_PushButton.setEnabled(True)
-            self._ui.WriteFile_GroupBox.setEnabled(True)
+            # self._ui.WriteFile_GroupBox.setEnabled(True)
             self._ui.CreateTask_PushButton.setDisabled(True)
             self._ui.PreparationSetting_Frame.setDisabled(True)
             self._ui.Parameters_Label.setText(
@@ -279,6 +281,7 @@ class NI9234ViewModel(QWidget):
         self._ui.Start_PushButton.setDisabled(True)
         self._ui.Reset_PushButton.setDisabled(True)
         self._ui.ClearTask_PushButton.setDisabled(True)
+        self._ui.WriteFile_GroupBox.setEnabled(True)
         self.wave_data_buffer_count = 0
         self.graph_update_timer.start()
         self._model.start()
@@ -288,17 +291,22 @@ class NI9234ViewModel(QWidget):
         self._ui.ClearTask_PushButton.setEnabled(True)
         self._ui.Reset_PushButton.setEnabled(True)
         self._ui.Stop_PushButton.setDisabled(True)
+        self._ui.WriteFile_CheckBox.setChecked(False)
+        self._ui.WriteFile_GroupBox.setEnabled(False)
         self.graph_update_timer.stop()
         self._model.stop()
-        self._ui.WriteFile_CheckBox.setChecked(False)
 
-    def on_write_file_type_combox_changed(self):
+    def on_write_file_type_combox_current_text_changed(self):
         self.writer_type = self._ui.WriteFileType_ComboBox.currentText()
 
     def on_write_file_checkbox_toggled(self):
         print('write file checkbox toggled')
         self._model.writer_switch_flag = self._ui.WriteFile_CheckBox.isChecked()
-        self._model.ready_write_file(mode=self.writer_type)    # TODO:之後需要加一個下拉式選單，直接讀選單裡面的值，選單內容是['stream','segment']
+        self._model.ready_write_file(mode=self.writer_type)
+        if self._ui.WriteFile_CheckBox.isChecked():
+            self._ui.WriteFileStatus_Label.setText('Status: On')
+        if not self._ui.WriteFile_CheckBox.isChecked():
+            self._ui.WriteFileStatus_Label.setText('Status: Off')
 
     def on_reset_button_clicked(self):
         self.set_default_values()

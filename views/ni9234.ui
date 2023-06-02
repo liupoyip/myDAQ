@@ -150,7 +150,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>100</x>
       <y>50</y>
       <width>201</width>
       <height>20</height>
@@ -175,18 +175,31 @@
    </widget>
    <widget class="QComboBox" name="WriteFileType_ComboBox">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>100</x>
       <y>20</y>
-      <width>61</width>
+      <width>81</width>
       <height>22</height>
      </rect>
     </property>
     <property name="frame">
      <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="WriteFileStatus_Label">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>20</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Status:</string>
     </property>
    </widget>
   </widget>
