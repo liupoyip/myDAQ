@@ -177,21 +177,17 @@ class NIDAQModel(QObject):
 
     def ready_write_file(self,mode='segment'):
         self._nidaq.set_writer_type(mode)
-        if mode=='stream':
-            if self._writer_switch_flag:
-                self._nidaq.set_writer_enable()
-                self.write_stream_file()
-            elif not self._writer_switch_flag:
+
+        if self._writer_switch_flag:
+            self._nidaq.set_writer_enable()
+            self.write_stream_file()
+        if not self._writer_switch_flag:
+            if mode=='stream':    
                 self._nidaq.set_writer_disable()
                 self._nidaq.writer.close_file()
-        
-        if mode=='segment':
-            if self._writer_switch_flag:
-                self._nidaq.set_writer_enable()
-                self.write_segment_file()
-            elif not self._writer_switch_flag:
+            if mode=='segment':
                 self._nidaq.set_writer_disable()
-
+            
     def write_stream_file(self):
         '''
         write all signal to one file while this function is working
@@ -288,12 +284,6 @@ class NIDAQModel(QObject):
         {
             'machine_ID':'dummy',
             'sensor_model':'model_0',
-
         }
         
         self._sample_rate
-
-        ...
-
-    def interval_split_write_file():
-        ...
