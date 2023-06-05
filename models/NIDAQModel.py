@@ -217,7 +217,10 @@ class NIDAQModel(QObject):
             os.mkdir(record_path)
         self._nidaq.writer.set_directory(record_path)
         self._nidaq.writer.reset_write_file_count()
+        
         #TODO: 要寫一個設定檔，內容包含錄製時間總長、錄製設備、採樣率...
+
+    
 
     def _update_plot_data_buffer(self):
         self._wave_data_buffer = np.roll(
@@ -282,8 +285,13 @@ class NIDAQModel(QObject):
         }
         '''
         {
-            'machine_ID':'dummy',
-            'sensor_model':'model_0',
+            'machine_ID':'dummy_machine',
+            'sensor_model':['model_dummy_0'],
+            'sensor_serial_number':[],
+            'data_name':['data_name_0']
         }
         
         self._sample_rate
+    def record_cfg_checker(self):
+        
+        ...

@@ -4,5 +4,6 @@
     "sample_rate": "",
     "physical_unit": "",
     "DAQ_model": "ni9234",
-    "sensor_model": "35c233"
+    "sensor_model": "35c233",
+    "sensor_setting":
 }
