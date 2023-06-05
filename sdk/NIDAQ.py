@@ -163,7 +163,7 @@ class NI9234(NIDAQ):
             min_val=-5.0,
             max_val=5.0,
             units=AccelUnits.G,
-            sensitivity=1000.0,
+            sensitivity=100.0,
             sensitivity_units=AccelSensitivityUnits.MILLIVOLTS_PER_G,
             current_excit_source=ExcitationSource.INTERNAL,
             current_excit_val=0.004,

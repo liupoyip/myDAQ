@@ -1,0 +1,15 @@
+{
+    "ai_channel_api_url": "https://nidaqmx-python.readthedocs.io/en/latest/ai_channel_collection.html?highlight=add_ai_mic#nidaqmx._task_modules.ai_channel_collection.AIChannelCollection.add_ai_accel_chan",
+    "sensor_model_url": "https://www.pcb.com/products?m=352c33",
+    "physical_channel": "dev0/ai0",
+    "name_to_assign_to_channel": "352C33",
+    "terminal_config": "default",
+    "min_val": -5.0,
+    "max_val": 5.0,
+    "units": "g",
+    "sensitivity": 100.0,
+    "sensitivity_units": "millivolts_per_g",
+    "current_excit_source": "internal",
+    "current_excit_val": 0.004,
+    "custom_scale_name": ""
+}
