@@ -2,25 +2,19 @@ from typing import Optional, Union
 import json
 
 
-class AiChannelBasicParameters:
+# class AiChannelBasicParameters:
 
-    sensor_cfg_file: Optional[str] = 'dummy_model.json'
-    physical_channel: Optional[str] = None  # format: {device_name}/{channel}, ex: dev0/ai0
-    name_to_assign_to_channel: Optional[str] = None  # custom channel name
-    min_val: Optional[float] = None
-    max_val: Optional[float] = None
-    physical_unit: Optional[str] = None
-    sensitivity: Optional[float] = None
-    sensitivity_units: Optional[str] = None
-    current_excit_source: Optional[str] = None
-    current_excit_val: Optional[float] = None
-    custom_scale_name: Optional[str] = ''
+#     def __init__(self) -> None:
+#         self.sensor_cfg_file: Optional[str] = 'dummy_model.json'
+#         self.physical_channel: Optional[str] = None  # format: {device_name}/{channel}, ex: dev0/ai0
+#         self.name_to_assign_to_channel: Optional[str] = None  # custom channel name
+#         self.custom_scale_name: Optional[str] = ''
 
-    def paramters_checker(self):
-        # TODO: 根據Sensor種類、使用的API來限制設定檔內容
-        pass
+#     def paramters_checker(self):
+#         # TODO: 根據Sensor種類、使用的API來限制設定檔內容
+#         pass
 
-class AccelerometerChannelSetting(AiChannelBasicParameters):
+class AccelerometerChannelSettings:
 
     def __init__(self, sensor_cfg_path) -> None:
         self.sensor_cfg_file = open(sensor_cfg_path)
@@ -42,7 +36,7 @@ class AccelerometerChannelSetting(AiChannelBasicParameters):
         pass
 
 
-class MicrophoneChannelSetting(AiChannelBasicParameters):
+class MicrophoneChannelSettings:
 
     def __init__(self, sensor_cfg_path) -> None:
         self.sensor_cfg_file = open(sensor_cfg_path)
@@ -63,8 +57,9 @@ class MicrophoneChannelSetting(AiChannelBasicParameters):
 
 if __name__ == '__main__':
     sensor_cfg_file = './sensor_cfg/352C33.json'
-    accel_setting = AccelerometerChannelSetting(sensor_cfg_file)
+    accel_setting = AccelerometerChannelSettings(sensor_cfg_file)
     print(accel_setting.current_excit_source)
     sensor_cfg_file = './sensor_cfg/130F20.json'
-    mic_setting = MicrophoneChannelSetting(sensor_cfg_file)
+    mic_setting = MicrophoneChannelSettings(sensor_cfg_file)
     print(mic_setting.current_excit_source)
+

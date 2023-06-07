@@ -8,124 +8,182 @@ import numpy.typing as npt
 from PySide6.QtCore import QObject, QTimer
 
 from sdk.NIDAQ import NI9234
+from sdk.sensor import AccelerometerChannelSettings,MicrophoneChannelSettings
 
 
 class NIDAQModel(QObject):
-    _cfg_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cfg_ni9234.json')
-    _cfg_file = open(_cfg_path)
-    default_settings = json.load(_cfg_file)
+    # daq config
+    cfg_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cfg_ni9234.json')
+    cfg_file = open(cfg_path)
+    default_settings = json.load(cfg_file)
 
-    _device_name: str = default_settings['device_name']
-    _task_name: str = default_settings['default_task_name']
-    _sample_rate: int = default_settings['default_sample_rate']
-    _min_sample_rate: int = default_settings['min_sample_rate']
-    _max_sample_rate: int = default_settings['max_sample_rate']
-    _frame_duration: int = default_settings['default_frame_duration']
-    _max_frame_duration: int = default_settings['default_frame_duration']
-    _min_frame_duration: int = default_settings['min_frame_duration']
-    _downsample: int = default_settings['default_wave_downsample']
-    _min_downsample: int = default_settings['min_wave_downsample']
-    _max_downsample: int = default_settings['max_wave_downsample']
-    _update_interval: int = _frame_duration
-    _min_update_interval: int = _frame_duration
-    _max_update_interval: int = default_settings['max_update_interval']
-    _buffer_rate: int = default_settings['min_buffer_rate']
-    _min_buffer_rate: int = default_settings['min_buffer_rate']
-    _max_buffer_rate: int = default_settings['max_buffer_rate']
-    _chunk_len = int(_sample_rate * _frame_duration * 0.001)
-    _buffer_duration: int = _frame_duration * _buffer_rate
-    _wave_buffer_len: int = int(_sample_rate * _buffer_duration * 0.001)
-    _channels: list[int] = list()
-    _sensor_types: list[str] = list()
-    _writer_switch_flag: bool = False
-    _nidaq: NI9234 = None
-    _write_file_directory = default_settings['default_write_file_dir']
+    device_name: str = default_settings['device_name']
+    task_name: str = default_settings['default_task_name']
+    sample_rate: int = default_settings['default_sample_rate']
+    min_sample_rate: int = default_settings['min_sample_rate']
+    max_sample_rate: int = default_settings['max_sample_rate']
+    frame_duration: int = default_settings['default_frame_duration']
+    max_frame_duration: int = default_settings['default_frame_duration']
+    min_frame_duration: int = default_settings['min_frame_duration']
+    downsample: int = default_settings['default_wave_downsample']
+    min_downsample: int = default_settings['min_wave_downsample']
+    max_downsample: int = default_settings['max_wave_downsample']
+    update_interval: int = frame_duration
+    min_update_interval: int = frame_duration
+    max_update_interval: int = default_settings['max_update_interval']
+    buffer_rate: int = default_settings['min_buffer_rate']
+    min_buffer_rate: int = default_settings['min_buffer_rate']
+    max_buffer_rate: int = default_settings['max_buffer_rate']
+    chunk_len = int(sample_rate * frame_duration * 0.001)
+    buffer_duration: int = frame_duration * buffer_rate
+    wave_buffer_len: int = int(sample_rate * buffer_duration * 0.001)
+    channels: list[int] = list()
+    sensor_types: list[str] = list()
+    writer_switch_flag: bool = False
+    nidaq: NI9234 = None
+    write_file_directory = default_settings['default_write_file_dir']
+
+    # sensor config
+    cfg_sensor_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'sensor_cfg')
+    cfg_sensor_path: str = None
+    sensor_model: str = None
+
+    # channel setting
+    accel_chan_settings:Optional[AccelerometerChannelSettings] = None
+    mic_chan_settings:Optional[MicrophoneChannelSettings] = None
 
     # buffer for visualize data
-    _data_buffer_update_timer = QTimer()
-    _wave_data_buffer: Optional[npt.NDArray[np.float64]]
-    _spectrum_data_buffer: Optional[npt.NDArray[np.float64]]
+    data_buffer_update_timer = QTimer()
+    wave_data_buffer: Optional[npt.NDArray[np.float64]]
+    spectrum_data_buffer: Optional[npt.NDArray[np.float64]]
 
-    _wave_data_buffer_mean: float = 0.0
-    _wave_data_buffer_count: int = 0
-    _wave_mean_threshold: float = 0.005   # 上線前做調整
-    _abnormal_flag: bool = False
+    wave_data_buffer_mean: float = 0.0
+    wave_data_buffer_count: int = 0
+    wave_mean_threshold: float = 0.005   # 上線前做調整
+    abnormal_flag: bool = False
 
     def __init__(self):
         super().__init__()
-        self._data_buffer_update_timer.timeout.connect(self._update_plot_data_buffer)
+        self.data_buffer_update_timer.timeout.connect(self.update_plot_data_buffer)
 
-    @property
-    def task_name(self):
-        return self._task_name
+    # @property
+    # def task_name(self):
+    #     return self.task_name
 
-    @task_name.setter
-    def task_name(self, value: str):
-        self._task_name = value
+    # @task_name.setter
+    # def task_name(self, value: str):
+    #     self.task_name = value
 
-    @property
-    def sample_rate(self):
-        return self._sample_rate
+    # @property
+    # def sample_rate(self):
+    #     return self.sample_rate
 
-    @sample_rate.setter
-    def sample_rate(self, value: int):
-        self._sample_rate = value
+    # @sample_rate.setter
+    # def sample_rate(self, value: int):
+    #     self.sample_rate = value
 
-    @property
-    def frame_duration(self):
-        return self._frame_duration
+    # @property
+    # def frame_duration(self):
+    #     return self.frame_duration
 
-    @frame_duration.setter
-    def frame_duration(self, value: int):
-        self._frame_duration = value
+    # @frame_duration.setter
+    # def frame_duration(self, value: int):
+    #     self.frame_duration = value
 
-    @property
-    def buffer_rate(self):
-        return self._buffer_rate
+    # @property
+    # def buffer_rate(self):
+    #     return self.buffer_rate
 
-    @buffer_rate.setter
-    def buffer_rate(self, value: int):
-        self._buffer_rate = value
+    # @buffer_rate.setter
+    # def buffer_rate(self, value: int):
+    #     self.buffer_rate = value
 
-    @property
-    def buffer_duration(self):
-        return self._buffer_duration
+    # @property
+    # def buffer_duration(self):
+    #     return self.buffer_duration
 
-    @buffer_duration.setter
-    def buffer_duration(self, value: int):
-        self._buffer_duration = value
+    # @buffer_duration.setter
+    # def buffer_duration(self, value: int):
+    #     self.buffer_duration = value
 
-    @property
-    def update_interval(self):
-        return self._buffer_rate
+    # @property
+    # def update_interval(self):
+    #     return self.buffer_rate
 
-    @update_interval.setter
-    def update_interval(self, value: int):
-        self._update_interval = value
+    # @update_interval.setter
+    # def update_interval(self, value: int):
+    #     self.update_interval = value
 
-    @property
-    def channels(self):
-        return self._channels
+    # @property
+    # def channels(self):
+    #     return self.channels
 
-    @channels.setter
-    def channels(self, value: list[int]):
-        self._channels = value
+    # @channels.setter
+    # def channels(self, value: list[int]):
+    #     self.channels = value
 
-    @property
-    def sensor_types(self):
-        return self._sensor_types
+    # @property
+    # def sensor_types(self):
+    #     return self.sensor_types
 
-    @sensor_types.setter
-    def sensor_types(self, value: list[str]):
-        self._sensor_types = value
+    # @sensor_types.setter
+    # def sensor_types(self, value: list[str]):
+    #     self.sensor_types = value
 
-    @property
-    def writer_switch_flag(self):
-        return self._writer_switch_flag
+    # @property
+    # def writer_switch_flag(self):
+    #     return self.writer_switch_flag
 
-    @writer_switch_flag.setter
-    def writer_switch_flag(self, value: bool):
-        self._writer_switch_flag = value
+    # @writer_switch_flag.setter
+    # def writer_switch_flag(self, value: bool):
+    #     self.writer_switch_flag = value
+    
+    # @property
+    # def sensor_model(self):
+    #     return self.sensor_model
+
+    # @sensor_model.setter
+    # def sensor_model(self, value: bool):
+    #     self.sensor_model = value
+
+    # TODO: 要寫一個讀取設定檔的功能
+    # 內容包含錄製時間總長、錄製設備、採樣率...
+    def read_sensor_cfg_352C33(self):
+        sensor_model='352C33'
+        cfg_sensor_path = os.path.join(self.cfg_sensor_dir,f'{sensor_model}.json')
+        self.accel_chan_settings = AccelerometerChannelSettings(cfg_sensor_path)
+        print(
+            f'config path:{cfg_sensor_path}\n',
+            f'Model : {sensor_model}\n',
+            f'physical channel : {self.accel_chan_settings.physical_channel}\n',
+            f'channel name : {self.accel_chan_settings.name_to_assign_to_channel}\n',
+            f'terminal config : {self.accel_chan_settings.terminal_config}\n',
+            f'min value : {self.accel_chan_settings.min_val}\n',
+            f'max value : {self.accel_chan_settings.max_val}\n',
+            f'units : {self.accel_chan_settings.units}\n',
+            f'sensitivity : {self.accel_chan_settings.sensitivity}\n',
+            f'sensitivity units : {self.accel_chan_settings.sensitivity_units}\n',
+            f'current excitation source : {self.accel_chan_settings.current_excit_source}\n',
+            f'current excitation val : {self.accel_chan_settings.current_excit_val}\n',
+            f'custom scale name : {self.accel_chan_settings.custom_scale_name}')
+        
+    def read_sensor_cfg_130F20(self):
+        sensor_model='130F20'
+        cfg_sensor_path = os.path.join(self.cfg_sensor_dir,f'{sensor_model}.json')
+        self.mic_chan_settings = MicrophoneChannelSettings(cfg_sensor_path)
+        print(
+            f'config path:{cfg_sensor_path}\n',
+            f'Model : {sensor_model}\n',
+            f'physical channel : {self.mic_chan_settings.physical_channel}\n',
+            f'channel name : {self.mic_chan_settings.name_to_assign_to_channel}\n',
+            f'terminal config : {self.mic_chan_settings.terminal_config}\n',
+            f'min value : {self.mic_chan_settings.mic_sensitivity}\n',
+            f'units : {self.mic_chan_settings.units}\n',
+            f'mic sensitivity : {self.mic_chan_settings.mic_sensitivity}\n',
+            f'max sound pressure level : {self.mic_chan_settings.max_snd_press_level}\n',
+            f'current excitation source : {self.mic_chan_settings.current_excit_source}\n',
+            f'current excitation val : {self.mic_chan_settings.current_excit_val}\n',
+            f'custom scale name : {self.mic_chan_settings.custom_scale_name}')
 
     def create(self):
         try:
@@ -133,139 +191,135 @@ class NIDAQModel(QObject):
             self.clear()
         except:
             pass
-        self._nidaq = NI9234(device_name=self._device_name)
-        self._nidaq.create_task(task_name=self.task_name)
+        self.nidaq = NI9234(device_name=self.device_name)
+        self.nidaq.create_task(task_name=self.task_name)
         for channel, sensor_type in zip(self.channels, self.sensor_types):
             if sensor_type == 'Accelerometer':
-                self._nidaq.add_accel_channel(channel)
+                self.nidaq.add_accel_channel(channel)
             if sensor_type == 'Microphone':
-                self._nidaq.add_microphone_channel(channel)
-        self._nidaq.set_sample_rate(self._sample_rate)
-        self._nidaq.set_frame_duration(self._frame_duration)
-        self._nidaq.show_daq_params()
-        self._nidaq.ready_read(callback_method=lambda foo1, foo2, foo3, foo4: self._nidaq.callback_method(
-            self._nidaq.task._handle, self._nidaq.every_n_samples_event_type, self._nidaq.frame_size, callback_data=self._nidaq))
+                self.nidaq.add_microphone_channel(channel)
+        self.nidaq.set_sample_rate(self.sample_rate)
+        self.nidaq.set_frame_duration(self.frame_duration)
+        self.nidaq.show_daq_params()
+        self.nidaq.ready_read(callback_method=lambda foo1, foo2, foo3, foo4: self.nidaq.callback_method(
+            self.nidaq.task._handle, self.nidaq.every_n_samples_event_type, self.nidaq.frame_size, callback_data=self.nidaq))
 
-        self._data_buffer_update_timer.setInterval(self._frame_duration)
-        self._chunk_len = int(self._sample_rate * self._frame_duration * 0.001)
-        self._buffer_duration: int = self._frame_duration * self._buffer_rate
-        self._wave_buffer_len: int = int(self._sample_rate * self._buffer_duration * 0.001)
+        self.data_buffer_update_timer.setInterval(self.frame_duration)
+        self.chunk_len = int(self.sample_rate * self.frame_duration * 0.001)
+        self.buffer_duration: int = self.frame_duration * self.buffer_rate
+        self.wave_buffer_len: int = int(self.sample_rate * self.buffer_duration * 0.001)
 
-        self._wave_data_buffer = np.zeros(
-            (self._nidaq.task.number_of_channels, self._wave_buffer_len))
-        self._spectrum_freqs = np.fft.rfftfreq(self._chunk_len, 1/self._sample_rate)
+        self.wave_data_buffer = np.zeros(
+            (self.nidaq.task.number_of_channels, self.wave_buffer_len))
+        self.spectrum_freqs = np.fft.rfftfreq(self.chunk_len, 1/self.sample_rate)
         # spectrum array format: (number of channels, buffer rate, chunk len)
-        self._spectrum_data_buffer = np.zeros(
-            (self._nidaq.task.number_of_channels, self._buffer_rate, self._spectrum_freqs.shape[0]))
+        self.spectrum_data_buffer = np.zeros(
+            (self.nidaq.task.number_of_channels, self.buffer_rate, self.spectrum_freqs.shape[0]))
 
     def start(self):
-        self._nidaq.start_task()
-        self._data_buffer_update_timer.start()
-        self._wave_data_cycle_count = 0
+        self.nidaq.start_task()
+        self.data_buffer_update_timer.start()
+        self.wave_data_cycle_count = 0
 
     def stop(self):
-        if self._writer_switch_flag and self._nidaq.writer.file != None:
-            self._nidaq.set_writer_disable()
-            self._nidaq.writer
-        self._nidaq.stop_task()
-        self._data_buffer_update_timer.stop()
+        if self.writer_switch_flag and self.nidaq.writer.file != None:
+            self.nidaq.set_writer_disable()
+            self.nidaq.writer
+        self.nidaq.stop_task()
+        self.data_buffer_update_timer.stop()
 
     def clear(self):
-        self._nidaq.close_task()
-        if self._nidaq.writer.file != None:
-            self._nidaq.writer.close_file()
+        self.nidaq.close_task()
+        if self.nidaq.writer.file != None:
+            self.nidaq.writer.close_file()
 
     def ready_write_file(self,mode='segment'):
-        self._nidaq.set_writer_type(mode)
+        self.nidaq.set_writer_type(mode)
 
-        if self._writer_switch_flag:
-            self._nidaq.set_writer_enable()
+        if self.writer_switch_flag:
+            self.nidaq.set_writer_enable()
             self.write_stream_file()
-        if not self._writer_switch_flag:
+        if not self.writer_switch_flag:
             if mode=='stream':    
-                self._nidaq.set_writer_disable()
-                self._nidaq.writer.close_file()
+                self.nidaq.set_writer_disable()
+                self.nidaq.writer.close_file()
             if mode=='segment':
-                self._nidaq.set_writer_disable()
+                self.nidaq.set_writer_disable()
             
     def write_stream_file(self):
         '''
         write all signal to one file while this function is working
         '''
         start_record_time = datetime.now().strftime("%Y%m%dT%H%M%S")
-        task_path = os.path.join(self._write_file_directory,self.task_name)
+        task_path = os.path.join(self.write_file_directory,self.task_name)
         if not os.path.isdir(task_path):
             os.mkdir(task_path)
         record_path = os.path.join(task_path,start_record_time)
         if not os.path.isdir(record_path):
             os.mkdir(record_path)
-        self._nidaq.writer.set_directory(record_path)
+        self.nidaq.writer.set_directory(record_path)
         file_path = f'{self.task_name}_{datetime.now().strftime("%Y%m%dT%H%M%S")}.csv'
-        self._nidaq.writer.set_file_name(file_path)
-        self._nidaq.writer.open_file()
+        self.nidaq.writer.set_file_name(file_path)
+        self.nidaq.writer.open_file()
 
     def write_segment_file(self,period=10):
         '''
         period : seconds, define a time period for a file
         '''
         start_record_time = datetime.now().strftime("%Y%m%dT%H%M%S")
-        task_path = os.path.join(self._write_file_directory,self.task_name)
+        task_path = os.path.join(self.write_file_directory,self.task_name)
         if not os.path.isdir(task_path):
             os.mkdir(task_path)
         record_path = os.path.join(task_path,start_record_time)
         if not os.path.isdir(record_path):
             os.mkdir(record_path)
-        self._nidaq.writer.set_directory(record_path)
-        self._nidaq.writer.reset_write_file_count()
-        
-        #TODO: 要寫一個設定檔，內容包含錄製時間總長、錄製設備、採樣率...
+        self.nidaq.writer.set_directory(record_path)
+        self.nidaq.writer.reset_write_file_count()
 
-    
+    def update_plot_data_buffer(self):
+        self.wave_data_buffer = np.roll(
+            self.wave_data_buffer, self.chunk_len)
+        self.wave_data_buffer[:, :self.chunk_len] = self.nidaq.chunk
 
-    def _update_plot_data_buffer(self):
-        self._wave_data_buffer = np.roll(
-            self._wave_data_buffer, self._chunk_len)
-        self._wave_data_buffer[:, :self._chunk_len] = self._nidaq.chunk
-
-        self._spectrum_data = np.abs(np.fft.rfft(self._nidaq.chunk))
-        self._spectrum_data[:, 0] = 0  # suppress 0 Hz to 0
-        self._spectrum_data_buffer = np.roll(self._spectrum_data_buffer, 1, axis=1)
-        for i in range(self._spectrum_data.shape[0]):
-            self._spectrum_data_buffer[i, 0, :] = self._spectrum_data[i]
-        self._wave_data_buffer_mean = np.mean(np.abs(self._wave_data_buffer))
+        self.spectrum_data = np.abs(np.fft.rfft(self.nidaq.chunk))
+        self.spectrum_data[:, 0] = 0  # suppress 0 Hz to 0
+        self.spectrum_data_buffer = np.roll(self.spectrum_data_buffer, 1, axis=1)
+        for i in range(self.spectrum_data.shape[0]):
+            self.spectrum_data_buffer[i, 0, :] = self.spectrum_data[i]
+        self.wave_data_buffer_mean = np.mean(np.abs(self.wave_data_buffer))
         # TODO: 需要新增spectrum的開關嗎??
 
     def get_wave_data_buffer(self):
-        return self._wave_data_buffer
+        return self.wave_data_buffer
 
     def get_spectrum_data_buffer(self):
-        return self._spectrum_data_buffer
+        return self.spectrum_data_buffer
 
     def get_spectrum_freqs(self):
-        return self._spectrum_freqs
+        return self.spectrum_freqs
 
     def get_wave_buffer_len(self):
-        return self._wave_buffer_len
+        return self.wave_buffer_len
 
     def get_wave_buffer_mean(self):
-        print(f'wave mean:{np.abs(self._wave_data_buffer_mean)}')
-        return self._wave_data_buffer_mean
+        print(f'wave mean:{np.abs(self.wave_data_buffer_mean)}')
+        return self.wave_data_buffer_mean
 
     def get_abnormal_flag(self):
-        if np.abs(self._wave_data_buffer_mean) > self._wave_mean_threshold:
-            self._wave_data_cycle_count += 1
+        if np.abs(self.wave_data_buffer_mean) > self.wave_mean_threshold:
+            self.wave_data_cycle_count += 1
         else:
-            self._wave_data_cycle_count -= 1
+            self.wave_data_cycle_count -= 1
 
-        if self._wave_data_cycle_count >= 5:
-            self._wave_data_cycle_count = 5
-        elif self._wave_data_cycle_count <= 0:
-            self._wave_data_cycle_count = 0
-        if self._wave_data_cycle_count == 5:
-            self._abnormal_flag = True
+        if self.wave_data_cycle_count >= 5:
+            self.wave_data_cycle_count = 5
+        elif self.wave_data_cycle_count <= 0:
+            self.wave_data_cycle_count = 0
+        if self.wave_data_cycle_count == 5:
+            self.abnormal_flag = True
         else:
-            self._abnormal_flag = False
-        return self._abnormal_flag
+            self.abnormal_flag = False
+        return self.abnormal_flag
 
     def write_record_info(self):
         '''
@@ -290,8 +344,8 @@ class NIDAQModel(QObject):
             'sensor_serial_number':[],
             'data_name':['data_name_0']
         }
-        
-        self._sample_rate
+        self.sample_rate
+
     def record_cfg_checker(self):
         
         ...

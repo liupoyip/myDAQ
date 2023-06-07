@@ -1,0 +1,13 @@
+{
+    "ai_channel_api_url": "https://nidaqmx-python.readthedocs.io/en/latest/ai_channel_collection.html?highlight=add_ai_microphone#nidaqmx._task_modules.ai_channel_collection.AIChannelCollection.add_ai_microphone_chan",
+    "sensor_model_url": "https://www.pcb.com/products?m=130F20",
+    "physical_channel": "dev0/ai0",
+    "name_to_assign_to_channel": "130F20",
+    "terminal_config": "default",
+    "units": "PA",
+    "mic_sensitivity": 45.0,
+    "max_snd_press_level": 122.0,
+    "current_excit_source": "internal",
+    "current_excit_val": 0.004,
+    "custom_scale_name": ""
+}

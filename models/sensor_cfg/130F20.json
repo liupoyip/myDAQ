@@ -6,7 +6,7 @@
     "terminal_config": "default",
     "units": "PA",
     "mic_sensitivity": 45.0,
-    "max_snd_press_level": 100.0,
+    "max_snd_press_level": 122.0,
     "current_excit_source": "internal",
     "current_excit_val": 0.004,
     "custom_scale_name": ""

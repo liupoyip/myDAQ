@@ -371,6 +371,9 @@ class Ui_NI9234(object):
         self.Charts_GridLayout.setObjectName(u"Charts_GridLayout")
         self.Charts_GridLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
         self.Charts_GridLayout.setContentsMargins(0, 0, 0, 0)
+        self.FunctionTest_Pushbutton = QPushButton(NI9234)
+        self.FunctionTest_Pushbutton.setObjectName(u"FunctionTest_Pushbutton")
+        self.FunctionTest_Pushbutton.setGeometry(QRect(280, 870, 75, 24))
 
         self.retranslateUi(NI9234)
         self.SampleRate_HorizontalSlider.valueChanged.connect(self.SampleRate_SpinBox.setValue)
@@ -417,5 +420,6 @@ class Ui_NI9234(object):
         self.Task_GroupBox.setTitle(QCoreApplication.translate("NI9234", u"Task", None))
         self.TaskName_Label.setText(QCoreApplication.translate("NI9234", u"Task Name", None))
         self.Info_Label.setText(QCoreApplication.translate("NI9234", u"<html><head/><body><p>Notice!!<br/>If value &quot;Buffer Rate&quot; and &quot;Frame Duration&quot; too high,<br/>line of chart may encount huge data to update and <br/>occur app clock slower than NI9234 clock.</p><p>When this phenomenon arise, adjust &quot;Down Sample&quot;<br/>to reduce the loading on updating charts.</p></body></html>", None))
+        self.FunctionTest_Pushbutton.setText(QCoreApplication.translate("NI9234", u"Func Test", None))
     # retranslateUi
 

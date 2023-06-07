@@ -1049,6 +1049,19 @@
     </property>
    </layout>
   </widget>
+  <widget class="QPushButton" name="FunctionTest_Pushbutton">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>870</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Func Test</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>

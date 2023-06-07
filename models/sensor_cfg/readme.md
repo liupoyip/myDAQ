@@ -28,8 +28,8 @@ sensor_series_number
             physical_channel,
             name_to_assign_to_channel='',
             terminal_config=TerminalConfiguration.DEFAULT,
-            min_val=-5.0,
-            max_val=5.0,
+            min_val=-50.0,
+            max_val=50.0,
             units=AccelUnits.G,
             sensitivity=100.0,
             sensitivity_units=AccelSensitivityUnits.MILLIVOLTS_PER_G,
@@ -47,7 +47,13 @@ sensor_series_number
             terminal_config=TerminalConfiguration.DEFAULT,
             units=SoundPressureUnits.PA,
             mic_sensitivity=45.0,
-            max_snd_press_level=100.0,
+            max_snd_press_level=122.0,
             current_excit_source=ExcitationSource.INTERNAL,
             current_excit_val=0.004,
             custom_scale_name='')
+
+## 已建立之Sensor設定檔
+設定檔放在 `./sensor_cfg/`，其中預設設定檔在 `./sensor_cfg/default` 中
+使用時將 `default` 的設定檔複製出來改就好
+- Model
+  - 352c
