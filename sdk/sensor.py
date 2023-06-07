@@ -2,18 +2,6 @@ from typing import Optional, Union
 import json
 
 
-# class AiChannelBasicParameters:
-
-#     def __init__(self) -> None:
-#         self.sensor_cfg_file: Optional[str] = 'dummy_model.json'
-#         self.physical_channel: Optional[str] = None  # format: {device_name}/{channel}, ex: dev0/ai0
-#         self.name_to_assign_to_channel: Optional[str] = None  # custom channel name
-#         self.custom_scale_name: Optional[str] = ''
-
-#     def paramters_checker(self):
-#         # TODO: 根據Sensor種類、使用的API來限制設定檔內容
-#         pass
-
 class AccelerometerChannelSettings:
 
     def __init__(self, sensor_cfg_path) -> None:
