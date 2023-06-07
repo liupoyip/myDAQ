@@ -1,5 +1,3 @@
-# %%
-
 from typing import Optional, Union
 import json
 
@@ -18,6 +16,9 @@ class AiChannelBasicParameters:
     current_excit_val: Optional[float] = None
     custom_scale_name: Optional[str] = ''
 
+    def paramters_checker(self):
+        # TODO: 根據Sensor種類、使用的API來限制設定檔內容
+        pass
 
 class AccelerometerChannelSetting(AiChannelBasicParameters):
 
@@ -37,7 +38,7 @@ class AccelerometerChannelSetting(AiChannelBasicParameters):
         self.custom_scale_name = self.sensor_cfg['custom_scale_name']
 
     def paramters_checker(self):
-
+        # TODO: 根據Sensor種類、使用的API來限制設定檔內容
         pass
 
 
@@ -56,6 +57,9 @@ class MicrophoneChannelSetting(AiChannelBasicParameters):
         self.current_excit_val = self.sensor_cfg['current_excit_val']
         self.custom_scale_name = self.sensor_cfg['custom_scale_name']
 
+    def paramters_checker(self):
+        # TODO: 根據Sensor種類、使用的API來限制設定檔內容
+        pass
 
 if __name__ == '__main__':
     sensor_cfg_file = './sensor_cfg/352C33.json'
