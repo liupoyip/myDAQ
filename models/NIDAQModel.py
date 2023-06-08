@@ -1,6 +1,6 @@
 import os
 import json
-from typing import Optional
+from typing import Optional,Union
 from datetime import datetime
 
 import numpy as np
@@ -38,6 +38,8 @@ class NIDAQModel(QObject):
     buffer_duration: int = frame_duration * buffer_rate
     wave_buffer_len: int = int(sample_rate * buffer_duration * 0.001)
     channels: list[int] = list()
+    channel_settings: list[Optional[Union[AccelerometerChannelSettings,MicrophoneChannelSettings]]] = list()
+    
     sensor_types: list[str] = list()
     writer_switch_flag: bool = False
     nidaq: NI9234 = None
@@ -49,8 +51,8 @@ class NIDAQModel(QObject):
     sensor_model: str = None
 
     # channel setting
-    accel_chan_settings:Optional[AccelerometerChannelSettings] = None
-    mic_chan_settings:Optional[MicrophoneChannelSettings] = None
+    accel_chan_settings: AccelerometerChannelSettings = None
+    mic_chan_settings: MicrophoneChannelSettings = None
 
     # buffer for visualize data
     data_buffer_update_timer = QTimer()
@@ -66,88 +68,10 @@ class NIDAQModel(QObject):
         super().__init__()
         self.data_buffer_update_timer.timeout.connect(self.update_plot_data_buffer)
 
-    # @property
-    # def task_name(self):
-    #     return self.task_name
-
-    # @task_name.setter
-    # def task_name(self, value: str):
-    #     self.task_name = value
-
-    # @property
-    # def sample_rate(self):
-    #     return self.sample_rate
-
-    # @sample_rate.setter
-    # def sample_rate(self, value: int):
-    #     self.sample_rate = value
-
-    # @property
-    # def frame_duration(self):
-    #     return self.frame_duration
-
-    # @frame_duration.setter
-    # def frame_duration(self, value: int):
-    #     self.frame_duration = value
-
-    # @property
-    # def buffer_rate(self):
-    #     return self.buffer_rate
-
-    # @buffer_rate.setter
-    # def buffer_rate(self, value: int):
-    #     self.buffer_rate = value
-
-    # @property
-    # def buffer_duration(self):
-    #     return self.buffer_duration
-
-    # @buffer_duration.setter
-    # def buffer_duration(self, value: int):
-    #     self.buffer_duration = value
-
-    # @property
-    # def update_interval(self):
-    #     return self.buffer_rate
-
-    # @update_interval.setter
-    # def update_interval(self, value: int):
-    #     self.update_interval = value
-
-    # @property
-    # def channels(self):
-    #     return self.channels
-
-    # @channels.setter
-    # def channels(self, value: list[int]):
-    #     self.channels = value
-
-    # @property
-    # def sensor_types(self):
-    #     return self.sensor_types
-
-    # @sensor_types.setter
-    # def sensor_types(self, value: list[str]):
-    #     self.sensor_types = value
-
-    # @property
-    # def writer_switch_flag(self):
-    #     return self.writer_switch_flag
-
-    # @writer_switch_flag.setter
-    # def writer_switch_flag(self, value: bool):
-    #     self.writer_switch_flag = value
-    
-    # @property
-    # def sensor_model(self):
-    #     return self.sensor_model
-
-    # @sensor_model.setter
-    # def sensor_model(self, value: bool):
-    #     self.sensor_model = value
-
     # TODO: 要寫一個讀取設定檔的功能
     # 內容包含錄製時間總長、錄製設備、採樣率...
+    
+
     def read_sensor_cfg_352C33(self):
         sensor_model='352C33'
         cfg_sensor_path = os.path.join(self.cfg_sensor_dir,f'{sensor_model}.json')
