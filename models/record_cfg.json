@@ -1,9 +1,18 @@
 {
     "machine_ID": "dummy_machine",
-    "data_name": "dummy_data",
-    "sample_rate": "",
-    "physical_unit": "",
+    "data_name": [
+        "vibration",
+        "sound_wave"
+    ],
+    "sample_rate": 20000,
     "DAQ_model": "ni9234",
-    "sensor_model": "35c233",
-    "sensor_setting": "__.json"
+    "sensor_model": [
+        "352C33",
+        "130F20"
+    ],
+    "sensor_cfg": [
+        "352C33.json",
+        "130F20.json"
+    ],
+    "frame_duration": 1000
 }

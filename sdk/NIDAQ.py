@@ -292,8 +292,6 @@ if __name__ == '__main__':
     nidaq.set_sample_rate(25600)
     nidaq.set_frame_duration(100)
 
-    # callback_data = 'hello'
-
     nidaq.ready_read(
         callback_method=lambda task_handle, every_n_samples_event_type,
         number_of_samples, callback_data: nidaq.callback_method(
