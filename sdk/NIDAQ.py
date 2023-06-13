@@ -25,6 +25,7 @@ from .utils import CSVStreamWriter, NPYWriter
 
 @dataclasses.dataclass
 class GeneralDAQParams:
+
     sample_rate: Optional[float] = None
     record_duration: Optional[float] = None
     frame_duration: Optional[int] = None  # millisecond
@@ -33,6 +34,7 @@ class GeneralDAQParams:
 
 
 class NIDAQ(GeneralDAQParams):
+
     system: Optional[nidaqmx.system.system.System] = None
     stream_switch_flag: Optional[bool] = None
     task: Optional[nidaqmx.task.Task] = None
@@ -43,12 +45,10 @@ class NIDAQ(GeneralDAQParams):
     stream_reader: Optional[NiStreamReaders.AnalogMultiChannelReader] = None
     stream_writer: Optional[CSVStreamWriter] = None
     segment_writer: Optional[NPYWriter] = None
-    writer = Optional[Union[CSVStreamWriter, NPYWriter]]
+    writer: Optional[Union[CSVStreamWriter, NPYWriter]] = None
     writer_switch_flag: Optional[bool] = None
     chunk: Optional[npt.NDArray[np.float64]] = None
     writer_type: Optional[str] = None  # "stream" for *.csv / "segment" for *.npy
-
-    # write_file_flag = False
 
     def __init__(self) -> None:
         super(NIDAQ, self).__init__()
@@ -109,6 +109,7 @@ class NIDAQ(GeneralDAQParams):
 
 
 class NI9234(NIDAQ):
+
     channel_num_list: tuple = (0, 1, 2, 3, '0', '1', '2', '3')
 
     def __init__(self, device_name) -> None:
@@ -199,6 +200,7 @@ class NI9234(NIDAQ):
 
     def set_writer_type(self, writer_type) -> None:
         print(f'set writer type: {writer_type}')
+        self.writer_type = writer_type
         if writer_type == 'stream':
             self.writer = self.stream_writer
         if writer_type == 'segment':
@@ -239,8 +241,8 @@ class NI9234(NIDAQ):
     def close_task(self) -> None:
         self.set_writer_disable()
         self.task.close()
-        if self.writer.file != None:
-            self.writer.close_file()
+        # if self.writer.file != None:
+        #     self.writer.close_file()
         print('Task is done!!')
 
     def show_control_manual(self):

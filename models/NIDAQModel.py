@@ -44,6 +44,7 @@ class NIDAQModel(QObject):
     writer_switch_flag: bool = False
     nidaq: NI9234 = None
     write_file_directory = default_settings['default_write_file_dir']
+    writer_mode = None
 
     # sensor config
     cfg_sensor_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'sensor_cfg')
@@ -147,35 +148,37 @@ class NIDAQModel(QObject):
 
     def stop(self):
         if self.writer_switch_flag and self.nidaq.writer.file != None:
-            self.nidaq.set_writer_disable()
-            self.nidaq.writer
+            self.stop_write_file()
         self.nidaq.stop_task()
         self.data_buffer_update_timer.stop()
 
     def clear(self):
         self.nidaq.close_task()
-        if self.nidaq.writer.file != None:
-            self.nidaq.writer.close_file()
-
-    def ready_write_file(self,mode='segment'):
-        self.nidaq.set_writer_type(mode)
-
-        if self.writer_switch_flag:
-            self.nidaq.set_writer_enable()
-            self.write_stream_file()
-        if not self.writer_switch_flag:
-            if mode=='stream':    
-                self.nidaq.set_writer_disable()
+        if self.nidaq.writer != None:
+            if self.nidaq.writer.file != None:
                 self.nidaq.writer.close_file()
-            if mode=='segment':
-                self.nidaq.set_writer_disable()
-            
+
+    def ready_write_file(self,mode):
+        self.nidaq.set_writer_type(mode)
+        self.nidaq.set_writer_enable()
+        print(f'nidaq writer switch flag: {self.nidaq.writer_switch_flag}')
+        if self.nidaq.writer_type == 'stream':
+            self.write_stream_file()
+        if self.nidaq.writer_type == 'segment':
+            self.write_segment_file()
+
+    def stop_write_file(self):
+        self.nidaq.set_writer_disable()
+        if self.nidaq.writer_type == 'stream':    
+            self.nidaq.writer.close_file()
+        
     def write_stream_file(self):
         '''
         write all signal to one file while this function is working
         '''
         start_record_time = datetime.now().strftime("%Y%m%dT%H%M%S")
         task_path = os.path.join(self.write_file_directory,self.task_name)
+        print(f'record path: {task_path}')
         if not os.path.isdir(task_path):
             os.mkdir(task_path)
         record_path = os.path.join(task_path,start_record_time)
@@ -192,6 +195,7 @@ class NIDAQModel(QObject):
         '''
         start_record_time = datetime.now().strftime("%Y%m%dT%H%M%S")
         task_path = os.path.join(self.write_file_directory,self.task_name)
+        print(f'record path: {task_path}')
         if not os.path.isdir(task_path):
             os.mkdir(task_path)
         record_path = os.path.join(task_path,start_record_time)

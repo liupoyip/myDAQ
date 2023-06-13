@@ -91,6 +91,7 @@ class NI9234ViewModel(QWidget):
         for checkbox, combox in zip(self._channel_checkboxes, self._channel_comboxes):
             checkbox.toggled.connect(combox.setEnabled)
         self.ui.WriteFile_CheckBox.toggled.connect(self.on_write_file_checkbox_toggled)
+        self.ui.VisualizeSwitch_Checkbox.toggled.connect(self.on_visualize_switch_checkbox_toggled)
 
         self.graph_update_timer.timeout.connect(self.on_graph_update_timer_timeout)
         self.now_time_timer.timeout.connect(self.on_now_time_timer_timeout)
@@ -204,21 +205,25 @@ class NI9234ViewModel(QWidget):
             'Parameters will show in here \n'
             'after Task created!!')
 
-        # set initial component enable
+        # set component initial enable
         self.ui.CreateTask_PushButton.setEnabled(True)
         self.ui.PreparationSetting_Frame.setEnabled(True)
 
-        # set initial component disable
+        # set component initial disable
         self.ui.Stop_PushButton.setDisabled(True)
         self.ui.Start_PushButton.setDisabled(True)
         self.ui.ClearTask_PushButton.setDisabled(True)
         self.ui.WriteFile_GroupBox.setDisabled(True)
 
+        self.ui.Visualize_Groupbox.setDisabled(True)
+
+        # set check boxes disable
         for checkbox, combox in zip(self._channel_checkboxes, self._channel_comboxes):
             checkbox.setChecked(False)
             combox.clear()
             combox.addItems(self.model.default_settings["sensor_type"])
             combox.setDisabled(True)
+        self.ui.VisualizeSwitch_Checkbox.setChecked(False)
 
     def on_focus_changed(self):
         if self.isActiveWindow():
@@ -278,6 +283,9 @@ class NI9234ViewModel(QWidget):
         self.ui.ClearTask_PushButton.setDisabled(True)
         self.ui.WriteFile_GroupBox.setDisabled(True)
         self.ui.WriteFile_CheckBox.setChecked(False)
+        self.ui.Visualize_Groupbox.setDisabled(True)
+        self.ui.VisualizeSwitch_Checkbox.setChecked(False)
+
         self.model.clear()
         self.reset_wave_chart()
         self.reset_spectrum_chart()
@@ -288,8 +296,8 @@ class NI9234ViewModel(QWidget):
         self.ui.Reset_PushButton.setDisabled(True)
         self.ui.ClearTask_PushButton.setDisabled(True)
         self.ui.WriteFile_GroupBox.setEnabled(True)
-        self.wave_data_buffer_count = 0
-        self.graph_update_timer.start()
+        self.ui.Visualize_Groupbox.setEnabled(True)
+        # self.graph_update_timer.start()
         self.model.start()
 
     def on_stop_button_clicked(self):
@@ -299,20 +307,38 @@ class NI9234ViewModel(QWidget):
         self.ui.Stop_PushButton.setDisabled(True)
         self.ui.WriteFile_CheckBox.setChecked(False)
         self.ui.WriteFile_GroupBox.setEnabled(False)
-        self.graph_update_timer.stop()
+        self.ui.VisualizeSwitch_Checkbox.setChecked(False)
+        self.ui.Visualize_Groupbox.setDisabled(True)
+        # self.graph_update_timer.stop()
         self.model.stop()
 
     def on_write_file_type_combox_current_text_changed(self):
         self.writer_type = self.ui.WriteFileType_ComboBox.currentText()
+        if self.ui.WriteFileType_ComboBox.currentIndex() == 0:
+            self.ui.WriteFile_CheckBox.setChecked(False)
+            self.ui.WriteFile_CheckBox.setDisabled(True)
+        else:
+            self.ui.WriteFile_CheckBox.setEnabled(True)
 
     def on_write_file_checkbox_toggled(self):
-        print('write file checkbox toggled')
+        print(f'write file checkbox toggled : {self.ui.WriteFile_CheckBox.isChecked()}')
         self.model.writer_switch_flag = self.ui.WriteFile_CheckBox.isChecked()
-        self.model.ready_write_file(mode=self.writer_type)
         if self.ui.WriteFile_CheckBox.isChecked():
+            self.model.ready_write_file(mode=self.writer_type)
             self.ui.WriteFileStatus_Label.setText('Status: On')
+            self.ui.WriteFileType_ComboBox.setDisabled(True)
         if not self.ui.WriteFile_CheckBox.isChecked():
+            self.model.stop_write_file()
             self.ui.WriteFileStatus_Label.setText('Status: Off')
+            self.ui.WriteFileType_ComboBox.setEnabled(True)
+
+    def on_visualize_switch_checkbox_toggled(self):
+        if self.ui.VisualizeSwitch_Checkbox.isChecked():
+            print('Signal Visualized enable')
+            self.graph_update_timer.start()
+        if not self.ui.VisualizeSwitch_Checkbox.isChecked():
+            print('Signal Visualized disable')
+            self.graph_update_timer.stop()
 
     def on_reset_button_clicked(self):
         self.set_default_values()
@@ -328,7 +354,7 @@ class NI9234ViewModel(QWidget):
         self.ui.NowTime_Label.setText(datetime.now().isoformat(sep=' ', timespec='seconds'))
 
     def channel_is_seleted(self):
-        """
+        '''
         Depend on Channel_Checkbox and SensorType_Combox
 
         If no channel been selected
@@ -339,14 +365,14 @@ class NI9234ViewModel(QWidget):
 
         If channels and sensor types be selected
             return `True`
-        """
+        '''
         error_channels = list()
         if set([checkbox.isChecked() for checkbox in self._channel_checkboxes]) == {False}:
             QMessageBox.critical(None, "Channel error", "Please select channels!!")
             return False
 
         for i, (checkbox, combox) in enumerate(zip(self._channel_checkboxes, self._channel_comboxes)):
-            if checkbox.isChecked() and combox.currentText() == '':
+            if checkbox.isChecked() and combox.currentIndex() == 0:
                 error_channels.append(i)
 
         if len(error_channels) == 0:

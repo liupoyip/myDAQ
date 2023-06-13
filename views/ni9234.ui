@@ -124,7 +124,7 @@
     <rect>
      <x>10</x>
      <y>530</y>
-     <width>341</width>
+     <width>361</width>
      <height>81</height>
     </rect>
    </property>
@@ -132,11 +132,14 @@
     <string>Write File</string>
    </property>
    <widget class="QCheckBox" name="WriteFile_CheckBox">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>140</x>
       <y>20</y>
-      <width>76</width>
+      <width>71</width>
       <height>20</height>
      </rect>
     </property>
@@ -179,9 +182,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>10</x>
       <y>20</y>
-      <width>81</width>
+      <width>111</width>
       <height>22</height>
      </rect>
     </property>
@@ -192,9 +195,9 @@
    <widget class="QLabel" name="WriteFileStatus_Label">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>220</x>
       <y>20</y>
-      <width>81</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
@@ -431,7 +434,7 @@
      <rect>
       <x>10</x>
       <y>340</y>
-      <width>271</width>
+      <width>231</width>
       <height>161</height>
      </rect>
     </property>
@@ -443,7 +446,7 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>251</width>
+       <width>211</width>
        <height>131</height>
       </rect>
      </property>
@@ -475,7 +478,7 @@
         <widget class="QComboBox" name="Channel0_ComboBox">
          <property name="geometry">
           <rect>
-           <x>110</x>
+           <x>90</x>
            <y>5</y>
            <width>110</width>
            <height>22</height>
@@ -511,7 +514,7 @@
         <widget class="QComboBox" name="Channel1_ComboBox">
          <property name="geometry">
           <rect>
-           <x>110</x>
+           <x>90</x>
            <y>5</y>
            <width>110</width>
            <height>22</height>
@@ -547,7 +550,7 @@
         <widget class="QComboBox" name="Channel2_ComboBox">
          <property name="geometry">
           <rect>
-           <x>110</x>
+           <x>90</x>
            <y>5</y>
            <width>110</width>
            <height>22</height>
@@ -583,7 +586,7 @@
         <widget class="QComboBox" name="Channel3_ComboBox">
          <property name="geometry">
           <rect>
-           <x>110</x>
+           <x>90</x>
            <y>5</y>
            <width>110</width>
            <height>22</height>
@@ -1002,6 +1005,32 @@
      </property>
      <property name="frame">
       <bool>false</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="Visualize_Groupbox">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>340</y>
+      <width>101</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Visualize</string>
+    </property>
+    <widget class="QCheckBox" name="VisualizeSwitch_Checkbox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>71</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>On/Off</string>
      </property>
     </widget>
    </widget>

@@ -20,11 +20,12 @@
     "default_task_name": "task",
     "default_write_file_dir": "./record_data",
     "write_file_type": [
+        "record method",
         "stream",
         "segment"
     ],
     "sensor_type": [
-        "Select Sensor",
+        "select sensor",
         "Accelerometer",
         "Microphone"
     ]
