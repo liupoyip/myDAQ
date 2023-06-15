@@ -40,7 +40,7 @@ class NIDAQModel(QObject):
     channels: list[int] = list()
     channel_settings: list[Optional[Union[AccelerometerChannelSettings,MicrophoneChannelSettings]]] = list()
     
-    sensor_types: list[str] = list()
+    sensor_models: list[str] = list()
     writer_switch_flag: bool = False
     nidaq: NI9234 = None
     write_file_directory = default_settings['default_write_file_dir']
@@ -118,10 +118,25 @@ class NIDAQModel(QObject):
             pass
         self.nidaq = NI9234(device_name=self.device_name)
         self.nidaq.create_task(task_name=self.task_name)
-        for channel, sensor_type in zip(self.channels, self.sensor_types):
-            if sensor_type == 'Accelerometer':
+        for channel, sensor_model in zip(self.channels, self.sensor_models):
+            if sensor_model == '352C33':
+                print('setting sensor config : 352C33')
+                self.read_sensor_cfg_352C33()
+                self.nidaq.add_accel_channel(
+                    channel=channel,
+                    name_to_assign_to_channel=self.accel_chan_settings.name_to_assign_to_channel,
+                    terminal_config=self.accel_chan_settings.terminal_config,
+                    min_val=self.accel_chan_settings.min_val,
+                    max_val=self.accel_chan_settings.max_val,
+                    units=self.accel_chan_settings.units,
+                    sensitivity=self.accel_chan_settings.sensitivity,
+                    sensitivity_units=self.accel_chan_settings.sensitivity_units,
+                    current_excit_source=self.accel_chan_settings.current_excit_source,
+                    current_excit_val=self.accel_chan_settings.current_excit_val,
+                    custom_scale_name=self.accel_chan_settings.custom_scale_name)
+            if sensor_model == 'Accelerometer':
                 self.nidaq.add_accel_channel(channel)
-            if sensor_type == 'Microphone':
+            if sensor_model == 'Microphone':
                 self.nidaq.add_microphone_channel(channel)
         self.nidaq.set_sample_rate(self.sample_rate)
         self.nidaq.set_frame_duration(self.frame_duration)

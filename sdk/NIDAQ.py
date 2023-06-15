@@ -155,20 +155,63 @@ class NI9234(NIDAQ):
             print(f'Channel added, exist channel: {self.task.channel_names}')
         return wrap
 
-    @add_ai_channel
-    def add_accel_channel(self, channel: Union[int, str]) -> None:
+    def channel_check(self, channel):
+        if channel not in self.channel_num_list:
+            raise BaseException(
+                f'Illegal channel number. Legal channel : {self.channel_num_list}')
+        if self.task.number_of_channels > 4:
+            raise BaseException('All channels have added to task.')
+
+    # @add_ai_channel
+    def add_accel_channel(
+            self,
+            channel,
+            name_to_assign_to_channel,
+            terminal_config,
+            min_val,
+            max_val,
+            units,
+            sensitivity,
+            sensitivity_units,
+            current_excit_source,
+            current_excit_val,
+            custom_scale_name) -> None:
+        # self.channel_check(channel)
+        # self.task.ai_channels.add_ai_accel_chan(
+        #     physical_channel=f'{self.device_name}/ai{channel}',
+        #     name_to_assign_to_channel=f'{self.device_name}-ch{channel}-accelerometer',
+        #     terminal_config=TerminalConfiguration.DEFAULT,
+        #     min_val=-5.0,
+        #     max_val=5.0,
+        #     units=AccelUnits.G,
+        #     sensitivity=100.0,
+        #     sensitivity_units=AccelSensitivityUnits.MILLIVOLTS_PER_G,
+        #     current_excit_source=ExcitationSource.INTERNAL,
+        #     current_excit_val=0.004,
+        #     custom_scale_name='')
+
+        if terminal_config == 'default':
+            terminal_config = TerminalConfiguration.DEFAULT
+        if sensitivity_units == 'millivolts_per_g':
+            sensitivity_units = AccelSensitivityUnits.MILLIVOLTS_PER_G
+        if units == 'g':
+
+            units = AccelUnits.G
+        if current_excit_source == 'internal':
+            current_excit_source = ExcitationSource.INTERNAL
+
         self.task.ai_channels.add_ai_accel_chan(
             physical_channel=f'{self.device_name}/ai{channel}',
-            name_to_assign_to_channel=f'{self.device_name}-ch{channel}-accelerometer',
-            terminal_config=TerminalConfiguration.DEFAULT,
-            min_val=-5.0,
-            max_val=5.0,
-            units=AccelUnits.G,
-            sensitivity=100.0,
-            sensitivity_units=AccelSensitivityUnits.MILLIVOLTS_PER_G,
-            current_excit_source=ExcitationSource.INTERNAL,
-            current_excit_val=0.004,
-            custom_scale_name='')
+            name_to_assign_to_channel=f'{self.device_name}-ch{channel}-{name_to_assign_to_channel}',
+            terminal_config=terminal_config,
+            min_val=min_val,
+            max_val=max_val,
+            units=units,
+            sensitivity=sensitivity,
+            sensitivity_units=sensitivity_units,
+            current_excit_source=current_excit_source,
+            current_excit_val=current_excit_val,
+            custom_scale_name=custom_scale_name)
 
     @add_ai_channel
     def add_microphone_channel(self, channel: Union[int, str]) -> None:
