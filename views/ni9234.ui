@@ -100,7 +100,7 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>180</x>
      <y>620</y>
      <width>191</width>
      <height>51</height>
@@ -1008,32 +1008,6 @@
      </property>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="Visualize_Groupbox">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>340</y>
-      <width>101</width>
-      <height>161</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Visualize</string>
-    </property>
-    <widget class="QCheckBox" name="VisualizeSwitch_Checkbox">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>71</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>On/Off</string>
-     </property>
-    </widget>
-   </widget>
   </widget>
   <widget class="QLabel" name="Info_Label">
    <property name="enabled">
@@ -1042,13 +1016,13 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>680</y>
+     <y>690</y>
      <width>321</width>
-     <height>111</height>
+     <height>101</height>
     </rect>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Notice!!&lt;br/&gt;If value &amp;quot;Buffer Rate&amp;quot; and &amp;quot;Frame Duration&amp;quot; too high,&lt;br/&gt;line of chart may encount huge data to update and &lt;br/&gt;occur app clock slower than NI9234 clock.&lt;/p&gt;&lt;p&gt;When this phenomenon arise, adjust &amp;quot;Down Sample&amp;quot;&lt;br/&gt;to reduce the loading on updating charts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Notice!!&lt;br/&gt;If value &amp;quot;Buffer Rate&amp;quot; and &amp;quot;Frame Duration&amp;quot; too high,&lt;br/&gt;line of chart may encount huge data to update and &lt;br/&gt;occur app clock slower than NI9234 clock.&lt;br/&gt;When this phenomenon arise, adjust &amp;quot;Down Sample&amp;quot;&lt;br/&gt;to reduce the loading on updating charts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1090,6 +1064,32 @@
    <property name="text">
     <string>Func Test</string>
    </property>
+  </widget>
+  <widget class="QGroupBox" name="Visualize_Groupbox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>620</y>
+     <width>101</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Visualize</string>
+   </property>
+   <widget class="QCheckBox" name="VisualizeSwitch_Checkbox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>On/Off</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

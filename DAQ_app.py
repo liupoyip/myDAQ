@@ -20,5 +20,5 @@ class App(QApplication):
 
 
 app = App()
-app.setStyleSheet(qdarktheme.load_stylesheet())
+# app.setStyleSheet(qdarktheme.load_stylesheet())
 sys.exit(app.exec())

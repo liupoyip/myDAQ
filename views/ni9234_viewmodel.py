@@ -44,8 +44,6 @@ class NI9234ViewModel(QWidget):
             self.Channel1_WaveChart,
             self.Channel2_WaveChart,
             self.Channel3_WaveChart]
-        # for i, wave_chart in enumerate(self.channel_wave_charts):
-        #     self.ui.WaveCharts_VBoxLayout.addWidget(wave_chart.chart_view)
 
         self.Channel0_SpectrumChart = SpectrumChart()
         self.Channel1_SpectrumChart = SpectrumChart()
@@ -56,8 +54,6 @@ class NI9234ViewModel(QWidget):
             self.Channel1_SpectrumChart,
             self.Channel2_SpectrumChart,
             self.Channel3_SpectrumChart]
-        # for i, spectrum_chart in enumerate(self.channel_spectrum_charts):
-        #     self.ui.SpectrumCharts_VBoxLayout.addWidget(spectrum_chart.chart_view)
 
         for i, (wave_chart, spectrum_chart) in enumerate(zip(self.channel_wave_charts, self.channel_spectrum_charts)):
             self.ui.Charts_GridLayout.addWidget(wave_chart.chart_view, i, 1)
@@ -70,8 +66,6 @@ class NI9234ViewModel(QWidget):
         self.now_time_timer.setInterval(1000)
 
         # listen for model event
-
-        # self.ui.TaskName_LineEdit.textChanged.connect(self.on_task_name_changed)
         self.ui.FrameDuration_SpinBox.valueChanged.connect(self.on_frame_duration_changed)
         self.ui.Reset_PushButton.clicked.connect(self.on_reset_button_clicked)
         self.ui.Start_PushButton.clicked.connect(self.on_start_button_clicked)
@@ -92,19 +86,19 @@ class NI9234ViewModel(QWidget):
             checkbox.toggled.connect(combox.setEnabled)
         self.ui.WriteFile_CheckBox.toggled.connect(self.on_write_file_checkbox_toggled)
         self.ui.VisualizeSwitch_Checkbox.toggled.connect(self.on_visualize_switch_checkbox_toggled)
-
         self.graph_update_timer.timeout.connect(self.on_graph_update_timer_timeout)
         self.now_time_timer.timeout.connect(self.on_now_time_timer_timeout)
+        self.ui.WriteFileType_ComboBox.currentTextChanged.connect(
+            self.on_write_file_type_combox_current_text_changed)
 
         self.wave_data_buffer: Optional[npt.NDArray] = None
         self.spectrum_data_buffer: Optional[npt.NDArray] = None
 
+        # set default params
         self.set_default_values()
         self.ui.WriteFileStatus_Label.setText('Status: Off')
         self.now_time_timer.start()
         self.writer_type = self.ui.WriteFileType_ComboBox.currentIndex()
-        self.ui.WriteFileType_ComboBox.currentTextChanged.connect(
-            self.on_write_file_type_combox_current_text_changed)
 
         # func test button
         self.ui.FunctionTest_Pushbutton.clicked.connect(self.on_function_test_pushbutton_clicked)
@@ -214,14 +208,13 @@ class NI9234ViewModel(QWidget):
         self.ui.Start_PushButton.setDisabled(True)
         self.ui.ClearTask_PushButton.setDisabled(True)
         self.ui.WriteFile_GroupBox.setDisabled(True)
-
         self.ui.Visualize_Groupbox.setDisabled(True)
 
         # set check boxes disable
         for checkbox, combox in zip(self._channel_checkboxes, self._channel_comboxes):
             checkbox.setChecked(False)
             combox.clear()
-            combox.addItems(self.model.default_settings["sensor_type"])
+            combox.addItems(self.model.default_settings["sensor_model"])
             combox.setDisabled(True)
         self.ui.VisualizeSwitch_Checkbox.setChecked(False)
 
@@ -260,18 +253,18 @@ class NI9234ViewModel(QWidget):
             self.model.buffer_rate = self.ui.BufferRate_SpinBox.value()
             self.model.update_interval = self.ui.ChartUpdateInterval_SpinBox.value()
             self.model.channels = self.active_channel_num_list
-            self.model.sensor_types = self.sensor_type_list
+            self.model.sensor_models = self.sensor_model_list
 
             self.model.create()
             self.reset_wave_chart()
             self.reset_spectrum_chart()
 
-            for num, sensor_type in zip(self.active_channel_num_list, self.sensor_type_list):
-                if sensor_type == 'Accelerometer':
+            for num, sensor_model in zip(self.active_channel_num_list, self.sensor_model_list):
+                if sensor_model == 'Accelerometer':
                     self.channel_wave_charts[num].set_y_range(-0.3, 0.3)
                     self.channel_wave_charts[num].set_y_label('value (g)')
                     self.channel_spectrum_charts[num].set_x_range(0, 6000)
-                elif sensor_type == 'Microphone':
+                elif sensor_model == 'Microphone':
                     self.channel_wave_charts[num].set_y_range(-10, 10)
                     self.channel_wave_charts[num].set_y_label('value (pa)')
                     self.channel_spectrum_charts[num].set_x_range(0, 6000)
@@ -285,7 +278,6 @@ class NI9234ViewModel(QWidget):
         self.ui.WriteFile_CheckBox.setChecked(False)
         self.ui.Visualize_Groupbox.setDisabled(True)
         self.ui.VisualizeSwitch_Checkbox.setChecked(False)
-
         self.model.clear()
         self.reset_wave_chart()
         self.reset_spectrum_chart()
@@ -297,7 +289,6 @@ class NI9234ViewModel(QWidget):
         self.ui.ClearTask_PushButton.setDisabled(True)
         self.ui.WriteFile_GroupBox.setEnabled(True)
         self.ui.Visualize_Groupbox.setEnabled(True)
-        # self.graph_update_timer.start()
         self.model.start()
 
     def on_stop_button_clicked(self):
@@ -306,10 +297,9 @@ class NI9234ViewModel(QWidget):
         self.ui.Reset_PushButton.setEnabled(True)
         self.ui.Stop_PushButton.setDisabled(True)
         self.ui.WriteFile_CheckBox.setChecked(False)
-        self.ui.WriteFile_GroupBox.setEnabled(False)
+        self.ui.WriteFile_GroupBox.setDisabled(True)
         self.ui.VisualizeSwitch_Checkbox.setChecked(False)
         self.ui.Visualize_Groupbox.setDisabled(True)
-        # self.graph_update_timer.stop()
         self.model.stop()
 
     def on_write_file_type_combox_current_text_changed(self):
@@ -384,12 +374,12 @@ class NI9234ViewModel(QWidget):
 
     def add_channels(self):
         self.active_channel_num_list = list()
-        self.sensor_type_list = list()
+        self.sensor_model_list = list()
 
         for i, (checkbox, combox) in enumerate(zip(self._channel_checkboxes, self._channel_comboxes)):
             if checkbox.isChecked():
                 self.active_channel_num_list.append(i)
-                self.sensor_type_list.append(combox.currentText())
+                self.sensor_model_list.append(combox.currentText())
 
     def reset_wave_chart(self):
         time_limit = self.model.buffer_duration
@@ -442,14 +432,8 @@ class NI9234ViewModel(QWidget):
                     max_power_idx]
                 spectrum_chart.chart_view.drawForeground(
                     self.vertical_line_painter, self.vertical_line_rectf)
-                # TODO: if abnormal_flag = True, get max(mean_spectrum) then mark
+            # TODO: if abnormal_flag = True, get max(mean_spectrum) then mark
             if not abnormal_flag:
                 spectrum_chart.chart_view.vertical_line_x = None
                 spectrum_chart.chart_view.drawForeground(
                     self.vertical_line_painter, self.vertical_line_rectf)
-
-    def activate_wave_chart(self):
-        ...
-
-    def activate_spectrum_chart(self):
-        ...

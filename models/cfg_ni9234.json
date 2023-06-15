@@ -24,9 +24,9 @@
         "stream",
         "segment"
     ],
-    "sensor_type": [
+    "sensor_model": [
         "select sensor",
-        "Accelerometer",
+        "352C33",
         "Microphone"
     ]
 }
