@@ -11,5 +11,6 @@
     "sensitivity_units": "millivolts_per_g",
     "current_excit_source": "internal",
     "current_excit_val": 0.004,
-    "custom_scale_name": ""
+    "custom_scale_name": "",
+    "sensor_type": "accelerometer"
 }

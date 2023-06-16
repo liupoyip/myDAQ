@@ -144,16 +144,16 @@ class NI9234(NIDAQ):
         if self.task != None:
             self.task.close()
 
-    def add_ai_channel(add_ai_channel_func):
-        def wrap(self, channel: Union[int, str]):
-            if channel not in self.channel_num_list:
-                raise BaseException(
-                    f'Illegal channel number. Legal channel : {self.channel_num_list}')
-            if self.task.number_of_channels > 4:
-                raise BaseException('All channels have added to task.')
-            add_ai_channel_func(self, channel)
-            print(f'Channel added, exist channel: {self.task.channel_names}')
-        return wrap
+    # def add_ai_channel(add_ai_channel_func):
+    #     def wrap(self, channel: Union[int, str]):
+    #         if channel not in self.channel_num_list:
+    #             raise BaseException(
+    #                 f'Illegal channel number. Legal channel : {self.channel_num_list}')
+    #         if self.task.number_of_channels > 4:
+    #             raise BaseException('All channels have added to task.')
+    #         add_ai_channel_func(self, channel)
+    #         print(f'Channel added, exist channel: {self.task.channel_names}')
+    #     return wrap
 
     def channel_check(self, channel):
         if channel not in self.channel_num_list:
@@ -165,7 +165,7 @@ class NI9234(NIDAQ):
     # @add_ai_channel
     def add_accel_channel(
             self,
-            channel,
+            channel: Union[int, str],
             name_to_assign_to_channel,
             terminal_config,
             min_val,
@@ -176,7 +176,7 @@ class NI9234(NIDAQ):
             current_excit_source,
             current_excit_val,
             custom_scale_name) -> None:
-        # self.channel_check(channel)
+        self.channel_check(channel)
         # self.task.ai_channels.add_ai_accel_chan(
         #     physical_channel=f'{self.device_name}/ai{channel}',
         #     name_to_assign_to_channel=f'{self.device_name}-ch{channel}-accelerometer',
@@ -195,7 +195,6 @@ class NI9234(NIDAQ):
         if sensitivity_units == 'millivolts_per_g':
             sensitivity_units = AccelSensitivityUnits.MILLIVOLTS_PER_G
         if units == 'g':
-
             units = AccelUnits.G
         if current_excit_source == 'internal':
             current_excit_source = ExcitationSource.INTERNAL
@@ -213,18 +212,45 @@ class NI9234(NIDAQ):
             current_excit_val=current_excit_val,
             custom_scale_name=custom_scale_name)
 
-    @add_ai_channel
-    def add_microphone_channel(self, channel: Union[int, str]) -> None:
+    # @add_ai_channel
+    def add_microphone_channel(
+            self,
+            channel: Union[int, str],
+            name_to_assign_to_channel,
+            terminal_config,
+            units,
+            mic_sensitivity,
+            current_excit_source,
+            current_excit_val,
+            custom_scale_name) -> None:
+
+        if terminal_config == 'default':
+            terminal_config = TerminalConfiguration.DEFAULT
+        if units == 'Pa':
+            units = SoundPressureUnits.PA
+        if current_excit_source == 'internal':
+            current_excit_source = ExcitationSource.INTERNAL
+
+        self.channel_check(channel)
         self.task.ai_channels.add_ai_microphone_chan(
             physical_channel=f'{self.device_name}/ai{channel}',
-            name_to_assign_to_channel=f'{self.device_name}-ch{channel}-microphone',
-            terminal_config=TerminalConfiguration.DEFAULT,
-            units=SoundPressureUnits.PA,
-            mic_sensitivity=10.0,
-            max_snd_press_level=100.0,
-            current_excit_source=ExcitationSource.INTERNAL,
-            current_excit_val=0.004,
-            custom_scale_name='')
+            name_to_assign_to_channel=f'{self.device_name}-ch{channel}-{name_to_assign_to_channel}',
+            terminal_config=terminal_config,
+            units=units,
+            mic_sensitivity=mic_sensitivity,
+            current_excit_source=current_excit_source,
+            current_excit_val=current_excit_val,
+            custom_scale_name=custom_scale_name)
+        # self.task.ai_channels.add_ai_microphone_chan(
+        #     physical_channel=f'{self.device_name}/ai{channel}',
+        #     name_to_assign_to_channel=f'{self.device_name}-ch{channel}-microphone',
+        #     terminal_config=TerminalConfiguration.DEFAULT,
+        #     units=SoundPressureUnits.PA,
+        #     mic_sensitivity=10.0,
+        #     max_snd_press_level=100.0,
+        #     current_excit_source=ExcitationSource.INTERNAL,
+        #     current_excit_val=0.004,
+        #     custom_scale_name='')
 
     def set_sample_rate(self, sample_rate: float) -> None:
         self.sample_rate = sample_rate

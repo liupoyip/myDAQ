@@ -27,6 +27,7 @@
     "sensor_model": [
         "select sensor",
         "352C33",
+        "130F20",
         "Microphone"
     ]
 }

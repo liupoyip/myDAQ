@@ -18,6 +18,9 @@ class AccelerometerChannelSettings:
         self.current_excit_source = self.sensor_cfg['current_excit_source']
         self.current_excit_val = self.sensor_cfg['current_excit_val']
         self.custom_scale_name = self.sensor_cfg['custom_scale_name']
+        self.sensor_type = self.sensor_cfg['sensor_type']
+        
+        self.sensor_cfg_file.close()
 
     def paramters_checker(self):
         # TODO: 根據Sensor種類、使用的API來限制設定檔內容
@@ -38,6 +41,9 @@ class MicrophoneChannelSettings:
         self.current_excit_source = self.sensor_cfg['current_excit_source']
         self.current_excit_val = self.sensor_cfg['current_excit_val']
         self.custom_scale_name = self.sensor_cfg['custom_scale_name']
+        self.sensor_type = self.sensor_cfg['sensor_type']
+
+        self.sensor_cfg_file.close()
 
     def paramters_checker(self):
         # TODO: 根據Sensor種類、使用的API來限制設定檔內容

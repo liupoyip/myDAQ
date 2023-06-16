@@ -41,6 +41,7 @@ class NIDAQModel(QObject):
     channel_settings: list[Optional[Union[AccelerometerChannelSettings,MicrophoneChannelSettings]]] = list()
     
     sensor_models: list[str] = list()
+    sensor_types: list[str] = list()
     writer_switch_flag: bool = False
     nidaq: NI9234 = None
     write_file_directory = default_settings['default_write_file_dir']
@@ -54,6 +55,7 @@ class NIDAQModel(QObject):
     # channel setting
     accel_chan_settings: AccelerometerChannelSettings = None
     mic_chan_settings: MicrophoneChannelSettings = None
+    all_channel_settings: list[Union[AccelerometerChannelSettings,MicrophoneChannelSettings]] = [None,None,None,None]
 
     # buffer for visualize data
     data_buffer_update_timer = QTimer()
@@ -90,7 +92,9 @@ class NIDAQModel(QObject):
             f'sensitivity units : {self.accel_chan_settings.sensitivity_units}\n',
             f'current excitation source : {self.accel_chan_settings.current_excit_source}\n',
             f'current excitation val : {self.accel_chan_settings.current_excit_val}\n',
-            f'custom scale name : {self.accel_chan_settings.custom_scale_name}')
+            f'custom scale name : {self.accel_chan_settings.custom_scale_name}',
+            f'sensor type : {self.accel_chan_settings.sensor_type}')
+        self.all_channel_settings[self.accel_chan_settings.physical_channel] = self.accel_chan_settings
         
     def read_sensor_cfg_130F20(self):
         sensor_model='130F20'
@@ -108,7 +112,9 @@ class NIDAQModel(QObject):
             f'max sound pressure level : {self.mic_chan_settings.max_snd_press_level}\n',
             f'current excitation source : {self.mic_chan_settings.current_excit_source}\n',
             f'current excitation val : {self.mic_chan_settings.current_excit_val}\n',
-            f'custom scale name : {self.mic_chan_settings.custom_scale_name}')
+            f'custom scale name : {self.mic_chan_settings.custom_scale_name}',
+            f'sensor type : {self.mic_chan_settings.sensor_type}')
+        self.all_channel_settings[self.mic_chan_settings.physical_channel] = self.mic_chan_settings
 
     def create(self):
         try:
@@ -134,6 +140,18 @@ class NIDAQModel(QObject):
                     current_excit_source=self.accel_chan_settings.current_excit_source,
                     current_excit_val=self.accel_chan_settings.current_excit_val,
                     custom_scale_name=self.accel_chan_settings.custom_scale_name)
+            if sensor_model == '130F20':
+                print('setting sensor config : 130F20')
+                self.read_sensor_cfg_130F20()
+                self.nidaq.add_microphone_channel(
+                    channel=channel,
+                    name_to_assign_to_channel=self.mic_chan_settings.name_to_assign_to_channel,
+                    terminal_config=self.mic_chan_settings.terminal_config,
+                    units=self.mic_chan_settings.units,
+                    mic_sensitivity=self.mic_chan_settings.mic_sensitivity,
+                    current_excit_source=self.mic_chan_settings.current_excit_source,
+                    current_excit_val=self.mic_chan_settings.current_excit_val,
+                    custom_scale_name=self.mic_chan_settings.custom_scale_name)
             if sensor_model == 'Accelerometer':
                 self.nidaq.add_accel_channel(channel)
             if sensor_model == 'Microphone':
