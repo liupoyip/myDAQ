@@ -153,10 +153,10 @@ class Ui_NI9234(object):
 
         self.ChannelOption_GroupBox = QGroupBox(self.PreparationSetting_Frame)
         self.ChannelOption_GroupBox.setObjectName(u"ChannelOption_GroupBox")
-        self.ChannelOption_GroupBox.setGeometry(QRect(10, 340, 231, 161))
+        self.ChannelOption_GroupBox.setGeometry(QRect(10, 340, 341, 161))
         self.layoutWidget1 = QWidget(self.ChannelOption_GroupBox)
         self.layoutWidget1.setObjectName(u"layoutWidget1")
-        self.layoutWidget1.setGeometry(QRect(10, 20, 211, 131))
+        self.layoutWidget1.setGeometry(QRect(10, 20, 321, 131))
         self.ChannelOption_VerticalLayout = QVBoxLayout(self.layoutWidget1)
         self.ChannelOption_VerticalLayout.setSpacing(0)
         self.ChannelOption_VerticalLayout.setObjectName(u"ChannelOption_VerticalLayout")

@@ -1,5 +1,6 @@
 from typing import Optional
 from datetime import datetime
+import os
 
 import numpy as np
 import numpy.typing as npt
@@ -21,6 +22,8 @@ class NI9234ViewModel(QWidget):
     vertical_line_pen = QPen(QColor('red'))
     vertical_line_pen.setWidth(2)
     vertical_line_painter.setPen(vertical_line_pen)
+    sensor_cfg_dir = './models/sensor_cfg/'
+    sensor_cfg_list: list[str] = list()
 
     def __init__(self, model):
         super().__init__()
@@ -72,17 +75,17 @@ class NI9234ViewModel(QWidget):
         self.ui.Stop_PushButton.clicked.connect(self.on_stop_button_clicked)
         self.ui.CreateTask_PushButton.clicked.connect(self.on_create_task_button_clicked)
         self.ui.ClearTask_PushButton.clicked.connect(self.on_clear_task_button_clicked)
-        self._channel_checkboxes = [
+        self.channel_checkboxes = [
             self.ui.Channel0_CheckBox,
             self.ui.Channel1_CheckBox,
             self.ui.Channel2_CheckBox,
             self.ui.Channel3_CheckBox]
-        self._channel_comboxes = [
+        self.channel_comboxes = [
             self.ui.Channel0_ComboBox,
             self.ui.Channel1_ComboBox,
             self.ui.Channel2_ComboBox,
             self.ui.Channel3_ComboBox]
-        for checkbox, combox in zip(self._channel_checkboxes, self._channel_comboxes):
+        for checkbox, combox in zip(self.channel_checkboxes, self.channel_comboxes):
             checkbox.toggled.connect(combox.setEnabled)
         self.ui.WriteFile_CheckBox.toggled.connect(self.on_write_file_checkbox_toggled)
         self.ui.VisualizeSwitch_Checkbox.toggled.connect(self.on_visualize_switch_checkbox_toggled)
@@ -211,12 +214,25 @@ class NI9234ViewModel(QWidget):
         self.ui.Visualize_Groupbox.setDisabled(True)
 
         # set check boxes disable
-        for checkbox, combox in zip(self._channel_checkboxes, self._channel_comboxes):
+        for checkbox, combox in zip(self.channel_checkboxes, self.channel_comboxes):
             checkbox.setChecked(False)
             combox.clear()
             combox.addItems(self.model.default_settings["sensor_model"])
+             # TODO : 將 channel combox 內容來源改成config files內的sensor_model
             combox.setDisabled(True)
         self.ui.VisualizeSwitch_Checkbox.setChecked(False)
+
+        # get sensor config
+        self.sensor_cfg_list.clear()
+        self.get_sensor_cfgs()
+
+    def get_sensor_cfgs(self):
+        sensor_cfg_path_list = [sensor_cfg_path_list for sensor_cfg_path_list in os.listdir(
+            self.sensor_cfg_dir) if 'json' in sensor_cfg_path_list]
+        for sensor_cfg_path in sensor_cfg_path_list:
+            sensor_cfg_name, _ = os.path.splitext(sensor_cfg_path)
+            self.sensor_cfg_list.append(sensor_cfg_name)
+        print(f'sensor config detected: {self.sensor_cfg_list}')
 
     def on_focus_changed(self):
         if self.isActiveWindow():
@@ -358,11 +374,11 @@ class NI9234ViewModel(QWidget):
             return `True`
         '''
         error_channels = list()
-        if set([checkbox.isChecked() for checkbox in self._channel_checkboxes]) == {False}:
+        if set([checkbox.isChecked() for checkbox in self.channel_checkboxes]) == {False}:
             QMessageBox.critical(None, "Channel error", "Please select channels!!")
             return False
 
-        for i, (checkbox, combox) in enumerate(zip(self._channel_checkboxes, self._channel_comboxes)):
+        for i, (checkbox, combox) in enumerate(zip(self.channel_checkboxes, self.channel_comboxes)):
             if checkbox.isChecked() and combox.currentIndex() == 0:
                 error_channels.append(i)
 
@@ -377,10 +393,11 @@ class NI9234ViewModel(QWidget):
         self.active_channel_num_list = list()
         self.sensor_model_list = list()
 
-        for i, (checkbox, combox) in enumerate(zip(self._channel_checkboxes, self._channel_comboxes)):
+        for i, (checkbox, combox) in enumerate(zip(self.channel_checkboxes, self.channel_comboxes)):
             if checkbox.isChecked():
                 self.active_channel_num_list.append(i)
                 self.sensor_model_list.append(combox.currentText())
+               
 
     def reset_wave_chart(self):
         time_limit = self.model.buffer_duration
