@@ -8,7 +8,6 @@ class AccelerometerChannelSettings:
         self.sensor_cfg_file = open(sensor_cfg_path)
         self.sensor_cfg = json.load(self.sensor_cfg_file)
         self.physical_channel = physical_channel
-        # self.physical_channel = self.sensor_cfg['physical_channel']
         self.name_to_assign_to_channel = self.sensor_cfg['name_to_assign_to_channel']
         self.terminal_config = self.sensor_cfg['terminal_config']
         self.min_val = self.sensor_cfg['min_val']
@@ -34,7 +33,6 @@ class MicrophoneChannelSettings:
         self.sensor_cfg_file = open(sensor_cfg_path)
         self.sensor_cfg = json.load(self.sensor_cfg_file)
         self.physical_channel = physical_channel
-        # self.physical_channel = self.sensor_cfg['physical_channel']
         self.name_to_assign_to_channel = self.sensor_cfg['name_to_assign_to_channel']
         self.terminal_config = self.sensor_cfg['terminal_config']
         self.units = self.sensor_cfg['units']
