@@ -16,6 +16,7 @@ class NIDAQModel(QObject):
     cfg_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cfg_ni9234.json')
     cfg_file = open(cfg_path)
     default_settings = json.load(cfg_file)
+    cfg_file.close()
 
     device_name: str = default_settings['device_name']
     task_name: str = default_settings['default_task_name']
@@ -40,7 +41,8 @@ class NIDAQModel(QObject):
     channels: list[int] = list()
     channel_settings: list[Optional[Union[AccelerometerChannelSettings,MicrophoneChannelSettings]]] = list()
     
-    sensor_models: list[str] = list()
+    active_sensor_model_list: list[str] = list()
+    active_sensors: list[str] = list()
     sensor_types: list[str] = list()
     writer_switch_flag: bool = False
     nidaq: NI9234 = None
@@ -48,7 +50,8 @@ class NIDAQModel(QObject):
     writer_mode = None
 
     # sensor config
-    cfg_sensor_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'sensor_cfg')
+    cfg_sensor_dir =  os.path.join(os.path.dirname(os.path.realpath(__file__)), 'sensors')
+    # cfg_sensor_list: list[str] = list()
     cfg_sensor_path: str = None
     sensor_model: str = None
 
@@ -70,19 +73,23 @@ class NIDAQModel(QObject):
     def __init__(self):
         super().__init__()
         self.data_buffer_update_timer.timeout.connect(self.update_plot_data_buffer)
+        
+        # for cfg_sensor in os.listdir(self.cfg_sensor_dir):
+        #     cfg, ext = os.path.splitext(cfg_sensor)
+        #     if ext == '.json':
+        #         self.cfg_sensor_list.append(os.path.join(self.cfg_sensor_dir,cfg_sensor))
 
     # TODO: 要寫一個讀取設定檔的功能
     # 內容包含錄製時間總長、錄製設備、採樣率...
-    
 
-    def read_sensor_cfg_352C33(self):
+    def read_sensor_cfg_352C33(self, physical_channel):
         sensor_model='352C33'
         cfg_sensor_path = os.path.join(self.cfg_sensor_dir,f'{sensor_model}.json')
-        self.accel_chan_settings = AccelerometerChannelSettings(cfg_sensor_path)
+        self.accel_chan_settings = AccelerometerChannelSettings(cfg_sensor_path,physical_channel)
         print(
             f'config path:{cfg_sensor_path}\n',
             f'Model : {sensor_model}\n',
-            f'physical channel : {self.accel_chan_settings.physical_channel}\n',
+            f'physical channel : {physical_channel}\n',
             f'channel name : {self.accel_chan_settings.name_to_assign_to_channel}\n',
             f'terminal config : {self.accel_chan_settings.terminal_config}\n',
             f'min value : {self.accel_chan_settings.min_val}\n',
@@ -96,14 +103,14 @@ class NIDAQModel(QObject):
             f'sensor type : {self.accel_chan_settings.sensor_type}')
         self.all_channel_settings[self.accel_chan_settings.physical_channel] = self.accel_chan_settings
         
-    def read_sensor_cfg_130F20(self):
+    def read_sensor_cfg_130F20(self, physical_channel):
         sensor_model='130F20'
         cfg_sensor_path = os.path.join(self.cfg_sensor_dir,f'{sensor_model}.json')
-        self.mic_chan_settings = MicrophoneChannelSettings(cfg_sensor_path)
+        self.mic_chan_settings = MicrophoneChannelSettings(cfg_sensor_path,physical_channel)
         print(
             f'config path:{cfg_sensor_path}\n',
             f'Model : {sensor_model}\n',
-            f'physical channel : {self.mic_chan_settings.physical_channel}\n',
+            f'physical channel : {physical_channel}\n',
             f'channel name : {self.mic_chan_settings.name_to_assign_to_channel}\n',
             f'terminal config : {self.mic_chan_settings.terminal_config}\n',
             f'min value : {self.mic_chan_settings.mic_sensitivity}\n',
@@ -124,12 +131,13 @@ class NIDAQModel(QObject):
             pass
         self.nidaq = NI9234(device_name=self.device_name)
         self.nidaq.create_task(task_name=self.task_name)
-        for channel, sensor_model in zip(self.channels, self.sensor_models):
+        for physical_channel, sensor_model in zip(self.channels, self.active_sensor_model_list):
+            
             if sensor_model == '352C33':
                 print('setting sensor config : 352C33')
-                self.read_sensor_cfg_352C33()
+                self.read_sensor_cfg_352C33(physical_channel)
                 self.nidaq.add_accel_channel(
-                    channel=channel,
+                    physical_channel=physical_channel,
                     name_to_assign_to_channel=self.accel_chan_settings.name_to_assign_to_channel,
                     terminal_config=self.accel_chan_settings.terminal_config,
                     min_val=self.accel_chan_settings.min_val,
@@ -140,11 +148,12 @@ class NIDAQModel(QObject):
                     current_excit_source=self.accel_chan_settings.current_excit_source,
                     current_excit_val=self.accel_chan_settings.current_excit_val,
                     custom_scale_name=self.accel_chan_settings.custom_scale_name)
+                
             if sensor_model == '130F20':
                 print('setting sensor config : 130F20')
-                self.read_sensor_cfg_130F20()
+                self.read_sensor_cfg_130F20(physical_channel)
                 self.nidaq.add_microphone_channel(
-                    channel=channel,
+                    physical_channel=physical_channel,
                     name_to_assign_to_channel=self.mic_chan_settings.name_to_assign_to_channel,
                     terminal_config=self.mic_chan_settings.terminal_config,
                     units=self.mic_chan_settings.units,
@@ -152,10 +161,7 @@ class NIDAQModel(QObject):
                     current_excit_source=self.mic_chan_settings.current_excit_source,
                     current_excit_val=self.mic_chan_settings.current_excit_val,
                     custom_scale_name=self.mic_chan_settings.custom_scale_name)
-            if sensor_model == 'Accelerometer':
-                self.nidaq.add_accel_channel(channel)
-            if sensor_model == 'Microphone':
-                self.nidaq.add_microphone_channel(channel)
+                
         self.nidaq.set_sample_rate(self.sample_rate)
         self.nidaq.set_frame_duration(self.frame_duration)
         self.nidaq.show_daq_params()
@@ -248,7 +254,6 @@ class NIDAQModel(QObject):
         for i in range(self.spectrum_data.shape[0]):
             self.spectrum_data_buffer[i, 0, :] = self.spectrum_data[i]
         self.wave_data_buffer_mean = np.mean(np.abs(self.wave_data_buffer))
-        # TODO: 需要新增spectrum的開關嗎??
 
     def get_wave_data_buffer(self):
         return self.wave_data_buffer

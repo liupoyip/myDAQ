@@ -1,7 +1,8 @@
 {
     "ai_channel_api_url": "https://nidaqmx-python.readthedocs.io/en/latest/ai_channel_collection.html?highlight=add_ai_microphone#nidaqmx._task_modules.ai_channel_collection.AIChannelCollection.add_ai_microphone_chan",
     "sensor_model_url": "https://www.pcb.com/products?m=130F20",
-    "physical_channel": 1,
+    "sensor_model": "130F20",
+    "series_num": "",
     "name_to_assign_to_channel": "130F20",
     "terminal_config": "default",
     "units": "Pa",

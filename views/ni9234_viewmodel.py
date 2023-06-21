@@ -1,6 +1,7 @@
 from typing import Optional
 from datetime import datetime
 import os
+import json
 
 import numpy as np
 import numpy.typing as npt
@@ -22,8 +23,11 @@ class NI9234ViewModel(QWidget):
     vertical_line_pen = QPen(QColor('red'))
     vertical_line_pen.setWidth(2)
     vertical_line_painter.setPen(vertical_line_pen)
-    sensor_cfg_dir = './models/sensor_cfg/'
+    sensor_cfg_dir = './models/sensors/'
     sensor_cfg_list: list[str] = list()
+    sensor_cfg_names: list[str] = list()
+    active_channel_num_list: list = list()
+    active_sensor_model_list: list = list()
 
     def __init__(self, model):
         super().__init__()
@@ -213,25 +217,27 @@ class NI9234ViewModel(QWidget):
         self.ui.WriteFile_GroupBox.setDisabled(True)
         self.ui.Visualize_Groupbox.setDisabled(True)
 
-        # set check boxes disable
-        for checkbox, combox in zip(self.channel_checkboxes, self.channel_comboxes):
+        # initail sensor config
+        self.sensor_cfg_list.clear()
+        self.sensor_cfg_names.clear()
+        self.get_sensor_cfgs()
+        for channel_num, (checkbox, combox) in enumerate(zip(self.channel_checkboxes, self.channel_comboxes)):
             checkbox.setChecked(False)
             combox.clear()
-            combox.addItems(self.model.default_settings["sensor_model"])
-             # TODO : 將 channel combox 內容來源改成config files內的sensor_model
+            combox.addItem('Sensor config')
+            combox.addItems(self.sensor_cfg_names)
+            print(f'channel {channel_num} combox item: {self.sensor_cfg_names}')
             combox.setDisabled(True)
         self.ui.VisualizeSwitch_Checkbox.setChecked(False)
 
-        # get sensor config
-        self.sensor_cfg_list.clear()
-        self.get_sensor_cfgs()
-
     def get_sensor_cfgs(self):
-        sensor_cfg_path_list = [sensor_cfg_path_list for sensor_cfg_path_list in os.listdir(
-            self.sensor_cfg_dir) if 'json' in sensor_cfg_path_list]
-        for sensor_cfg_path in sensor_cfg_path_list:
-            sensor_cfg_name, _ = os.path.splitext(sensor_cfg_path)
-            self.sensor_cfg_list.append(sensor_cfg_name)
+        for cfg in os.listdir(self.sensor_cfg_dir):
+            cfg_name, ext = os.path.splitext(cfg)
+            if ext == '.json':
+                self.sensor_cfg_list.append(os.path.join(self.sensor_cfg_dir, cfg))
+        for cfg in self.sensor_cfg_list:
+            cfg_name, _ = os.path.splitext(os.path.basename(cfg))
+            self.sensor_cfg_names.append(cfg_name)
         print(f'sensor config detected: {self.sensor_cfg_list}')
 
     def on_focus_changed(self):
@@ -248,7 +254,9 @@ class NI9234ViewModel(QWidget):
         self.ui.ChartUpdateInterval_HorizontalSlider.setSingleStep(value)
         self.ui.ChartUpdateInterval_HorizontalSlider.setPageStep(value)
 
+
     def on_create_task_button_clicked(self):
+        # 這個 function 耦合和 NIDAQModel.py 程度極高，改動時要謹慎
         if self.channel_is_seleted():
             self.ui.Start_PushButton.setEnabled(True)
             self.ui.ClearTask_PushButton.setEnabled(True)
@@ -262,6 +270,9 @@ class NI9234ViewModel(QWidget):
             self.wave_downsample_rate = self.ui.WaveDownSample_SpinBox.value()
             self.spectrum_downsample_rate = self.ui.SpectrumDownSample_SpinBox.value()
 
+            # setting task for nidaq model
+            # TODO : get parameters from this block for output data
+            # ------block start------
             self.add_channels()
             self.model.task_name = self.ui.TaskName_LineEdit.text()
             self.model.sample_rate = self.ui.SampleRate_SpinBox.value()
@@ -269,14 +280,14 @@ class NI9234ViewModel(QWidget):
             self.model.buffer_rate = self.ui.BufferRate_SpinBox.value()
             self.model.update_interval = self.ui.ChartUpdateInterval_SpinBox.value()
             self.model.channels = self.active_channel_num_list
-            self.model.sensor_models = self.sensor_model_list
-
+            self.model.active_sensor_model_list = self.active_sensor_model_list
             self.model.create()
+            # ------block end------
+
             self.reset_wave_chart()
             self.reset_spectrum_chart()
-            self.model.all_channel_settings
+            # for num, sensor_model in zip(self.active_channel_num_list, self.sensor_model_list):
             for num, channel_setting in zip(self.active_channel_num_list, self.model.all_channel_settings):
-                # for num, sensor_model in zip(self.active_channel_num_list, self.sensor_model_list):
                 if channel_setting.sensor_type == 'accelerometer':
                     self.channel_wave_charts[num].set_y_range(-0.5, 0.5)
                     self.channel_wave_charts[num].set_y_label('value (g)')
@@ -390,14 +401,17 @@ class NI9234ViewModel(QWidget):
             return False
 
     def add_channels(self):
-        self.active_channel_num_list = list()
-        self.sensor_model_list = list()
-
-        for i, (checkbox, combox) in enumerate(zip(self.channel_checkboxes, self.channel_comboxes)):
+        self.active_channel_num_list.clear()
+        self.active_sensor_model_list.clear()
+        for channel_num, (checkbox, combox) in enumerate(zip(self.channel_checkboxes, self.channel_comboxes)):
             if checkbox.isChecked():
-                self.active_channel_num_list.append(i)
-                self.sensor_model_list.append(combox.currentText())
-               
+                self.active_channel_num_list.append(channel_num)
+                sensor_cfg_path = os.path.join(self.sensor_cfg_dir, f'{combox.currentText()}.json')
+                cfg_file = open(sensor_cfg_path)
+                print(sensor_cfg_path)
+                sensor_cfg = json.load(cfg_file)
+                cfg_file.close()
+                self.active_sensor_model_list.append(sensor_cfg['sensor_model'])
 
     def reset_wave_chart(self):
         time_limit = self.model.buffer_duration

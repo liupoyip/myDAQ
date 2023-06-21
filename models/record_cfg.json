@@ -6,13 +6,9 @@
     ],
     "sample_rate": 20000,
     "DAQ_model": "ni9234",
-    "sensor_model": [
+    "supported_sensor_model": [
         "352C33",
         "130F20"
-    ],
-    "sensor_cfg": [
-        "352C33.json",
-        "130F20.json"
     ],
     "frame_duration": 1000
 }

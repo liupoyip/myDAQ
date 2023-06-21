@@ -1,5 +1,5 @@
 {
-    "_comment": "This config is for - ni9234_form.py",
+    "__comment": "This config is for - ni9234_form.py",
     "device_name": "NI_9234",
     "default_sample_rate": 12800,
     "min_sample_rate": 3200,
@@ -23,11 +23,5 @@
         "record method",
         "stream",
         "segment"
-    ],
-    "sensor_model": [
-        "select sensor",
-        "352C33",
-        "130F20",
-        "Microphone"
     ]
 }

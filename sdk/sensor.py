@@ -4,10 +4,11 @@ import json
 
 class AccelerometerChannelSettings:
 
-    def __init__(self, sensor_cfg_path) -> None:
+    def __init__(self, sensor_cfg_path, physical_channel) -> None:
         self.sensor_cfg_file = open(sensor_cfg_path)
         self.sensor_cfg = json.load(self.sensor_cfg_file)
-        self.physical_channel = self.sensor_cfg['physical_channel']
+        self.physical_channel = physical_channel
+        # self.physical_channel = self.sensor_cfg['physical_channel']
         self.name_to_assign_to_channel = self.sensor_cfg['name_to_assign_to_channel']
         self.terminal_config = self.sensor_cfg['terminal_config']
         self.min_val = self.sensor_cfg['min_val']
@@ -29,10 +30,11 @@ class AccelerometerChannelSettings:
 
 class MicrophoneChannelSettings:
 
-    def __init__(self, sensor_cfg_path) -> None:
+    def __init__(self, sensor_cfg_path, physical_channel) -> None:
         self.sensor_cfg_file = open(sensor_cfg_path)
         self.sensor_cfg = json.load(self.sensor_cfg_file)
-        self.physical_channel = self.sensor_cfg['physical_channel']
+        self.physical_channel = physical_channel
+        # self.physical_channel = self.sensor_cfg['physical_channel']
         self.name_to_assign_to_channel = self.sensor_cfg['name_to_assign_to_channel']
         self.terminal_config = self.sensor_cfg['terminal_config']
         self.units = self.sensor_cfg['units']
@@ -50,10 +52,10 @@ class MicrophoneChannelSettings:
         pass
 
 if __name__ == '__main__':
-    sensor_cfg_file = './sensor_cfg/352C33.json'
+    sensor_cfg_file = './352C33.json'
     accel_setting = AccelerometerChannelSettings(sensor_cfg_file)
     print(accel_setting.current_excit_source)
-    sensor_cfg_file = './sensor_cfg/130F20.json'
+    sensor_cfg_file = './130F20.json'
     mic_setting = MicrophoneChannelSettings(sensor_cfg_file)
     print(mic_setting.current_excit_source)
 

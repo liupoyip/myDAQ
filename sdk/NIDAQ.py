@@ -155,8 +155,8 @@ class NI9234(NIDAQ):
     #         print(f'Channel added, exist channel: {self.task.channel_names}')
     #     return wrap
 
-    def channel_check(self, channel):
-        if channel not in self.channel_num_list:
+    def channel_check(self, physical_channel):
+        if physical_channel not in self.channel_num_list:
             raise BaseException(
                 f'Illegal channel number. Legal channel : {self.channel_num_list}')
         if self.task.number_of_channels > 4:
@@ -165,7 +165,7 @@ class NI9234(NIDAQ):
     # @add_ai_channel
     def add_accel_channel(
             self,
-            channel: Union[int, str],
+            physical_channel: Union[int, str],
             name_to_assign_to_channel,
             terminal_config,
             min_val,
@@ -176,7 +176,7 @@ class NI9234(NIDAQ):
             current_excit_source,
             current_excit_val,
             custom_scale_name) -> None:
-        self.channel_check(channel)
+        self.channel_check(physical_channel)
         # self.task.ai_channels.add_ai_accel_chan(
         #     physical_channel=f'{self.device_name}/ai{channel}',
         #     name_to_assign_to_channel=f'{self.device_name}-ch{channel}-accelerometer',
@@ -200,8 +200,8 @@ class NI9234(NIDAQ):
             current_excit_source = ExcitationSource.INTERNAL
 
         self.task.ai_channels.add_ai_accel_chan(
-            physical_channel=f'{self.device_name}/ai{channel}',
-            name_to_assign_to_channel=f'{self.device_name}-ch{channel}-{name_to_assign_to_channel}',
+            physical_channel=f'{self.device_name}/ai{physical_channel}',
+            name_to_assign_to_channel=f'{self.device_name}-ch{physical_channel}-{name_to_assign_to_channel}',
             terminal_config=terminal_config,
             min_val=min_val,
             max_val=max_val,
@@ -215,7 +215,7 @@ class NI9234(NIDAQ):
     # @add_ai_channel
     def add_microphone_channel(
             self,
-            channel: Union[int, str],
+            physical_channel: Union[int, str],
             name_to_assign_to_channel,
             terminal_config,
             units,
@@ -231,10 +231,10 @@ class NI9234(NIDAQ):
         if current_excit_source == 'internal':
             current_excit_source = ExcitationSource.INTERNAL
 
-        self.channel_check(channel)
+        self.channel_check(physical_channel)
         self.task.ai_channels.add_ai_microphone_chan(
-            physical_channel=f'{self.device_name}/ai{channel}',
-            name_to_assign_to_channel=f'{self.device_name}-ch{channel}-{name_to_assign_to_channel}',
+            physical_channel=f'{self.device_name}/ai{physical_channel}',
+            name_to_assign_to_channel=f'{self.device_name}-ch{physical_channel}-{name_to_assign_to_channel}',
             terminal_config=terminal_config,
             units=units,
             mic_sensitivity=mic_sensitivity,
