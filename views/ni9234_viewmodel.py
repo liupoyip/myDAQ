@@ -23,11 +23,12 @@ class NI9234ViewModel(QWidget):
     vertical_line_pen = QPen(QColor('red'))
     vertical_line_pen.setWidth(2)
     vertical_line_painter.setPen(vertical_line_pen)
-    sensor_cfg_dir = './models/sensors/'
+    sensor_cfg_dir = f'.{os.sep}models{os.sep}sensors'
     sensor_cfg_list: list[str] = list()
     sensor_cfg_names: list[str] = list()
     active_channel_num_list: list = list()
     active_sensor_model_list: list = list()
+    active_sensor_cfg_list: list = list()
 
     def __init__(self, model):
         super().__init__()
@@ -111,14 +112,14 @@ class NI9234ViewModel(QWidget):
         self.ui.FunctionTest_Pushbutton.clicked.connect(self.on_function_test_pushbutton_clicked)
 
     def on_function_test_pushbutton_clicked(self):
-        self.model.read_sensor_cfg_352C33()
-        self.model.read_sensor_cfg_130F20()
+        pass
+        #self.model.read_sensor_cfg_352C33()
+        #self.model.read_sensor_cfg_130F20()
 
     def set_default_values(self):
 
         self.ui.TaskName_LineEdit.setText(
             self.model.default_settings['default_task_name'])
-
         self.ui.SampleRate_SpinBox.setMinimum(
             self.model.default_settings['min_sample_rate'])
         self.ui.SampleRate_SpinBox.setMaximum(
@@ -221,12 +222,11 @@ class NI9234ViewModel(QWidget):
         self.sensor_cfg_list.clear()
         self.sensor_cfg_names.clear()
         self.get_sensor_cfgs()
-        for channel_num, (checkbox, combox) in enumerate(zip(self.channel_checkboxes, self.channel_comboxes)):
+        for checkbox, combox in zip(self.channel_checkboxes, self.channel_comboxes):
             checkbox.setChecked(False)
             combox.clear()
             combox.addItem('Sensor config')
             combox.addItems(self.sensor_cfg_names)
-            print(f'channel {channel_num} combox item: {self.sensor_cfg_names}')
             combox.setDisabled(True)
         self.ui.VisualizeSwitch_Checkbox.setChecked(False)
 
@@ -243,17 +243,16 @@ class NI9234ViewModel(QWidget):
     def on_focus_changed(self):
         if self.isActiveWindow():
             self.setMouseTracking(True)
-            print('focus in!!')
+            #print('focus in!!')
         else:
             self.setMouseTracking(False)
-            print('focus out!!')
+            #print('focus out!!')
 
     def on_frame_duration_changed(self, value):
         self.ui.ChartUpdateInterval_SpinBox.setMinimum(value)
         self.ui.ChartUpdateInterval_SpinBox.setSingleStep(value)
         self.ui.ChartUpdateInterval_HorizontalSlider.setSingleStep(value)
         self.ui.ChartUpdateInterval_HorizontalSlider.setPageStep(value)
-
 
     def on_create_task_button_clicked(self):
         # 這個 function 耦合和 NIDAQModel.py 程度極高，改動時要謹慎
@@ -281,6 +280,7 @@ class NI9234ViewModel(QWidget):
             self.model.update_interval = self.ui.ChartUpdateInterval_SpinBox.value()
             self.model.channels = self.active_channel_num_list
             self.model.active_sensor_model_list = self.active_sensor_model_list
+            self.model.active_sensor_cfg_list = self.active_sensor_cfg_list
             self.model.create()
             # ------block end------
 
@@ -408,10 +408,11 @@ class NI9234ViewModel(QWidget):
                 self.active_channel_num_list.append(channel_num)
                 sensor_cfg_path = os.path.join(self.sensor_cfg_dir, f'{combox.currentText()}.json')
                 cfg_file = open(sensor_cfg_path)
-                print(sensor_cfg_path)
                 sensor_cfg = json.load(cfg_file)
                 cfg_file.close()
                 self.active_sensor_model_list.append(sensor_cfg['sensor_model'])
+                self.active_sensor_cfg_list.append(sensor_cfg_path)
+        print(f'active sensor models: {self.active_sensor_model_list}')
 
     def reset_wave_chart(self):
         time_limit = self.model.buffer_duration
