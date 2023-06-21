@@ -49,6 +49,7 @@ class NIDAQModel(QObject):
     nidaq: NI9234 = None
     write_file_directory = default_settings['default_write_file_dir']
     writer_mode = None
+    chunk_count = None
 
     # sensor config
     cfg_sensor_dir =  os.path.join(os.path.dirname(os.path.realpath(__file__)), 'sensors')
@@ -75,8 +76,6 @@ class NIDAQModel(QObject):
         super().__init__()
         self.data_buffer_update_timer.timeout.connect(self.update_plot_data_buffer)
         
-    # TODO: 要寫一個讀取設定檔的功能
-    # 內容包含錄製時間總長、錄製設備、採樣率...
 
     def read_sensor_cfg_352C33(self, physical_channel,sensor_cfg_path):
         sensor_model = '352C33'
@@ -191,7 +190,8 @@ class NIDAQModel(QObject):
             if self.nidaq.writer.file != None:
                 self.nidaq.writer.close_file()
 
-    def ready_write_file(self,mode):
+
+    def start_write_file(self,mode):
         self.nidaq.set_writer_type(mode)
         self.nidaq.set_writer_enable()
         print(f'nidaq writer switch flag: {self.nidaq.writer_switch_flag}')
@@ -204,7 +204,48 @@ class NIDAQModel(QObject):
         self.nidaq.set_writer_disable()
         if self.nidaq.writer_type == 'stream':    
             self.nidaq.writer.close_file()
+
+    def write_record_info(self):
+        '''
+        properties format: 
+        {
+            machine_ID,
+            [sensor_model_0, sensor_model_1, ...],
+            [data_name_0, data_name_1, ...],
+            [physical_unit_0, physical_unit_1, ],
+            DAQ_model,
+            start_time,
+            sampling_rate,
+            end_time,
+            chunk_length,
+            chunk_count,
+        }
+        '''
+        {
+            'machine_ID':'dummy_machine',
+            'sensor_model':['model_dummy_0'],
+            'sensor_serial_number':[],
+            'data_name':['data_name_0']
+        }
+        self.sample_rate
+        self.frame_duration
+        self.chunk_len
+        self.task_name
+        self.nidaq.task.ai_channels.channel_names
+        if self.nidaq.writer.writer_type == 'segment':
+            self.chunk_count = self.nidaq.writer.write_file_count
+        if self.nidaq.writer.writer_type == 'stream':
+            self.chunk_count = None
+
+        # chunk_count
+        # record start time
         
+
+        
+    # TODO: 要寫一個讀取設定檔的功能
+    # 內容包含錄製時間總長、錄製設備、採樣率...
+        
+
     def write_stream_file(self):
         '''
         write all signal to one file while this function is working
@@ -281,30 +322,6 @@ class NIDAQModel(QObject):
             self.abnormal_flag = False
         return self.abnormal_flag
 
-    def write_record_info(self):
-        '''
-        properties format: 
-        {
-            machine_ID,
-            [sensor_model_0, sensor_model_1, ...],
-            [data_name_0, data_name_1, ...],
-            [physical_unit_0, physical_unit_1, ],
-            DAQ_model,
-            start_time,
-            sampling_rate,
-            end_time,
-            chunk_length,
-            chunk_count,
-            
-        }
-        '''
-        {
-            'machine_ID':'dummy_machine',
-            'sensor_model':['model_dummy_0'],
-            'sensor_serial_number':[],
-            'data_name':['data_name_0']
-        }
-        self.sample_rate
 
     def record_cfg_checker(self):
         

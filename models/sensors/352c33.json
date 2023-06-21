@@ -3,7 +3,7 @@
     "sensor_model_url": "https://www.pcb.com/products?m=352c33",
     "sensor_model": "352C33",
     "series_num": "",
-    "name_to_assign_to_channel": "352C33",
+    "name_to_assign_to_channel": "machine_vibration",
     "terminal_config": "default",
     "min_val": -50.0,
     "max_val": 50.0,

@@ -342,7 +342,7 @@ class NI9234ViewModel(QWidget):
         print(f'write file checkbox toggled : {self.ui.WriteFile_CheckBox.isChecked()}')
         self.model.writer_switch_flag = self.ui.WriteFile_CheckBox.isChecked()
         if self.ui.WriteFile_CheckBox.isChecked():
-            self.model.ready_write_file(mode=self.writer_type)
+            self.model.start_write_file(mode=self.writer_type)
             self.ui.WriteFileStatus_Label.setText('Status: On')
             self.ui.WriteFileType_ComboBox.setDisabled(True)
         if not self.ui.WriteFile_CheckBox.isChecked():

@@ -3,7 +3,7 @@
     "sensor_model_url": "https://www.pcb.com/products?m=130F20",
     "sensor_model": "130F20",
     "series_num": "",
-    "name_to_assign_to_channel": "130F20",
+    "name_to_assign_to_channel": "env_sound",
     "terminal_config": "default",
     "units": "Pa",
     "mic_sensitivity": 45.0,

@@ -4,11 +4,10 @@
         "vibration",
         "sound_wave"
     ],
-    "sample_rate": 20000,
-    "DAQ_model": "ni9234",
-    "supported_sensor_model": [
-        "352C33",
-        "130F20"
-    ],
-    "frame_duration": 1000
+    "sample_rate": 12800,
+    "frame_duration": 1000,
+    "cDAQ_model": "NI cDAQ-9171",
+    "cDAQ_series_num": "02016787",
+    "DAQ_model": "NI 9234",
+    "DAQ_series_num": "0201110A"
 }

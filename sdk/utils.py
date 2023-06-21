@@ -10,6 +10,7 @@ class StorageTools:
         self.file_name = None
         self.file_path = None
         self.file = None
+        self.writer_type = None
 
     def set_directory(self, directory):
         self.directory = directory
@@ -24,6 +25,7 @@ class CSVStreamWriter(StorageTools):
 
     def __init__(self, directory: str):
         super(StorageTools, self).__init__()
+        self.writer_type = 'stream'
         self.directory = directory
 
     def check_file_extension(self):
@@ -50,6 +52,7 @@ class NPYWriter(StorageTools):
     def __init__(self, directory: str):
         super(NPYWriter, self).__init__()
         self.directory = directory
+        self.writer_type = 'segment'
         self.write_file_count = 0
 
     def reset_write_file_count(self):

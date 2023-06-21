@@ -23,5 +23,9 @@
         "record method",
         "stream",
         "segment"
+    ],
+    "supported_sensor_model": [
+        "352C33",
+        "130F20"
     ]
 }
