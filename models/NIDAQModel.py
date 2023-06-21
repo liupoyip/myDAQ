@@ -75,17 +75,11 @@ class NIDAQModel(QObject):
         super().__init__()
         self.data_buffer_update_timer.timeout.connect(self.update_plot_data_buffer)
         
-        # for cfg_sensor in os.listdir(self.cfg_sensor_dir):
-        #     cfg, ext = os.path.splitext(cfg_sensor)
-        #     if ext == '.json':
-        #         self.cfg_sensor_list.append(os.path.join(self.cfg_sensor_dir,cfg_sensor))
-
     # TODO: 要寫一個讀取設定檔的功能
     # 內容包含錄製時間總長、錄製設備、採樣率...
 
     def read_sensor_cfg_352C33(self, physical_channel,sensor_cfg_path):
         sensor_model = '352C33'
-        # cfg_sensor_path = os.path.join(self.cfg_sensor_dir,f'{sensor_model}.json')
         self.accel_chan_settings = AccelerometerChannelSettings(sensor_cfg_path,physical_channel)
         print(
             f'config path:{sensor_cfg_path}\n',
@@ -106,7 +100,6 @@ class NIDAQModel(QObject):
         
     def read_sensor_cfg_130F20(self, physical_channel,sensor_cfg_path):
         sensor_model = '130F20'
-        # cfg_sensor_path = os.path.join(self.cfg_sensor_dir,f'{sensor_model}.json')
         self.mic_chan_settings = MicrophoneChannelSettings(sensor_cfg_path,physical_channel)
         print(
             f'config path:{sensor_cfg_path}\n',
