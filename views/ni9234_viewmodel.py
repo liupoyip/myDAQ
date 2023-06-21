@@ -278,11 +278,11 @@ class NI9234ViewModel(QWidget):
             for num, channel_setting in zip(self.active_channel_num_list, self.model.all_channel_settings):
                 # for num, sensor_model in zip(self.active_channel_num_list, self.sensor_model_list):
                 if channel_setting.sensor_type == 'accelerometer':
-                    self.channel_wave_charts[num].set_y_range(-0.3, 0.3)
+                    self.channel_wave_charts[num].set_y_range(-0.5, 0.5)
                     self.channel_wave_charts[num].set_y_label('value (g)')
                     self.channel_spectrum_charts[num].set_x_range(0, 6000)
                 elif channel_setting.sensor_type == 'microphone':
-                    self.channel_wave_charts[num].set_y_range(-10, 10)
+                    self.channel_wave_charts[num].set_y_range(-1, 1)
                     self.channel_wave_charts[num].set_y_label('value (Pa)')
                     self.channel_spectrum_charts[num].set_x_range(0, 6000)
 
