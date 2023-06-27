@@ -1,10 +1,16 @@
 from typing import Optional, Union
 import json
 
+from sdk.utils import get_func_name
+from debug_flags import PRINT_FUNC_NAME_FLAG
+
 
 class AccelerometerChannelSettings:
 
     def __init__(self, sensor_cfg_path, physical_channel) -> None:
+        if PRINT_FUNC_NAME_FLAG:
+            print(f'run function - {get_func_name(self.__init__)}')
+
         self.sensor_cfg_file = open(sensor_cfg_path)
         self.sensor_cfg = json.load(self.sensor_cfg_file)
         self.physical_channel = physical_channel
@@ -30,6 +36,9 @@ class AccelerometerChannelSettings:
 class MicrophoneChannelSettings:
 
     def __init__(self, sensor_cfg_path, physical_channel) -> None:
+        if PRINT_FUNC_NAME_FLAG:
+            print(f'run function - {get_func_name(self.__init__)}')
+
         self.sensor_cfg_file = open(sensor_cfg_path)
         self.sensor_cfg = json.load(self.sensor_cfg_file)
         self.physical_channel = physical_channel
