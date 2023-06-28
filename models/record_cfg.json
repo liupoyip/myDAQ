@@ -1,6 +1,10 @@
 {
     "machine_ID": "machine_0",
     "task_name": "task_0",
+    "channels": [
+        0,
+        2
+    ],
     "sensor_cfg": [
         "./sensors/130F20.json",
         "./sensors/352c33.json"

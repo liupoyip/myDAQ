@@ -30,6 +30,7 @@ class NI9234ViewModel(QWidget):
     sensor_cfg_dir = f'.{os.sep}models{os.sep}sensors'
     sensor_cfg_list: list[str] = list()
     sensor_cfg_names: list[str] = list()
+    
     active_channel_num_list: list = list()
     active_sensor_model_list: list = list()
     active_sensor_cfg_list: list = list()
@@ -254,6 +255,8 @@ class NI9234ViewModel(QWidget):
         self.ui.TaskName_LineEdit.setText(self.record_cfg['task_name'])
         self.ui.SampleRate_HorizontalSlider.setValue(self.record_cfg['sample_rate'])
         self.ui.FrameDuration_HorizontalSlider.setValue(self.record_cfg['frame_duration'])
+        self.set_sensor_cfg_with_record_cfg()
+        
 
     def get_sensor_cfgs(self):
         if PRINT_FUNC_NAME_FLAG:
@@ -268,6 +271,25 @@ class NI9234ViewModel(QWidget):
             self.sensor_cfg_names.append(cfg_name)
         print(f'sensor config detected: {self.sensor_cfg_list}')
 
+    def set_sensor_cfg_with_record_cfg(self):
+        '''
+        For ImportConfig_Pushbutton
+        '''
+        if PRINT_FUNC_NAME_FLAG:
+            print(f'run function - {get_func_name(self.set_sensor_cfg_with_record_cfg)}')
+
+        for checkbox, combox in zip(self.channel_checkboxes, self.channel_comboxes):
+            checkbox.setChecked(False)
+            checkbox.setDisabled(True)
+            combox.setDisabled(True)
+
+        for channel, cfg_path in zip(self.record_cfg['channels'], self.record_cfg['sensor_cfg']):
+            cfg_file_name, _ = os.path.splitext(os.path.basename(cfg_path))
+            print(f'cfg_path: {cfg_path}, target chan: {channel}, cfg_file_name:{cfg_file_name}')
+            self.channel_comboxes[channel].setCurrentText(cfg_file_name)
+            self.channel_checkboxes[channel].setChecked(True)
+            self.channel_comboxes[channel].setDisabled(True)
+            
     def on_focus_changed(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.on_focus_changed)}')
