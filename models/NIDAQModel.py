@@ -264,7 +264,7 @@ class NIDAQModel(QObject):
             self.chunk_count = self.nidaq.writer.write_file_count
         if self.nidaq.writer.writer_type == 'stream':
             self.chunk_count = None
-        
+                
         # chunk_count
         # record start time
         
