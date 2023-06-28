@@ -20,7 +20,6 @@ class NIDAQModel(QObject):
     cfg_file = open(cfg_path)
     default_settings = json.load(cfg_file)
     cfg_file.close()
-
     device_name: str = default_settings['device_name']
     task_name: str = default_settings['default_task_name']
     sample_rate: int = default_settings['default_sample_rate']
@@ -44,9 +43,6 @@ class NIDAQModel(QObject):
     channels: list[int] = list()
     channel_settings: list[Optional[Union[AccelerometerChannelSettings,MicrophoneChannelSettings]]] = list()
     
-    active_sensor_model_list: list[str] = list()
-    active_sensor_cfg_list: list[str] = list()
-
     sensor_types: list[str] = list()
     writer_switch_flag: bool = False
     nidaq: NI9234 = None
@@ -55,6 +51,8 @@ class NIDAQModel(QObject):
     chunk_count = None
 
     # sensor config
+    active_sensor_model_list: list[str] = list()
+    active_sensor_cfg_list: list[str] = list()
     cfg_sensor_dir =  os.path.join(os.path.dirname(os.path.realpath(__file__)), 'sensors')
     # cfg_sensor_list: list[str] = list()
     cfg_sensor_path: str = None
@@ -81,7 +79,6 @@ class NIDAQModel(QObject):
 
         super().__init__()
         self.data_buffer_update_timer.timeout.connect(self.update_plot_data_buffer)
-        
 
     def read_sensor_cfg_352C33(self, physical_channel,sensor_cfg_path):
         if PRINT_FUNC_NAME_FLAG:
@@ -267,7 +264,6 @@ class NIDAQModel(QObject):
             self.chunk_count = self.nidaq.writer.write_file_count
         if self.nidaq.writer.writer_type == 'stream':
             self.chunk_count = None
-
         
         # chunk_count
         # record start time
