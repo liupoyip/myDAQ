@@ -15,6 +15,7 @@ from models.NIDAQModel import NIDAQModel
 from debug_flags import PRINT_FUNC_NAME_FLAG
 from sdk.utils import get_func_name
 
+
 class NI9234ViewModel(QWidget):
     wave_downsample_rate: Optional[int] = None
     spectrum_downsample_rate: Optional[int] = None
@@ -24,6 +25,8 @@ class NI9234ViewModel(QWidget):
     vertical_line_pen = QPen(QColor('red'))
     vertical_line_pen.setWidth(2)
     vertical_line_painter.setPen(vertical_line_pen)
+    record_cfg_path = f'.{os.sep}models{os.sep}record_cfg.json'
+    record_cfg = None
     sensor_cfg_dir = f'.{os.sep}models{os.sep}sensors'
     sensor_cfg_list: list[str] = list()
     sensor_cfg_names: list[str] = list()
@@ -112,6 +115,9 @@ class NI9234ViewModel(QWidget):
         self.now_time_timer.start()
         self.writer_type = self.ui.WriteFileType_ComboBox.currentIndex()
 
+        # import config
+        self.ui.ImportConfig_Pushbutton.clicked.connect(self.on_import_config_button_clicked)
+
         # func test button
         self.ui.FunctionTest_Pushbutton.clicked.connect(self.on_function_test_pushbutton_clicked)
 
@@ -126,6 +132,9 @@ class NI9234ViewModel(QWidget):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.set_default_values)}')
 
+        self.ui.ImportConfigPath_LineEdit.setText(self.record_cfg_path)
+        self.ui.MachineID_LineEdit.setText('dummy_machine')
+        
         self.ui.TaskName_LineEdit.setText(
             self.model.default_settings['default_task_name'])
         self.ui.SampleRate_SpinBox.setMinimum(
@@ -211,10 +220,6 @@ class NI9234ViewModel(QWidget):
         self.ui.WriteFile_LineEdit.setText(
             self.model.default_settings['default_write_file_dir'])
 
-        self.ui.Parameters_Label.setText(
-            'Parameters will show in here \n'
-            'after Task created!!')
-
         # set component initial enable
         self.ui.CreateTask_PushButton.setEnabled(True)
         self.ui.PreparationSetting_Frame.setEnabled(True)
@@ -237,6 +242,18 @@ class NI9234ViewModel(QWidget):
             combox.addItems(self.sensor_cfg_names)
             combox.setDisabled(True)
         self.ui.VisualizeSwitch_Checkbox.setChecked(False)
+
+    def on_import_config_button_clicked(self):
+        if PRINT_FUNC_NAME_FLAG:
+            print(f'run function - {get_func_name(self.on_import_config_button_clicked)}')
+
+        record_cfg_file = open(self.record_cfg_path)
+        self.record_cfg = json.load(record_cfg_file)
+        record_cfg_file.close()
+        self.ui.MachineID_LineEdit.setText(self.record_cfg['machine_ID'])
+        self.ui.TaskName_LineEdit.setText(self.record_cfg['task_name'])
+        self.ui.SampleRate_HorizontalSlider.setValue(self.record_cfg['sample_rate'])
+        self.ui.FrameDuration_HorizontalSlider.setValue(self.record_cfg['frame_duration'])
 
     def get_sensor_cfgs(self):
         if PRINT_FUNC_NAME_FLAG:
@@ -281,13 +298,10 @@ class NI9234ViewModel(QWidget):
             self.ui.ClearTask_PushButton.setEnabled(True)
             self.ui.CreateTask_PushButton.setDisabled(True)
             self.ui.PreparationSetting_Frame.setDisabled(True)
-            self.ui.Parameters_Label.setText(
-                f'Sample Rate: {self.ui.SampleRate_SpinBox.value()} Hz\n'
-                f'Frame Duration: {self.ui.FrameDuration_SpinBox.value()} ms\n'
-                f'Buffer Rate: {self.ui.BufferRate_SpinBox.value()}\n')
             self.graph_update_timer.setInterval(self.ui.ChartUpdateInterval_SpinBox.value())
             self.wave_downsample_rate = self.ui.WaveDownSample_SpinBox.value()
             self.spectrum_downsample_rate = self.ui.SpectrumDownSample_SpinBox.value()
+            
 
             # setting task for nidaq model
             # TODO : get parameters from this block for output data

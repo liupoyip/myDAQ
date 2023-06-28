@@ -19,9 +19,9 @@
   <widget class="QGroupBox" name="ControlButtons_GroupBox">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>790</y>
-     <width>341</width>
+     <x>20</x>
+     <y>780</y>
+     <width>331</width>
      <height>80</height>
     </rect>
    </property>
@@ -94,37 +94,12 @@
     </property>
    </widget>
   </widget>
-  <widget class="QLabel" name="Parameters_Label">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>620</y>
-     <width>191</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Parameters!!&lt;br/&gt;Will show at here!!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-   </property>
-   <property name="wordWrap">
-    <bool>false</bool>
-   </property>
-   <property name="textInteractionFlags">
-    <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-   </property>
-  </widget>
   <widget class="QGroupBox" name="WriteFile_GroupBox">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>530</y>
-     <width>361</width>
+     <x>20</x>
+     <y>690</y>
+     <width>341</width>
      <height>81</height>
     </rect>
    </property>
@@ -223,9 +198,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
+     <y>150</y>
      <width>361</width>
-     <height>511</height>
+     <height>331</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -433,7 +408,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>340</y>
+      <y>160</y>
       <width>341</width>
       <height>161</height>
      </rect>
@@ -601,11 +576,116 @@
      </layout>
     </widget>
    </widget>
+   <widget class="QGroupBox" name="Task_GroupBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>0</y>
+      <width>341</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Task</string>
+    </property>
+    <widget class="QLabel" name="TaskName_Label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>60</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Task Name</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="TaskName_LineEdit">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>20</y>
+       <width>241</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="inputMask">
+      <string/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="frame">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>10</y>
+     <width>1211</width>
+     <height>881</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="Charts_GridLayout">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetDefaultConstraint</enum>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
+   </layout>
+  </widget>
+  <widget class="QPushButton" name="FunctionTest_Pushbutton">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>870</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Func Test</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="Visualize_Groupbox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>480</y>
+     <width>361</width>
+     <height>211</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Visualize</string>
+   </property>
+   <widget class="QCheckBox" name="VisualizeSwitch_Checkbox">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>On/Off</string>
+    </property>
+   </widget>
    <widget class="QGroupBox" name="ChartParameters_GroupBox">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>170</y>
+      <y>40</y>
       <width>341</width>
       <height>161</height>
      </rect>
@@ -966,130 +1046,84 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="Task_GroupBox">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>0</y>
-      <width>341</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Task</string>
-    </property>
-    <widget class="QLabel" name="TaskName_Label">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>60</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Task Name</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="TaskName_LineEdit">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>20</y>
-       <width>251</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="frame">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </widget>
   </widget>
-  <widget class="QLabel" name="Info_Label">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
+  <widget class="QGroupBox" name="MachineInfo_GroupBox">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>690</y>
-     <width>321</width>
-     <height>101</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Notice!!&lt;br/&gt;If value &amp;quot;Buffer Rate&amp;quot; and &amp;quot;Frame Duration&amp;quot; too high,&lt;br/&gt;line of chart may encount huge data to update and &lt;br/&gt;occur app clock slower than NI9234 clock.&lt;br/&gt;When this phenomenon arise, adjust &amp;quot;Down Sample&amp;quot;&lt;br/&gt;to reduce the loading on updating charts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-   </property>
-   <property name="wordWrap">
-    <bool>false</bool>
-   </property>
-   <property name="textInteractionFlags">
-    <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-   </property>
-  </widget>
-  <widget class="QWidget" name="gridLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>380</x>
-     <y>10</y>
-     <width>1211</width>
-     <height>881</height>
-    </rect>
-   </property>
-   <layout class="QGridLayout" name="Charts_GridLayout">
-    <property name="sizeConstraint">
-     <enum>QLayout::SetDefaultConstraint</enum>
-    </property>
-    <property name="spacing">
-     <number>0</number>
-    </property>
-   </layout>
-  </widget>
-  <widget class="QPushButton" name="FunctionTest_Pushbutton">
-   <property name="geometry">
-    <rect>
-     <x>280</x>
-     <y>870</y>
-     <width>75</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Func Test</string>
-   </property>
-  </widget>
-  <widget class="QGroupBox" name="Visualize_Groupbox">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>620</y>
-     <width>101</width>
-     <height>71</height>
+     <y>90</y>
+     <width>341</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="title">
-    <string>Visualize</string>
+    <string>Machine Info</string>
    </property>
-   <widget class="QCheckBox" name="VisualizeSwitch_Checkbox">
+   <widget class="QLabel" name="MachineID_Label">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>71</width>
-      <height>20</height>
+      <width>61</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>On/Off</string>
+     <string>Machine ID</string>
     </property>
    </widget>
+   <widget class="QLineEdit" name="MachineID_LineEdit">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>20</y>
+      <width>241</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="ImportConfig_Pushbutton">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>40</y>
+     <width>51</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Import</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="ImportConfig_Label">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>40</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>path:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ImportConfigPath_LineEdit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>40</y>
+     <width>221</width>
+     <height>22</height>
+    </rect>
+   </property>
   </widget>
  </widget>
  <resources/>
