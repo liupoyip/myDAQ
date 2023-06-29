@@ -224,13 +224,13 @@ class NI9234ViewModel(QWidget):
         # set component initial enable
         self.ui.CreateTask_PushButton.setEnabled(True)
         self.ui.PreparationSetting_Frame.setEnabled(True)
+        self.ui.Visualize_Groupbox.setEnabled(True)
 
         # set component initial disable
         self.ui.Stop_PushButton.setDisabled(True)
         self.ui.Start_PushButton.setDisabled(True)
         self.ui.ClearTask_PushButton.setDisabled(True)
         self.ui.WriteFile_GroupBox.setDisabled(True)
-        self.ui.Visualize_Groupbox.setDisabled(True)
 
         # initail sensor config
         self.sensor_cfg_list.clear()
@@ -379,7 +379,7 @@ class NI9234ViewModel(QWidget):
         self.ui.Reset_PushButton.setDisabled(True)
         self.ui.ClearTask_PushButton.setDisabled(True)
         self.ui.WriteFile_GroupBox.setEnabled(True)
-        self.ui.Visualize_Groupbox.setEnabled(True)
+        self.ui.ChartParameters_GroupBox.setDisabled(True)
         self.model.start()
 
     def on_stop_button_clicked(self):
@@ -392,8 +392,9 @@ class NI9234ViewModel(QWidget):
         self.ui.Stop_PushButton.setDisabled(True)
         self.ui.WriteFile_CheckBox.setChecked(False)
         self.ui.WriteFile_GroupBox.setDisabled(True)
-        self.ui.VisualizeSwitch_Checkbox.setChecked(False)
-        self.ui.Visualize_Groupbox.setDisabled(True)
+        # self.ui.VisualizeSwitch_Checkbox.setChecked(False)
+        self.ui.ChartParameters_GroupBox.setEnabled(True)
+        # self.ui.Visualize_Groupbox.setEnabled(True)
         self.model.stop()
 
     def on_write_file_type_combox_current_text_changed(self):
