@@ -231,6 +231,7 @@ class NI9234ViewModel(QWidget):
         self.ui.Start_PushButton.setDisabled(True)
         self.ui.ClearTask_PushButton.setDisabled(True)
         self.ui.WriteFile_GroupBox.setDisabled(True)
+        self.ui.ChannelOption_GroupBox.setEnabled(True)
 
         # initail sensor config
         self.sensor_cfg_list.clear()
@@ -238,11 +239,13 @@ class NI9234ViewModel(QWidget):
         self.get_sensor_cfgs()
         for checkbox, combox in zip(self.channel_checkboxes, self.channel_comboxes):
             checkbox.setChecked(False)
+            checkbox.setEnabled(True)
             combox.clear()
             combox.addItem('Sensor config')
             combox.addItems(self.sensor_cfg_names)
-            combox.setDisabled(True)
+            combox.setEnabled(True)
         self.ui.VisualizeSwitch_Checkbox.setChecked(False)
+
 
     def on_import_config_button_clicked(self):
         if PRINT_FUNC_NAME_FLAG:
@@ -255,6 +258,7 @@ class NI9234ViewModel(QWidget):
         self.ui.TaskName_LineEdit.setText(self.record_cfg['task_name'])
         self.ui.SampleRate_HorizontalSlider.setValue(self.record_cfg['sample_rate'])
         self.ui.FrameDuration_HorizontalSlider.setValue(self.record_cfg['frame_duration'])
+        self.ui.DAQParameters_GroupBox.setDisabled(True)
         self.set_sensor_cfg_with_record_cfg()
         
 
