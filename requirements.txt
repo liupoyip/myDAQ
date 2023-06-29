@@ -5,3 +5,4 @@ pyqtdarktheme
 numpy
 nidaqmx
 keyboard
+watchdog
