@@ -15,6 +15,9 @@ from debug_flags import PRINT_FUNC_NAME_FLAG
 
 
 class NIDAQModel(QObject):
+    # machine info
+    machine_name: str = 'dummy_machine'
+
     # daq config
     cfg_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cfg_ni9234.json')
     cfg_file = open(cfg_path)
@@ -42,8 +45,7 @@ class NIDAQModel(QObject):
     wave_buffer_len: int = int(sample_rate * buffer_duration * 0.001)
     channels: list[int] = list()
     channel_settings: list[Optional[Union[AccelerometerChannelSettings,MicrophoneChannelSettings]]] = list()
-    
-    sensor_types: list[str] = list()
+        
     writer_switch_flag: bool = False
     nidaq: NI9234 = None
     write_file_directory = default_settings['default_write_file_dir']
@@ -51,6 +53,7 @@ class NIDAQModel(QObject):
     chunk_count = None
 
     # sensor config
+    sensor_types: list[str] = list()
     active_sensor_model_list: list[str] = list()
     active_sensor_cfg_list: list[str] = list()
     cfg_sensor_dir =  os.path.join(os.path.dirname(os.path.realpath(__file__)), 'sensors')
@@ -72,6 +75,12 @@ class NIDAQModel(QObject):
     wave_data_buffer_count: int = 0
     wave_mean_threshold: float = 0.005   # 上線前做調整
     abnormal_flag: bool = False
+
+    # record file args
+    task_dir = ''
+    record_dir = ''
+    export_cfg_file_name = 'record_params.json'
+
 
     def __init__(self):
         if PRINT_FUNC_NAME_FLAG:
@@ -222,6 +231,8 @@ class NIDAQModel(QObject):
             self.write_stream_file()
         if self.nidaq.writer_type == 'segment':
             self.write_segment_file()
+        
+        self.write_record_info()
 
     def stop_write_file(self):
         if PRINT_FUNC_NAME_FLAG:
@@ -234,40 +245,45 @@ class NIDAQModel(QObject):
     def write_record_info(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.write_record_info)}')
-        '''
-        properties format: 
-        {
-            machine_ID,
-            [sensor_model_0, sensor_model_1, ...],
-            [data_name_0, data_name_1, ...],
-            [physical_unit_0, physical_unit_1, ],
-            DAQ_model,
-            start_time,
-            sampling_rate,
-            end_time,
-            chunk_length,
-            chunk_count,
+
+        task_params = {
+            'machine_ID':self.machine_name,
+            'task_name':self.task_name,
+            'sample_rate':self.sample_rate,
+            'frame_duration':self.frame_duration,
+            'chunk_len':self.chunk_len,
+            'channels':self.channels,
+            'channel_names':self.nidaq.task.ai_channels.channel_names,
+            #'data_names':[]
+            'writer_type':self.nidaq.writer.writer_type,
+            'sensor_cfgs':list(),
         }
-        '''
-        {
-            'machine_ID':'dummy_machine',
-            'sensor_model':['model_dummy_0'],
-            'sensor_serial_number':[],
-            'data_name':['data_name_0']
-        }
-        self.sample_rate
-        self.frame_duration
-        self.chunk_len
-        self.task_name
-        self.nidaq.task.ai_channels.channel_names
-        if self.nidaq.writer.writer_type == 'segment':
-            self.chunk_count = self.nidaq.writer.write_file_count
-        if self.nidaq.writer.writer_type == 'stream':
-            self.chunk_count = None
-                
+        for sensor_cfg_path in self.active_sensor_cfg_list:
+            with open(sensor_cfg_path) as sensor_cfg_file:
+                sensor_cfg = json.load(sensor_cfg_file)
+            task_params['sensor_cfgs'].append(sensor_cfg)
+        
+        print(task_params)
+        
+        export_path = os.path.join(self.record_dir,self.export_cfg_file_name)
+        with open(export_path,'w') as file:
+            json.dump(task_params,file)
+        
+
+        'task_setting.json'
+
         # chunk_count
         # record start time
-        
+
+    def get_current_write_file_count(self):
+        if PRINT_FUNC_NAME_FLAG:
+            print(f'run function - {get_func_name(self.get_current_write_file_count)}')
+
+        if self.nidaq.writer.writer_type == 'segment':
+            self.chunk_count = self.nidaq.writer.write_file_count
+        elif self.nidaq.writer.writer_type == 'stream':
+            self.chunk_count = None
+    
     # TODO: 要寫一個讀取設定檔的功能
     # 內容包含錄製時間總長、錄製設備、採樣率...
         
@@ -279,14 +295,14 @@ class NIDAQModel(QObject):
         write all signal to one file while this function is working
         '''
         start_record_time = datetime.now().strftime("%Y%m%dT%H%M%S")
-        task_path = os.path.join(self.write_file_directory,self.task_name)
-        print(f'record path: {task_path}')
-        if not os.path.isdir(task_path):
-            os.mkdir(task_path)
-        record_path = os.path.join(task_path,start_record_time)
-        if not os.path.isdir(record_path):
-            os.mkdir(record_path)
-        self.nidaq.writer.set_directory(record_path)
+        self.task_dir = os.path.join(self.write_file_directory,self.task_name)
+        print(f'record path: {self.task_dir}')
+        if not os.path.isdir(self.task_dir):
+            os.mkdir(self.task_dir)
+        self.record_dir = os.path.join(self.task_dir,start_record_time)
+        if not os.path.isdir(self.record_dir):
+            os.mkdir(self.record_dir)
+        self.nidaq.writer.set_directory(self.record_dir)
         file_path = f'{self.task_name}_{datetime.now().strftime("%Y%m%dT%H%M%S")}.csv'
         self.nidaq.writer.set_file_name(file_path)
         self.nidaq.writer.open_file()
@@ -298,14 +314,14 @@ class NIDAQModel(QObject):
         period : seconds, define a time period for a file
         '''
         start_record_time = datetime.now().strftime("%Y%m%dT%H%M%S")
-        task_path = os.path.join(self.write_file_directory,self.task_name)
-        print(f'record path: {task_path}')
-        if not os.path.isdir(task_path):
-            os.mkdir(task_path)
-        record_path = os.path.join(task_path,start_record_time)
-        if not os.path.isdir(record_path):
-            os.mkdir(record_path)
-        self.nidaq.writer.set_directory(record_path)
+        self.task_dir = os.path.join(self.write_file_directory,self.task_name)
+        print(f'record path: {self.task_dir}')
+        if not os.path.isdir(self.task_dir):
+            os.mkdir(self.task_dir)
+        self.record_dir = os.path.join(self.task_dir,start_record_time)
+        if not os.path.isdir(self.record_dir):
+            os.mkdir(self.record_dir)
+        self.nidaq.writer.set_directory(self.record_dir)
         self.nidaq.writer.reset_write_file_count()
 
     def update_plot_data_buffer(self):

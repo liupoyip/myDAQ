@@ -668,26 +668,13 @@
    <property name="title">
     <string>Visualize</string>
    </property>
-   <widget class="QCheckBox" name="VisualizeSwitch_Checkbox">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>71</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>On/Off</string>
-    </property>
-   </widget>
    <widget class="QGroupBox" name="ChartParameters_GroupBox">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>40</y>
+      <y>20</y>
       <width>341</width>
-      <height>161</height>
+      <height>181</height>
      </rect>
     </property>
     <property name="title">
@@ -697,7 +684,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>20</y>
+       <y>40</y>
        <width>321</width>
        <height>131</height>
       </rect>
@@ -1044,6 +1031,19 @@
        </widget>
       </item>
      </layout>
+    </widget>
+    <widget class="QCheckBox" name="VisualizeSwitch_Checkbox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>71</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>On/Off</string>
+     </property>
     </widget>
    </widget>
   </widget>

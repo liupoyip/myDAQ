@@ -329,6 +329,7 @@ class NI9234ViewModel(QWidget):
             # TODO : get parameters from this block for output data
             # ------block start------
             self.add_channels()
+            self.model.machine_name = self.ui.MachineID_LineEdit.text()
             self.model.task_name = self.ui.TaskName_LineEdit.text()
             self.model.sample_rate = self.ui.SampleRate_SpinBox.value()
             self.model.frame_duration = self.ui.FrameDuration_SpinBox.value()
