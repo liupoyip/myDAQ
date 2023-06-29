@@ -394,7 +394,6 @@ class NI9234ViewModel(QWidget):
         self.ui.WriteFile_GroupBox.setDisabled(True)
         # self.ui.VisualizeSwitch_Checkbox.setChecked(False)
         self.ui.ChartParameters_GroupBox.setEnabled(True)
-        # self.ui.Visualize_Groupbox.setEnabled(True)
         self.model.stop()
 
     def on_write_file_type_combox_current_text_changed(self):
