@@ -268,8 +268,6 @@ class NIDAQModel(QObject):
         export_path = os.path.join(self.record_dir,self.export_cfg_file_name)
         with open(export_path,'w') as file:
             json.dump(task_params,file)
-        
-
         'task_setting.json'
 
         # chunk_count
@@ -287,7 +285,6 @@ class NIDAQModel(QObject):
     # TODO: 要寫一個讀取設定檔的功能
     # 內容包含錄製時間總長、錄製設備、採樣率...
         
-
     def write_stream_file(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.write_stream_file)}')
