@@ -247,16 +247,16 @@ class NIDAQModel(QObject):
             print(f'run function - {get_func_name(self.write_record_info)}')
 
         task_params = {
-            'machine_ID':self.machine_name,
-            'task_name':self.task_name,
-            'sample_rate':self.sample_rate,
-            'frame_duration':self.frame_duration,
-            'chunk_len':self.chunk_len,
-            'channels':self.channels,
-            'channel_names':self.nidaq.task.ai_channels.channel_names,
-            #'data_names':[]
-            'writer_type':self.nidaq.writer.writer_type,
-            'sensor_cfgs':list(),
+            'machine_ID'    :   self.machine_name,
+            'task_name'     :   self.task_name,
+            'sample_rate'   :   self.sample_rate,
+            'frame_duration':   self.frame_duration,
+            'chunk_len'     :   self.chunk_len,
+            'channels'      :   self.channels,
+            'channel_names' :   self.nidaq.task.ai_channels.channel_names,
+            # 'data_names'  :   []
+            'writer_type'   :   self.nidaq.writer.writer_type,
+            'sensor_cfgs'   :   list(),
         }
         for sensor_cfg_path in self.active_sensor_cfg_list:
             with open(sensor_cfg_path) as sensor_cfg_file:
@@ -268,7 +268,6 @@ class NIDAQModel(QObject):
         export_path = os.path.join(self.record_dir,self.export_cfg_file_name)
         with open(export_path,'w') as file:
             json.dump(task_params,file)
-        'task_setting.json'
 
         # chunk_count
         # record start time
