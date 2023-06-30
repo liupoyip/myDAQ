@@ -27,9 +27,11 @@ class NewFileHandler(FileSystemEventHandler):
 
 if __name__ == '__main__':
     
-    path_target_folder = './monitored_folder'
+    path_target_folder = './record_data/'
     path_recording_csv = 'record.csv'
     setting_file = 'setting_file.json'
+    
+    
 
     path_target_folder = os.path.abspath(path_target_folder)
     path_recording_csv = os.path.abspath(path_recording_csv)
