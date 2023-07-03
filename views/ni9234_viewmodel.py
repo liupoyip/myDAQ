@@ -596,7 +596,7 @@ class NI9234ViewModel(QWidget):
                     max_power_idx]
                 spectrum_chart.chart_view.drawForeground(
                     self.vertical_line_painter, self.vertical_line_rectf)
-            # TODO: if abnormal_flag = True, get max(mean_spectrum) then mark
+
             if not abnormal_flag:
                 spectrum_chart.chart_view.vertical_line_x = None
                 spectrum_chart.chart_view.drawForeground(
