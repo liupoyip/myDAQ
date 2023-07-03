@@ -108,8 +108,7 @@ class NIDAQModel(QObject):
 
         super().__init__()
         self.data_buffer_update_timer.timeout.connect(self.update_plot_data_buffer)
-    
-    
+        
 
     def read_sensor_cfg_352C33(self, physical_channel,sensor_cfg_path):
         if PRINT_FUNC_NAME_FLAG:
@@ -134,7 +133,8 @@ class NIDAQModel(QObject):
             f'custom scale name : {self.accel_chan_settings.custom_scale_name}\n',
             f'sensor type : {self.accel_chan_settings.sensor_type}\n')
         self.all_channel_settings[self.accel_chan_settings.physical_channel] = self.accel_chan_settings
-        
+
+
     def read_sensor_cfg_130F20(self, physical_channel,sensor_cfg_path):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.read_sensor_cfg_130F20)}')
@@ -156,6 +156,7 @@ class NIDAQModel(QObject):
             f'custom scale name : {self.mic_chan_settings.custom_scale_name}\n',
             f'sensor type : {self.mic_chan_settings.sensor_type}\n')
         self.all_channel_settings[self.mic_chan_settings.physical_channel] = self.mic_chan_settings
+
 
     def create(self):
         if PRINT_FUNC_NAME_FLAG:
@@ -217,12 +218,14 @@ class NIDAQModel(QObject):
         self.spectrum_data_buffer = np.zeros(
             (self.nidaq.task.number_of_channels, self.buffer_rate, self.spectrum_freqs.shape[0]))
 
+
     def start(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.start)}')
         self.nidaq.start_task()
         self.data_buffer_update_timer.start()
         self.wave_data_cycle_count = 0
+
 
     def stop(self):
         if PRINT_FUNC_NAME_FLAG:
@@ -234,6 +237,7 @@ class NIDAQModel(QObject):
         self.data_buffer_update_timer.stop()
         self.start_record_time = 'time_not_set'
 
+
     def clear(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.clear)}')
@@ -242,6 +246,7 @@ class NIDAQModel(QObject):
         if self.nidaq.writer != None:
             if self.nidaq.writer.file != None:
                 self.nidaq.writer.close_file()
+
 
     def start_write_file(self,mode):
         if PRINT_FUNC_NAME_FLAG:
@@ -257,6 +262,7 @@ class NIDAQModel(QObject):
         
         self.write_record_info()
 
+
     def stop_write_file(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.stop_write_file)}')
@@ -268,6 +274,7 @@ class NIDAQModel(QObject):
 
         self.task_params['frame_count'] = self.chunk_count
         self.write_record_info()
+
 
     def write_record_info(self):
         if PRINT_FUNC_NAME_FLAG:
@@ -309,9 +316,7 @@ class NIDAQModel(QObject):
         elif self.nidaq.writer.writer_type == 'stream':
             self.chunk_count = 0
     
-    # TODO: 要寫一個讀取設定檔的功能
-    # 內容包含錄製時間總長、錄製設備、採樣率...
-        
+
     def write_stream_file(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.write_stream_file)}')
@@ -331,6 +336,7 @@ class NIDAQModel(QObject):
         self.nidaq.writer.set_file_name(file_path)
         self.nidaq.writer.open_file()
 
+
     def write_segment_file(self,period=10):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.write_segment_file)}')
@@ -348,6 +354,7 @@ class NIDAQModel(QObject):
         self.nidaq.writer.set_directory(self.record_dir)
         self.nidaq.writer.reset_write_file_count()
 
+
     def update_plot_data_buffer(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.update_plot_data_buffer)}')
@@ -363,11 +370,13 @@ class NIDAQModel(QObject):
             self.spectrum_data_buffer[i, 0, :] = self.spectrum_data[i]
         self.wave_data_buffer_mean = np.mean(np.abs(self.wave_data_buffer))
 
+
     def get_wave_data_buffer(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.get_wave_data_buffer)}')
 
         return self.wave_data_buffer
+
 
     def get_spectrum_data_buffer(self):
         if PRINT_FUNC_NAME_FLAG:
@@ -375,11 +384,13 @@ class NIDAQModel(QObject):
 
         return self.spectrum_data_buffer
 
+
     def get_spectrum_freqs(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.get_spectrum_freqs)}')
 
         return self.spectrum_freqs
+
 
     def get_wave_buffer_len(self):
         if PRINT_FUNC_NAME_FLAG:
@@ -387,12 +398,14 @@ class NIDAQModel(QObject):
 
         return self.wave_buffer_len
 
+
     def get_wave_buffer_mean(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.get_wave_buffer_mean)}')
 
         print(f'wave mean:{np.abs(self.wave_data_buffer_mean)}')
         return self.wave_data_buffer_mean
+
 
     def get_abnormal_flag(self):
         if PRINT_FUNC_NAME_FLAG:

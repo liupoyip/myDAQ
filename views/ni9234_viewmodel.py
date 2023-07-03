@@ -17,6 +17,7 @@ from sdk.utils import get_func_name
 
 
 class NI9234ViewModel(QWidget):
+
     wave_downsample_rate: Optional[int] = None
     spectrum_downsample_rate: Optional[int] = None
     abnormal_flags: npt.NDArray = np.array([False, False, False, False])
@@ -34,6 +35,7 @@ class NI9234ViewModel(QWidget):
     active_channel_num_list: list = list()
     active_sensor_model_list: list = list()
     active_sensor_cfg_list: list = list()
+
 
     def __init__(self, model):
         if PRINT_FUNC_NAME_FLAG:
@@ -122,12 +124,14 @@ class NI9234ViewModel(QWidget):
         # func test button
         self.ui.FunctionTest_Pushbutton.clicked.connect(self.on_function_test_pushbutton_clicked)
 
+
     def on_function_test_pushbutton_clicked(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.on_function_test_pushbutton_clicked)}')
         pass
         #self.model.read_sensor_cfg_352C33()
         #self.model.read_sensor_cfg_130F20()
+
 
     def set_default_values(self):
         if PRINT_FUNC_NAME_FLAG:
@@ -275,6 +279,7 @@ class NI9234ViewModel(QWidget):
             self.sensor_cfg_names.append(cfg_name)
         print(f'sensor config detected: {self.sensor_cfg_list}')
 
+
     def set_sensor_cfg_with_record_cfg(self):
         '''
         For ImportConfig_Pushbutton
@@ -293,7 +298,8 @@ class NI9234ViewModel(QWidget):
             self.channel_comboxes[channel].setCurrentText(cfg_file_name)
             self.channel_checkboxes[channel].setChecked(True)
             self.channel_comboxes[channel].setDisabled(True)
-            
+
+
     def on_focus_changed(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.on_focus_changed)}')
@@ -305,6 +311,7 @@ class NI9234ViewModel(QWidget):
             self.setMouseTracking(False)
             #print('focus out!!')
 
+
     def on_frame_duration_changed(self, value):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.on_frame_duration_changed)}')
@@ -313,6 +320,7 @@ class NI9234ViewModel(QWidget):
         self.ui.ChartUpdateInterval_SpinBox.setSingleStep(value)
         self.ui.ChartUpdateInterval_HorizontalSlider.setSingleStep(value)
         self.ui.ChartUpdateInterval_HorizontalSlider.setPageStep(value)
+
 
     def on_create_task_button_clicked(self):
         if PRINT_FUNC_NAME_FLAG:
@@ -360,6 +368,7 @@ class NI9234ViewModel(QWidget):
                     self.channel_wave_charts[num].set_y_label('value (Pa)')
                     self.channel_spectrum_charts[num].set_x_range(0, 6000)
 
+
     def on_clear_task_button_clicked(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.on_clear_task_button_clicked)}')
@@ -376,6 +385,7 @@ class NI9234ViewModel(QWidget):
         self.reset_wave_chart()
         self.reset_spectrum_chart()
 
+
     def on_start_button_clicked(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.on_start_button_clicked)}')
@@ -387,6 +397,7 @@ class NI9234ViewModel(QWidget):
         self.ui.WriteFile_GroupBox.setEnabled(True)
         self.ui.ChartParameters_GroupBox.setDisabled(True)
         self.model.start()
+
 
     def on_stop_button_clicked(self):
         if PRINT_FUNC_NAME_FLAG:
@@ -402,6 +413,7 @@ class NI9234ViewModel(QWidget):
         self.ui.ChartParameters_GroupBox.setEnabled(True)
         self.model.stop()
 
+
     def on_write_file_type_combox_current_text_changed(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.on_write_file_type_combox_current_text_changed)}')
@@ -412,6 +424,7 @@ class NI9234ViewModel(QWidget):
             self.ui.WriteFile_CheckBox.setDisabled(True)
         else:
             self.ui.WriteFile_CheckBox.setEnabled(True)
+
 
     def on_write_file_checkbox_toggled(self):
         if PRINT_FUNC_NAME_FLAG:
@@ -428,6 +441,7 @@ class NI9234ViewModel(QWidget):
             self.ui.WriteFileStatus_Label.setText('Status: Off')
             self.ui.WriteFileType_ComboBox.setEnabled(True)
 
+
     def on_visualize_switch_checkbox_toggled(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.on_visualize_switch_checkbox_toggled)}')
@@ -439,11 +453,13 @@ class NI9234ViewModel(QWidget):
             print('Signal Visualized disable')
             self.graph_update_timer.stop()
 
+
     def on_reset_button_clicked(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.on_reset_button_clicked)}')
 
         self.set_default_values()
+
 
     def on_graph_update_timer_timeout(self):
         if PRINT_FUNC_NAME_FLAG:
@@ -455,11 +471,13 @@ class NI9234ViewModel(QWidget):
         self.update_wave_chart()
         self.update_spectrum_chart()
 
+
     def on_now_time_timer_timeout(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.on_now_time_timer_timeout)}')
 
         self.ui.NowTime_Label.setText(datetime.now().isoformat(sep=' ', timespec='seconds'))
+
 
     def channel_is_seleted(self):
         '''
@@ -493,6 +511,7 @@ class NI9234ViewModel(QWidget):
                                  f"Incorrect sensor type!!\n Channel: {error_channels}")
             return False
 
+
     def add_channels(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.add_channels)}')
@@ -510,6 +529,7 @@ class NI9234ViewModel(QWidget):
                 self.active_sensor_cfg_list.append(sensor_cfg_path)
         print(f'active sensor models: {self.active_sensor_model_list}')
 
+
     def reset_wave_chart(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.reset_wave_chart)}')
@@ -525,6 +545,7 @@ class NI9234ViewModel(QWidget):
         for num in self.active_channel_num_list:
             wave_chart: WaveChart = self.channel_wave_charts[num]
             wave_chart.reset_axis(time_limit, wave_len)
+
 
     def reset_spectrum_chart(self):
         if PRINT_FUNC_NAME_FLAG:
@@ -544,6 +565,7 @@ class NI9234ViewModel(QWidget):
             spectrum_chart: SpectrumChart = self.channel_spectrum_charts[num]
             spectrum_chart.reset_axis(self.freq_limit, spectrum_len)
 
+
     def update_wave_chart(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.update_wave_chart)}')
@@ -552,6 +574,7 @@ class NI9234ViewModel(QWidget):
             wave_chart: WaveChart = self.channel_wave_charts[num]
             wave_data_downsample = self.wave_data_buffer[i, ::self.wave_downsample_rate]
             wave_chart.set_y(wave_data_downsample)
+
 
     def update_spectrum_chart(self):
         if PRINT_FUNC_NAME_FLAG:
