@@ -18,5 +18,6 @@
     "cDAQ_model": "NI cDAQ-9171",
     "cDAQ_series_num": "02016787",
     "DAQ_model": "NI 9234",
-    "DAQ_series_num": "0201110A"
+    "DAQ_series_num": "0201110A",
+    "export_cfg_file_name": "cfg.json"
 }

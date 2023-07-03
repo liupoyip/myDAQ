@@ -335,6 +335,7 @@ class NI9234ViewModel(QWidget):
             self.add_channels()
             self.model.machine_name = self.ui.MachineID_LineEdit.text()
             self.model.task_name = self.ui.TaskName_LineEdit.text()
+            self.model.export_cfg_file_name = self.record_cfg['export_cfg_file_name']
             self.model.sample_rate = self.ui.SampleRate_SpinBox.value()
             self.model.frame_duration = self.ui.FrameDuration_SpinBox.value()
             self.model.buffer_rate = self.ui.BufferRate_SpinBox.value()
@@ -343,6 +344,7 @@ class NI9234ViewModel(QWidget):
             self.model.active_sensor_model_list = self.active_sensor_model_list
             self.model.active_sensor_cfg_list = self.active_sensor_cfg_list
             self.model.create()
+
             # ------block end------
 
             self.reset_wave_chart()

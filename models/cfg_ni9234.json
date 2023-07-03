@@ -18,7 +18,7 @@
     "min_buffer_rate": 1,
     "max_buffer_rate": 20,
     "default_task_name": "task",
-    "default_write_file_dir": "./record_data",
+    "default_write_file_dir": "Y:/E102/rawdata/",
     "write_file_type": [
         "record method",
         "stream",
