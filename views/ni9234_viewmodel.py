@@ -126,11 +126,12 @@ class NI9234ViewModel(QWidget):
 
 
     def on_function_test_pushbutton_clicked(self):
+        '''
+        This function is for testing while function built or function modified
+        Don't let this function online
+        '''
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.on_function_test_pushbutton_clicked)}')
-        pass
-        #self.model.read_sensor_cfg_352C33()
-        #self.model.read_sensor_cfg_130F20()
 
 
     def set_default_values(self):
@@ -326,7 +327,8 @@ class NI9234ViewModel(QWidget):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.on_create_task_button_clicked)}')
 
-        # 這個 function 耦合和 NIDAQModel.py 程度極高，改動時要謹慎
+        # 這個 function 耦合程度和 NIDAQModel.py 程度極高，改動時要謹慎
+
         if self.channel_is_seleted():
             self.ui.Start_PushButton.setEnabled(True)
             self.ui.ClearTask_PushButton.setEnabled(True)
@@ -335,7 +337,6 @@ class NI9234ViewModel(QWidget):
             self.graph_update_timer.setInterval(self.ui.ChartUpdateInterval_SpinBox.value())
             self.wave_downsample_rate = self.ui.WaveDownSample_SpinBox.value()
             self.spectrum_downsample_rate = self.ui.SpectrumDownSample_SpinBox.value()
-            
 
             # setting task for nidaq model
             # TODO : get parameters from this block for output data
@@ -352,12 +353,10 @@ class NI9234ViewModel(QWidget):
             self.model.active_sensor_model_list = self.active_sensor_model_list
             self.model.active_sensor_cfg_list = self.active_sensor_cfg_list
             self.model.create()
-
             # ------block end------
 
             self.reset_wave_chart()
             self.reset_spectrum_chart()
-            # for num, sensor_model in zip(self.active_channel_num_list, self.sensor_model_list):
             for num, channel_setting in zip(self.active_channel_num_list, self.model.all_channel_settings):
                 if channel_setting.sensor_type == 'accelerometer':
                     self.channel_wave_charts[num].set_y_range(-0.5, 0.5)

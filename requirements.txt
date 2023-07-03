@@ -6,3 +6,4 @@ numpy
 nidaqmx
 keyboard
 watchdog
+mysql-connector-python
