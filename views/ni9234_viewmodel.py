@@ -230,6 +230,7 @@ class NI9234ViewModel(QWidget):
         self.ui.CreateTask_PushButton.setEnabled(True)
         self.ui.PreparationSetting_Frame.setEnabled(True)
         self.ui.Visualize_Groupbox.setEnabled(True)
+        self.ui.DAQParameters_GroupBox.setEnabled(True)
 
         # set component initial disable
         self.ui.Stop_PushButton.setDisabled(True)
