@@ -11,11 +11,11 @@
     "lab": "E102",
     "headers": [
         "task",
-        "time",
+        "start_time",
         "record_cfg_path"
     ],
     "data_types": [
-        "VARCHAR(255)",
+        "VARCHAR(127)",
         "VARCHAR(15)",
         "VARCHAR(255)"
     ],
