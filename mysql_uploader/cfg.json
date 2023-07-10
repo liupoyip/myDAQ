@@ -1,4 +1,5 @@
 {
+    "__comment": "路徑: database/{$lab}/{$machine}/{task}/{table_name}/",
     "host": "140.134.76.145",
     "port": 3306,
     "user": "AIoTLab-MySQL",
