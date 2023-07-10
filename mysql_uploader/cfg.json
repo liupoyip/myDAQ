@@ -1,5 +1,6 @@
 {
     "__comment": "路徑: database/{$lab}/{$machine}/{task}/{table_name}/",
+    "database_dir": "Y:/",
     "host": "140.134.76.145",
     "port": 3306,
     "user": "AIoTLab-MySQL",
@@ -8,7 +9,6 @@
     "task": "dummy_task",
     "task_cfg": "cfg.json",
     "rawdata_table_name": "dummy_rawdata",
-    "database_dir": "Y:\\",
     "lab": "E102",
     "headers": [
         "task",

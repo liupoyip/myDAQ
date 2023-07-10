@@ -1,6 +1,7 @@
 {
     "machine_ID": "machine_0",
     "task_name": "task_0",
+    "target_storage": "Y:\\E102",
     "channels": [
         0,
         2
