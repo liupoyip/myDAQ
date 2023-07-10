@@ -27,7 +27,11 @@ class MySQLDataUploader(FileSystemEventHandler):
     rawdata_table_name = None
     task_cfg = None
 
-    def __init__(self, target_dir, cfg_path, task_cfg):
+    target_dir = None
+    database_dir = None
+
+    def __init__(self, database_dir, target_dir, cfg_path, task_cfg):
+        self.database_dir = database_dir
         self.target_dir = target_dir
         self.cfg_path = cfg_path
         self.task_cfg = task_cfg
@@ -113,9 +117,9 @@ class MySQLDataUploader(FileSystemEventHandler):
             self.create_rawdata_table()
 
             timestamp = os.path.basename(event.src_path)
-            dummy_data = (self.task_name, timestamp, os.path.join(
-                event.src_path, self.task_cfg))
-            self.set_current_data(dummy_data)
+            data = (self.task_name, timestamp, os.path.join(
+                self.target_dir, timestamp, self.task_cfg))
+            self.set_current_data(data)
             self.append_rawdata()
             print(f'Done!!')
 
@@ -127,21 +131,23 @@ with open(uploader_cfg_path, 'r') as file:
 task_name = cfg['task']
 database_dir = cfg['database_dir']
 lab = cfg['lab']
+database_dir = cfg['database_dir']
 
 machine = cfg['machine']
 table_name = cfg['rawdata_table_name']
-target_dir = os.path.join(task_name, database_dir, lab,
-                          machine, table_name, task_name)
-print(f'target directory: {target_dir}')
-
+target_dir = os.path.join(lab, machine, table_name, task_name)
+absolute_target_dir = os.path.join(database_dir, target_dir)
 uploader = MySQLDataUploader(
-    target_dir=target_dir, cfg_path=uploader_cfg_path, task_cfg=cfg['task_cfg'])
+    database_dir=database_dir,
+    target_dir=target_dir,
+    cfg_path=uploader_cfg_path,
+    task_cfg=cfg['task_cfg'])
 print('--- Start monitoring ---')
-print(f'Monitor folder: {target_dir}')
+print(f'Monitor directory: {absolute_target_dir}')
 
 uploader.connect_to_server()
 observer = Observer()
-observer.schedule(uploader, target_dir, recursive=False)
+observer.schedule(uploader, absolute_target_dir, recursive=False)
 observer.start()
 try:
     while True:
