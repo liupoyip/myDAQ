@@ -14,7 +14,7 @@
         "vibration",
         "sound_wave"
     ],
-    "sample_rate": 12800,
+    "sample_rate": 25600,
     "frame_duration": 1000,
     "cDAQ_model": "NI cDAQ-9171",
     "cDAQ_series_num": "02016787",
