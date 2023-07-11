@@ -10,6 +10,7 @@ from typing import Optional
 
 
 class MySQLDataUploader(FileSystemEventHandler):
+
     db = None
     cursor: Optional[mysql.connector.cursor.MySQLCursor] = None
     host = None
