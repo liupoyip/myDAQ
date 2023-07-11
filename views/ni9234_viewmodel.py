@@ -341,11 +341,12 @@ class NI9234ViewModel(QWidget):
         self.ui.ChartUpdateInterval_HorizontalSlider.setPageStep(value)
 
     def on_create_task_button_clicked(self):
+        '''
+        這個 function 耦合程度和 NIDAQModel.py 程度極高，改動時要謹慎
+        '''
         if PRINT_FUNC_NAME_FLAG:
             print(
                 f'run function - {get_func_name(self.on_create_task_button_clicked)}')
-
-        # 這個 function 耦合程度和 NIDAQModel.py 程度極高，改動時要謹慎
 
         if self.channel_is_seleted():
             self.ui.Start_PushButton.setEnabled(True)
@@ -358,7 +359,6 @@ class NI9234ViewModel(QWidget):
             self.spectrum_downsample_rate = self.ui.SpectrumDownSample_SpinBox.value()
 
             # setting task for nidaq model
-            # TODO : get parameters from this block for output data
             # ------block start------
             self.add_channels()
             self.model.machine_name = self.ui.MachineID_LineEdit.text()
@@ -428,7 +428,6 @@ class NI9234ViewModel(QWidget):
         self.ui.Stop_PushButton.setDisabled(True)
         self.ui.WriteFile_CheckBox.setChecked(False)
         self.ui.WriteFile_GroupBox.setDisabled(True)
-        # self.ui.VisualizeSwitch_Checkbox.setChecked(False)
         self.ui.ChartParameters_GroupBox.setEnabled(True)
         self.model.stop()
 
