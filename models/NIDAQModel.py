@@ -294,7 +294,6 @@ class NIDAQModel(QObject):
             'chunk_len':   self.chunk_len,
             'channels':   self.channels,
             'channel_names':   self.nidaq.task.ai_channels.channel_names,
-            # 'data_names'  :   []
             'writer_type':   self.nidaq.writer.writer_type,
             'sensor_cfgs':   list(),
         }
