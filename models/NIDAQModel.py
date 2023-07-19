@@ -332,7 +332,7 @@ class NIDAQModel(QObject):
         '''
         write all signal to one file while this function is working
         '''
-        self.start_record_time = datetime.now().strftime("%Y%m%dT%H%M%S")
+        self.start_record_time = datetime.now().strftime('%Y%m%dT%H%M%S')
         self.task_dir = os.path.join(self.write_file_directory, self.task_name)
         print(f'record path: {self.task_dir}')
         if not os.path.isdir(self.task_dir):
@@ -351,7 +351,7 @@ class NIDAQModel(QObject):
         '''
         period : seconds, define a time period for a file
         '''
-        self.start_record_time = datetime.now().strftime("%Y%m%dT%H%M%S")
+        self.start_record_time = datetime.now().strftime('%Y%m%dT%H%M%S')
         self.task_dir = os.path.join(self.write_file_directory, self.task_name)
         print(f'record path: {self.task_dir}')
         if not os.path.isdir(self.task_dir):
