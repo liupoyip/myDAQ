@@ -55,7 +55,6 @@ class MySQLDataUploader(FileSystemEventHandler):
         self.task_name = cfg['task']
 
     def set_current_data(self, current_data):
-        # TODO: 之要串正確的data
         self.current_data = current_data
 
     def connect_to_server(self):
@@ -109,8 +108,6 @@ class MySQLDataUploader(FileSystemEventHandler):
 
     def on_created(self, event: FileSystemEvent):
         if event.is_directory:
-
-            # TODO: 找到新增的資料夾
             print(f'new directory created: {event.src_path}')
             print(f'uploading file to database...', end='')
             self.create_database()
@@ -132,7 +129,6 @@ with open(uploader_cfg_path, 'r') as file:
 task_name = cfg['task']
 database_dir = cfg['database_dir']
 lab = cfg['lab']
-database_dir = cfg['database_dir']
 
 machine = cfg['machine']
 table_name = cfg['rawdata_table_name']
