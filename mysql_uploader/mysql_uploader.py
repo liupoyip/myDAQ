@@ -18,18 +18,17 @@ class MySQLDataUploader(FileSystemEventHandler):
     user = None
     password = None
     db_name = None
-    rawdata_table_name = None
+    datastore_name = None
     headers = None
     data_types = None
     values = None
     cfg_path = None
     cfg = None
     current_data: tuple = None
-    rawdata_table_name = None
     task_cfg = None
-
     target_dir = None
     database_dir = None
+    rawdata_dir = None
 
     def __init__(self, database_dir, target_dir, cfg_path, task_cfg):
         self.database_dir = database_dir
@@ -47,11 +46,11 @@ class MySQLDataUploader(FileSystemEventHandler):
         self.user = cfg['user']
         self.password = cfg['password']
         self.db_name = cfg['machine']
-        self.rawdata_table_name = cfg['rawdata_table_name']
+        self.datastore_name = cfg['datastore_name']
+        self.rawdata_dir = cfg['rawdata_dir']
         self.headers = cfg['headers']
         self.data_types = cfg['data_types']
         self.values = cfg['values']
-        self.rawdata_table_name = cfg['rawdata_table_name']
         self.task_name = cfg['task']
 
     def set_current_data(self, current_data):
@@ -78,8 +77,8 @@ class MySQLDataUploader(FileSystemEventHandler):
         self.cursor = self.db.cursor()
         self.cursor.execute(sql)
 
-    def create_rawdata_table(self):
-        sql = f'CREATE TABLE IF NOT EXISTS {self.rawdata_table_name} ('
+    def create_datastore(self):
+        sql = f'CREATE TABLE IF NOT EXISTS {self.datastore_name} ('
         for header, data_type in zip(self.headers, self.data_types):
             sql = f'{sql}{header} '
             sql = f'{sql}{data_type}, '
@@ -90,7 +89,7 @@ class MySQLDataUploader(FileSystemEventHandler):
         self.cursor.execute(sql)
 
     def append_rawdata(self):
-        sql = f'INSERT INTO {self.rawdata_table_name} ('
+        sql = f'INSERT INTO {self.datastore_name} ('
         for header in self.headers:
             sql = f'{sql}{header}, '
         sql = sql[:-2]
@@ -112,7 +111,7 @@ class MySQLDataUploader(FileSystemEventHandler):
             print(f'uploading file to database...', end='')
             self.create_database()
             self.use_database()
-            self.create_rawdata_table()
+            self.create_datastore()
 
             timestamp = os.path.basename(event.src_path)
             data = (self.task_name, timestamp, os.path.join(
@@ -131,8 +130,8 @@ database_dir = cfg['database_dir']
 lab = cfg['lab']
 
 machine = cfg['machine']
-table_name = cfg['rawdata_table_name']
-target_dir = os.path.join(lab, machine, table_name, task_name)
+rawdata_dir = cfg['rawdata_dir']
+target_dir = os.path.join(lab, machine, rawdata_dir, task_name)
 absolute_target_dir = os.path.join(database_dir, target_dir)
 uploader = MySQLDataUploader(
     database_dir=database_dir,

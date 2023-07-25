@@ -2,6 +2,7 @@ from typing import Optional, Union
 import asyncio
 from datetime import datetime
 import dataclasses
+import json
 
 import keyboard
 import nidaqmx
@@ -50,7 +51,8 @@ class NIDAQ(GeneralDAQParams):
     writer: Optional[Union[CSVStreamWriter, NPYWriter]] = None
     writer_switch_flag: Optional[bool] = None
     chunk: Optional[npt.NDArray[np.float64]] = None
-    writer_type: Optional[str] = None  # "stream" for *.csv / "segment" for *.npy
+    # "stream" for *.csv / "segment" for *.npy
+    writer_type: Optional[str] = None
 
     def __init__(self) -> None:
         if PRINT_FUNC_NAME_FLAG:
@@ -73,7 +75,8 @@ class NIDAQ(GeneralDAQParams):
 
     def check_device_is_exsit(self) -> None:
         if PRINT_FUNC_NAME_FLAG:
-            print(f'run function - {get_func_name(self.check_device_is_exsit)}')
+            print(
+                f'run function - {get_func_name(self.check_device_is_exsit)}')
 
         if len(self.system.devices) == 0:
             raise BaseException('Cannot find local device.')
@@ -107,7 +110,8 @@ class NIDAQ(GeneralDAQParams):
 
     def show_device_channel_names(self) -> None:
         if PRINT_FUNC_NAME_FLAG:
-            print(f'run function - {get_func_name(self.show_device_channel_names)}')
+            print(
+                f'run function - {get_func_name(self.show_device_channel_names)}')
 
         print(f'{self.device_name} channels:')
         print(''.join(f'  {name}\n' for name in list(
@@ -115,7 +119,8 @@ class NIDAQ(GeneralDAQParams):
 
     def show_task_exist_channels(self) -> None:
         if PRINT_FUNC_NAME_FLAG:
-            print(f'run function - {get_func_name(self.show_task_exist_channels)}')
+            print(
+                f'run function - {get_func_name(self.show_task_exist_channels)}')
 
         print(f'Task exist channel num: {len(self.task.channel_names)}')
         print('Task exist_channels:')
@@ -130,14 +135,16 @@ class NIDAQ(GeneralDAQParams):
 
     def show_sample_rate_range(self) -> None:
         if PRINT_FUNC_NAME_FLAG:
-            print(f'run function - {get_func_name(self.show_sample_rate_range)}')
+            print(
+                f'run function - {get_func_name(self.show_sample_rate_range)}')
 
         print(
             f'Sampling rate range: {self.min_sample_rate:.2f} ~ {self.max_sample_rate} Hz')
 
     def show_daq_chassis_device_name(self) -> None:
         if PRINT_FUNC_NAME_FLAG:
-            print(f'run function - {get_func_name(self.show_daq_chassis_device_name)}')
+            print(
+                f'run function - {get_func_name(self.show_daq_chassis_device_name)}')
 
         print(f'DAQ chassis name: {self.device.compact_daq_chassis_device}')
 
@@ -261,7 +268,8 @@ class NI9234(NIDAQ):
             current_excit_val,
             custom_scale_name) -> None:
         if PRINT_FUNC_NAME_FLAG:
-            print(f'run function - {get_func_name(self.add_microphone_channel)}')
+            print(
+                f'run function - {get_func_name(self.add_microphone_channel)}')
 
         self.channel_check(physical_channel)
 
@@ -352,7 +360,8 @@ class NI9234(NIDAQ):
         time: second
         '''
         if PRINT_FUNC_NAME_FLAG:
-            print(f'run function - {get_func_name(self.start_streaming_period_time)}')
+            print(
+                f'run function - {get_func_name(self.start_streaming_period_time)}')
 
         number_of_samples = int(time * self.sample_rate)
         return self.task.in_stream.read(number_of_samples_per_channel=number_of_samples)

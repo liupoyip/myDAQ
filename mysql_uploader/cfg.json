@@ -8,6 +8,7 @@
     "machine": "dummy_machine",
     "task": "dummy_task",
     "task_cfg": "cfg.json",
+    "datastore_name": "datastore",
     "rawdata_table_name": "dummy_rawdata",
     "lab": "E102",
     "headers": [
