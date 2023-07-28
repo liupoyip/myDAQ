@@ -438,10 +438,8 @@ if __name__ == '__main__':
     nidaq = NI9234(device_name='NI_9234')
     nidaq.create_task(task_name='myTask')
     nidaq.add_accel_channel(0)
-    nidaq.add_accel_channel(1)
-    # nidaq.add_microphone_channel(2)
-    # nidaq.add_microphone_channel(3)
-    nidaq.set_sample_rate(25600)
+    nidaq.add_microphone_channel(1)
+    nidaq.set_sample_rate(12800)
     nidaq.set_frame_duration(100)
 
     nidaq.ready_read(
@@ -449,18 +447,8 @@ if __name__ == '__main__':
         number_of_samples, callback_data: nidaq.callback_method(
             nidaq.task._handle, nidaq.every_n_samples_event_type, nidaq.frame_size, callback_data=nidaq))
     nidaq.show_control_manual()
-    # method 1 async function with event loop
-    # loop = asyncio.get_event_loop()
-    # tasks = [asyncio.ensure_future(nidaq.key_switch_event())]
-    # loop.run_until_complete(asyncio.wait(tasks))
 
-    # method 2 async run (similiar with method 1)
     tasks = [nidaq.key_switch_event()]
     asyncio.run(asyncio.wait(tasks))
-
-    # method 4 read with period time (not complete yet!!)
-    # nidaq.start_streaming(callback_method=callback_nidaq)
-    # data = nidaq.start_streaming_period_time(10)    # only read ch0??
-    # print(data.shape)
 
     print('Process done!')
