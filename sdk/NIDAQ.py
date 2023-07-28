@@ -2,7 +2,6 @@ from typing import Optional, Union
 import asyncio
 from datetime import datetime
 import dataclasses
-import json
 
 import keyboard
 import nidaqmx
@@ -194,17 +193,6 @@ class NI9234(NIDAQ):
         if self.task != None:
             self.task.close()
 
-    # def add_ai_channel(add_ai_channel_func):
-    #     def wrap(self, channel: Union[int, str]):
-    #         if channel not in self.channel_num_list:
-    #             raise BaseException(
-    #                 f'Illegal channel number. Legal channel : {self.channel_num_list}')
-    #         if self.task.number_of_channels > 4:
-    #             raise BaseException('All channels have added to task.')
-    #         add_ai_channel_func(self, channel)
-    #         print(f'Channel added, exist channel: {self.task.channel_names}')
-    #     return wrap
-
     def channel_check(self, physical_channel):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.channel_check)}')
@@ -215,7 +203,6 @@ class NI9234(NIDAQ):
         if self.task.number_of_channels > 4:
             raise BaseException('All channels have added to task.')
 
-    # @add_ai_channel
     def add_accel_channel(
             self,
             physical_channel: Union[int, str],
@@ -256,7 +243,6 @@ class NI9234(NIDAQ):
             current_excit_val=current_excit_val,
             custom_scale_name=custom_scale_name)
 
-    # @add_ai_channel
     def add_microphone_channel(
             self,
             physical_channel: Union[int, str],
@@ -385,8 +371,6 @@ class NI9234(NIDAQ):
 
         self.set_writer_disable()
         self.task.close()
-        # if self.writer.file != None:
-        #     self.writer.close_file()
         print('Task is done!!')
 
     def show_control_manual(self):
