@@ -129,19 +129,6 @@ class NI9234ViewModel(QWidget):
         self.ui.ImportConfig_Pushbutton.clicked.connect(
             self.on_import_config_button_clicked)
 
-        # func test button
-        self.ui.FunctionTest_Pushbutton.clicked.connect(
-            self.on_function_test_pushbutton_clicked)
-
-    def on_function_test_pushbutton_clicked(self):
-        '''
-        This function is for testing while function built or function modified
-        Don't let this function online
-        '''
-        if PRINT_FUNC_NAME_FLAG:
-            print(
-                f'run function - {get_func_name(self.on_function_test_pushbutton_clicked)}')
-
     def set_default_values(self):
         if PRINT_FUNC_NAME_FLAG:
             print(f'run function - {get_func_name(self.set_default_values)}')
@@ -235,6 +222,7 @@ class NI9234ViewModel(QWidget):
             self.model.default_settings['default_write_file_dir'])
 
         # set component initial enable
+        self.ui.ImportConfig_Pushbutton.setEnabled(True)
         self.ui.CreateTask_PushButton.setEnabled(True)
         self.ui.PreparationSetting_Frame.setEnabled(True)
         self.ui.Visualize_Groupbox.setEnabled(True)
@@ -349,6 +337,8 @@ class NI9234ViewModel(QWidget):
                 f'run function - {get_func_name(self.on_create_task_button_clicked)}')
 
         if self.channel_is_seleted():
+            # button behavior
+            self.ui.ImportConfig_Pushbutton.setDisabled(True)
             self.ui.Start_PushButton.setEnabled(True)
             self.ui.ClearTask_PushButton.setEnabled(True)
             self.ui.CreateTask_PushButton.setDisabled(True)
@@ -392,6 +382,7 @@ class NI9234ViewModel(QWidget):
             print(
                 f'run function - {get_func_name(self.on_clear_task_button_clicked)}')
 
+        self.ui.ImportConfig_Pushbutton.setEnabled(True)
         self.ui.PreparationSetting_Frame.setEnabled(True)
         self.ui.CreateTask_PushButton.setEnabled(True)
         self.ui.Start_PushButton.setDisabled(True)
