@@ -416,8 +416,6 @@ class NI9234(NIDAQ):
         return 0
 
 
-callback_obj_ptr = None
-
 if __name__ == '__main__':
     nidaq = NI9234(device_name='NI_9234')
     nidaq.create_task(task_name='myTask')
