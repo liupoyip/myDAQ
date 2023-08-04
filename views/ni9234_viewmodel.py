@@ -216,6 +216,7 @@ class NI9234ViewModel(QWidget):
         self.ui.SpectrumDownSample_HorizontalSlider.setValue(
             self.model.default_settings['default_spectrum_downsample'])
 
+        self.ui.WriteFileType_ComboBox.clear()
         self.ui.WriteFileType_ComboBox.addItems(
             self.model.default_settings['write_file_type'])
         self.ui.WriteFile_LineEdit.setText(
@@ -528,6 +529,7 @@ class NI9234ViewModel(QWidget):
 
         self.active_channel_num_list.clear()
         self.active_sensor_model_list.clear()
+        self.active_sensor_cfg_list.clear()
         for channel_num, (checkbox, combox) in enumerate(zip(self.channel_checkboxes, self.channel_comboxes)):
             if checkbox.isChecked():
                 self.active_channel_num_list.append(channel_num)

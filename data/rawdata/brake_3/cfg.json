@@ -1,0 +1,52 @@
+{
+    "machine_ID": "rotating_machinary",
+    "task_name": "brake_3",
+    "start_time": "20230804T150200",
+    "frame_count": 30,
+    "sample_rate": 6400,
+    "frame_duration": 1000,
+    "chunk_len": 6400,
+    "channels": [
+        0,
+        1
+    ],
+    "channel_names": [
+        "NI_9234-ch0-machine_vibration",
+        "NI_9234-ch1-env_sound"
+    ],
+    "writer_type": "segment",
+    "sensor_cfgs": [
+        {
+            "ai_channel_api_url": "https://nidaqmx-python.readthedocs.io/en/latest/ai_channel_collection.html?highlight=add_ai_mic#nidaqmx._task_modules.ai_channel_collection.AIChannelCollection.add_ai_accel_chan",
+            "sensor_model_url": "https://www.pcb.com/products?m=352c33",
+            "sensor_model": "352C33",
+            "series_num": "",
+            "name_to_assign_to_channel": "machine_vibration",
+            "terminal_config": "default",
+            "min_val": -50.0,
+            "max_val": 50.0,
+            "units": "g",
+            "sensitivity": 100.0,
+            "sensitivity_units": "millivolts_per_g",
+            "current_excit_source": "internal",
+            "current_excit_val": 0.004,
+            "custom_scale_name": "",
+            "sensor_type": "accelerometer"
+        },
+        {
+            "ai_channel_api_url": "https://nidaqmx-python.readthedocs.io/en/latest/ai_channel_collection.html?highlight=add_ai_microphone#nidaqmx._task_modules.ai_channel_collection.AIChannelCollection.add_ai_microphone_chan",
+            "sensor_model_url": "https://www.pcb.com/products?m=130F20",
+            "sensor_model": "130F20",
+            "series_num": "",
+            "name_to_assign_to_channel": "env_sound",
+            "terminal_config": "default",
+            "units": "Pa",
+            "mic_sensitivity": 45.0,
+            "max_snd_press_level": 122.0,
+            "current_excit_source": "internal",
+            "current_excit_val": 0.004,
+            "custom_scale_name": "",
+            "sensor_type": "microphone"
+        }
+    ]
+}
