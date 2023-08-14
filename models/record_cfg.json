@@ -1,7 +1,7 @@
 {
     "machine_ID": "rotating_machinary",
     "task_name": "myTask",
-    "target_storage": "Y:/E102",
+    "target_storage": "Y:\\E102",
     "channels": [
         0,
         1
