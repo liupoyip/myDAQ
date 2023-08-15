@@ -1,5 +1,5 @@
 {
-    "machine_ID": "rotating_machinary",
+    "machine_ID": "rotating_machinery",
     "task_name": "myTask",
     "target_storage": "Y:\\E102",
     "channels": [
@@ -14,7 +14,7 @@
         "vibration",
         "sound_wave"
     ],
-    "sample_rate": 6400,
+    "sample_rate": 3200,
     "frame_duration": 1000,
     "cDAQ_model": "NI cDAQ-9171",
     "cDAQ_series_num": "02016787",
