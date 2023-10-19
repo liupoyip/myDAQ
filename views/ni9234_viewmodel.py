@@ -249,6 +249,9 @@ class NI9234ViewModel(QWidget):
             combox.setEnabled(True)
         self.ui.VisualizeSwitch_Checkbox.setChecked(False)
 
+        record_cfg_file = open(self.record_cfg_path)
+        self.record_cfg = json.load(record_cfg_file)
+
     def on_import_config_button_clicked(self):
         if PRINT_FUNC_NAME_FLAG:
             print(
