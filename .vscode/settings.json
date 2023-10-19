@@ -1,4 +1,4 @@
 {
-    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/myDAQs_alpha/",
-    "qtForPython.designer.path": "${workspaceFolder}/.venv/myDAQs_alpha/Lib/site-packages/qt6_applications/Qt/bin/designer.exe",
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/myDAQ/",
+    "qtForPython.designer.path": "${workspaceFolder}/.venv/myDAQ/Lib/site-packages/qt6_applications/Qt/bin/designer.exe",
 }
