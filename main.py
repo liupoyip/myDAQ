@@ -6,7 +6,6 @@ from PySide6.QtGui import QPen, QColor, QPalette, QGuiApplication
 
 from models.NIDAQModel import NIDAQModel
 from views.ni9234_viewmodel import NI9234ViewModel
-import qdarktheme
 
 from debug_flags import PRINT_FUNC_NAME_FLAG
 from sdk.utils import get_func_name
@@ -28,5 +27,4 @@ class App(QApplication):
 
 
 app = App()
-# app.setStyleSheet(qdarktheme.load_stylesheet())
 sys.exit(app.exec())
