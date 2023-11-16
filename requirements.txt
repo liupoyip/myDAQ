@@ -1,9 +1,6 @@
 pyside6
 pyqt6
 pyqt6-tools
-pyqtdarktheme
 numpy
 nidaqmx
 keyboard
-watchdog
-mysql-connector-python
