@@ -1,4 +1,18 @@
-This project is deloy for Nation Instructment(NI) device NI-9234.
+# Intro
+
+This project is deloy for Nation Instructment(NI) device for data acquisition.
+
+The application is build with Python 
+
+
+The below GIF is the demonstartion of this project.
+
+![demo](./description/demo.gif)
+
+## Pre-install driver
+
+Need to install the driver of DAQ called **NI-DAQmx** before execute this application.
+- [NI-DAQmx](https://www.ni.com/en/support/downloads/drivers/download.ni-daq-mx.html)
 
 
 ## Support NI hardware
@@ -13,12 +27,3 @@ This project is deloy for Nation Instructment(NI) device NI-9234.
 - PCB 130F20
 
 ![](./description/pcb_130f20_sample.jpg)
-
-## demonstration
-
-![](./description/demo.gif)
-
-
-<video width="1920" height="930" controls>
-  <source src="./description/demo.mp4" type="video/mp4">
-</video>
