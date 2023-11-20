@@ -1,5 +1,5 @@
 # Intro
-This application is developed for Nation Instrument's data acquisition(DAQ) device by Python. The package controlling DAQ core is **nidaqmx**, and the UI framework used is **PySide6**. (see `requirements.txt`)
+This application is developed for Nation Instrument's data acquisition(DAQ) device by Python. The package controlling core of DAQ is **nidaqmx**, and the UI framework used is **PySide6**. (see `requirements.txt`)
 
 The below video is the application demo.
 
