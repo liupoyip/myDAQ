@@ -16,6 +16,9 @@ This project is deloy for Nation Instructment(NI) device NI-9234.
 
 ## demonstration
 
+![](./description/demo.gif)
+
+
 <video width="1920" height="930" controls>
   <source src="./description/demo.mp4" type="video/mp4">
 </video>
