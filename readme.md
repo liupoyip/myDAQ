@@ -4,15 +4,13 @@ This project is deloy for Nation Instructment(NI) device NI-9234.
 ## Support NI hardware
 - cDAQ-9171 + DAQ-9234
 
-<img src="./description/NI_cDAQ-9171&DAQ9234.jpg" height="180">
+<img src="./description/NI_cDAQ-9171&DAQ9234.jpg" height="240">
 
 - PCB 352C33
 
-<img src="./description/pcb_352c33_sample.jpg" height="120">
+<img src="./description/pcb_352c33_sample.jpg" height="240">
 
 - PCB 130F20
-
-<img src="./description/pcb_130F20_sample.jpg" height="180">
 
 ![](./description/pcb_130f20_sample.jpg)
 
