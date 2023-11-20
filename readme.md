@@ -1,29 +1,31 @@
 # Intro
-
-This project is deloy for Nation Instructment(NI) device for data acquisition.
-
-The application is build with Python 
-
+This project is deloy for Nation Instructment(NI) device for data acquisition(DAQ). This application is developed using Python. The package controlling DAQ is nidaqmx, and the UI framework used is PySide6.(see requirements.txt)
 
 The below GIF is the demonstartion of this project.
 
 ![demo](./description/demo.gif)
 
 ## Pre-install driver
-
-Need to install the driver of DAQ called **NI-DAQmx** before execute this application.
+Need to install the driver of DAQ called **NI-DAQmx** before execute this application. Driver is in the following url.
 - [NI-DAQmx](https://www.ni.com/en/support/downloads/drivers/download.ni-daq-mx.html)
 
 
-## Support NI hardware
-- cDAQ-9171 + DAQ-9234
+## Support hardwares
+- NI-cDAQ-9171
 
-<img src="./description/NI_cDAQ-9171&DAQ9234.jpg" height="240">
+<img src="./description/NI_cDAQ-9171.jpg" height="240">
+
+- NI-DAQ-9234
+
+<img src="./description/NI_DAQ-9234.jpg" height="240">
 
 - PCB 352C33
 
-<img src="./description/pcb_352c33_sample.jpg" height="240">
+<img src="./description/pcb_352c33.jpg" height="180">
 
 - PCB 130F20
 
-![](./description/pcb_130f20_sample.jpg)
+
+<img src="./description/pcb_130F20.jpg" height="180">
+
+![](./description/pcb_130f20.jpg)
