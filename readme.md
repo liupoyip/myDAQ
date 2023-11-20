@@ -5,6 +5,7 @@ The below GIF is the demonstartion of this project.
 
 ![demo](description/demo.gif)
 
+
 ## Pre-install driver
 Need to install the driver of DAQ called **NI-DAQmx** before execute this application. Driver is in the following url.
 - [NI-DAQmx](https://www.ni.com/en/support/downloads/drivers/download.ni-daq-mx.html)
