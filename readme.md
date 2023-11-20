@@ -1,5 +1,5 @@
 # Intro
-This project is deloy for Nation Instructment(NI) device for data acquisition(DAQ). This application is developed using Python. The package controlling DAQ is nidaqmx, and the UI framework used is PySide6.(see requirements.txt)
+This project is deloy for Nation Instructment(NI) device for data acquisition(DAQ). This application is developed using Python. The package controlling DAQ is nidaqmx, and the UI framework used is PySide6. (see `requirements.txt`)
 
 The below GIF is the demonstartion of this project.
 
@@ -26,6 +26,6 @@ Need to install the driver of DAQ called **NI-DAQmx** before execute this applic
 - PCB 130F20
 
 
-<img src="./description/pcb_130F20.jpg" height="180">
+<img src="./description/pcb_130F20_real.jpg" height="180">
 
 ![](./description/pcb_130f20.jpg)
