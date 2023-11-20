@@ -9,7 +9,6 @@ The below video is the application demo.
 Need to install the driver of DAQ called **NI-DAQmx** before execute this application. 
 - Driver URL: [NI-DAQmx](https://www.ni.com/en/support/downloads/drivers/download.ni-daq-mx.html)
 
-
 ## Support devices
 - NI-cDAQ-9171
 
@@ -26,5 +25,3 @@ Need to install the driver of DAQ called **NI-DAQmx** before execute this applic
 - PCB 130F20
 
 <img src="description/pcb_130f20.jpg" name="PCB 130F20" height="100">
-
-## setup overall
