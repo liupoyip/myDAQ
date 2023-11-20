@@ -26,5 +26,6 @@ Need to install the driver of DAQ called **NI-DAQmx** before execute this applic
 
 - PCB 130F20
 
+<img src="description/pcb_130f20.jpg" name="PCB 352C33" height="180">
 
 ![PCB 130F20](description/pcb_130f20.jpg)
