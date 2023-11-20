@@ -14,6 +14,7 @@ This project is deloy for Nation Instructment(NI) device NI-9234.
 
 <img src="./description/pcb_130F20_sample.jpg" height="120">
 
+![](./description/pcb_130f20_sample.jpg)
 
 ## demonstration
 
