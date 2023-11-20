@@ -3,7 +3,7 @@ This project is deloy for Nation Instructment(NI) device for data acquisition(DA
 
 The below video is the application demo.
 
-<video width="630" height="300" src="https://github.com/liupoyip/myDAQ/assets/52535343/e4cfc2b7-d42b-4191-8a2f-c438fab0ba47"></video>
+<video width="1920" height="930" src="https://github.com/liupoyip/myDAQ/assets/52535343/e4cfc2b7-d42b-4191-8a2f-c438fab0ba47"></video>
 
 
 ## Pre-install driver
