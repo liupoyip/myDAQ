@@ -1,5 +1,6 @@
 # Intro
-This application is developed for Nation Instrument's data acquisition(DAQ) device by Python. The package controlling core of DAQ is **nidaqmx**, and the UI framework used is **PySide6**. (see `requirements.txt`)
+This application is developed for Nation Instrument's data acquisition(DAQ) device by Python.
+The package controlling core of DAQ is **nidaqmx**, and the UI framework used is **PySide6**. (see `requirements.txt`)
 
 The below video is the application demo.
 
@@ -25,3 +26,28 @@ Need to install the driver of DAQ called **NI-DAQmx** before execute this applic
 - PCB 130F20
 
 <img src="description/pcb_130f20.jpg" name="PCB 130F20" height="100">
+
+## About `Import` Button
+
+When clicked Import button, parameters will automatically import to application.
+The parameters is written in `./models/record_cfg.json`. User can determine the parameters in config file.
+
+
+The explanation of paramters
+- `machine_ID`: customize ID
+- `task_name`: customize task name
+- `target_storage`: target directory of record data
+- `channels`: based on amount of channels used
+- `sensor_cfg`: sensor configs, refer to config files in `./models/sensors/`
+- `data_name`: customize data name
+- `sample_rate`: unit - Hz,
+- `frame_duration`: unit - millisecond
+- `cDAQ_model`: based on cDAQ device, check series device name in driver
+- `cDAQ_series_num`: based on cDAQ device, check series num in driver
+- `DAQ_model`: based on DAQ device, check series device name in driver
+- `DAQ_series_num`: based on DAQ device, check series num in driver
+- `export_cfg_file_name`: config file which represent the DAQ paramters. This file will export to record directory
+
+
+
+NOTICE: `channels`, `sensor_cfg`, `data_name` are paried, if a channel in is added in `channels`, `sensor_cfg` and `data_name` need to added paramters
