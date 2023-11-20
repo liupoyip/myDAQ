@@ -9,9 +9,6 @@ startion of this project.
 
 <video width="630" height="300" src="https://github.com/liupoyip/myDAQ/assets/52535343/e4cfc2b7-d42b-4191-8a2f-c438fab0ba47"></video>
 
-![](https://github.com/liupoyip/myDAQ/assets/52535343/e4cfc2b7-d42b-4191-8a2f-c438fab0ba47)
-![demo](description/demo.gif)
-
 ## Pre-install driver
 Need to install the driver of DAQ called **NI-DAQmx** before execute this application. Driver is in the following url.
 - [NI-DAQmx](https://www.ni.com/en/support/downloads/drivers/download.ni-daq-mx.html)
