@@ -11,7 +11,7 @@ Need to install the driver of DAQ called **NI-DAQmx** before execute this applic
 - Driver URL: [NI-DAQmx](https://www.ni.com/en/support/downloads/drivers/download.ni-daq-mx.html)
 
 
-## Support hardwares
+## Support devices
 - NI-cDAQ-9171
 
 <img src="description/NI_cDAQ-9171.jpg" name="NI-cDAQ-9171" height="200">
