@@ -1,5 +1,5 @@
 # Intro
-This project is deloy for Nation Instructment(NI) device for data acquisition(DAQ). This application is developed using Python. The package controlling DAQ is nidaqmx, and the UI framework used is PySide6. (see `requirements.txt`)
+This application is developed for Nation Instrument's data acquisition(DAQ) device by Python. The package controlling DAQ core is **nidaqmx**, and the UI framework used is **PySide6**. (see `requirements.txt`)
 
 The below video is the application demo.
 
