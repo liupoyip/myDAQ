@@ -1,9 +1,13 @@
 # Intro
 This project is deloy for Nation Instructment(NI) device for data acquisition(DAQ). This application is developed using Python. The package controlling DAQ is nidaqmx, and the UI framework used is PySide6. (see `requirements.txt`)
 
-The below GIF is the demonstartion of this project.
+The below GIF is the demon
 
-![demo](description/demo.gif)
+
+https://github.com/liupoyip/myDAQ/assets/52535343/e4cfc2b7-d42b-4191-8a2f-c438fab0ba47
+startion of this project.
+
+<video width="630" height="300" src="https://github.com/liupoyip/myDAQ/assets/52535343/e4cfc2b7-d42b-4191-8a2f-c438fab0ba47"></video>
 
 
 ## Pre-install driver
