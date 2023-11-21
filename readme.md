@@ -30,7 +30,6 @@ Need to install the driver of DAQ called **NI-DAQmx** before execute this applic
 ## Instruction
 Before start recording, you should first some settings first.
 
-
 - define task name
 
 <img src="description/UI/UI_task_name.png" alt="task_name" width="400">
