@@ -49,6 +49,7 @@ Before start recording, you should first some settings first.
 
 ## Automatic import parameters
 <img src="description/UI/UI_import_config.png" alt="import_button" width="400">
+
 When clicked `Import` button, parameters will automatically import to application.
 The parameters is written in `./models/record_cfg.json`. User can determine the parameters in config file.
 
