@@ -6,6 +6,9 @@ The package controlling core of DAQ is **nidaqmx**, and the UI framework used is
 
 ## Application demo
 
+The devices is shown as below.
+
+<img src="description/device_overview.jpg" alt="NI-cDAQ-9171" height="600">
 
 Application demo video as below.
 
