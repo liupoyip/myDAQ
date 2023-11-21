@@ -1,6 +1,11 @@
 # Intro
+This application is intended to create a demo for a measurement system, allowing future successors to directly utilize the sensor signals in the measuring apparatus. Simultaneously, the source code is made open, enabling the successor to make modifications freely.
+
 This application is developed for Nation Instrument's data acquisition(DAQ) device by Python.
-The package controlling core of DAQ is **nidaqmx**, and the UI framework used is **PySide6**. (see `requirements.txt`)
+The package controlling core of DAQ is **nidaqmx**, and the UI framework used is **PySide6**.
+
+## Application demo
+
 
 Application demo video as below.
 
@@ -9,6 +14,18 @@ Application demo video as below.
 ## Pre-install driver
 Need to install the driver of DAQ called **NI-DAQmx** before execute this application. 
 - Driver URL: [NI-DAQmx](https://www.ni.com/en/support/downloads/drivers/download.ni-daq-mx.html)
+
+## Python enviroment
+This application depend on following packages.
+
+```
+pyside6
+pyqt6
+pyqt6-tools
+numpy
+nidaqmx
+keyboard
+```
 
 ## Support devices
 - NI-cDAQ-9171
