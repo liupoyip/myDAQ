@@ -43,7 +43,7 @@ Before start recording, you should first some settings first.
 
 <img src="description/UI/UI_Channel_Option.png" alt="Channel_Option" width="400">
 
-- press `Create` to create the task then press `Start` to start DAQ
+- press `Create Task` to create task, then press `Start` to start DAQ
 
 <img src="description/UI/UI_Button_control.png" alt="UI_Button_control" width="400">
 
