@@ -13,37 +13,42 @@ Need to install the driver of DAQ called **NI-DAQmx** before execute this applic
 ## Support devices
 - NI-cDAQ-9171
 
-<img src="description/NI_cDAQ-9171.jpg" name="NI-cDAQ-9171" height="150">
+<img src="description/NI_cDAQ-9171.jpg" alt="NI-cDAQ-9171" height="150">
 
 - NI-DAQ-9234
 
-<img src="description/NI_DAQ-9234.jpg" name="NI-DAQ-9234" height="150">
+<img src="description/NI_DAQ-9234.jpg" alt="NI-DAQ-9234" height="150">
 
 - PCB 352C33
 
-<img src="description/pcb_352c33.jpg" name="PCB 352C33" height="100">
+<img src="description/pcb_352c33.jpg" alt="PCB 352C33" height="100">
 
 - PCB 130F20
 
-<img src="description/pcb_130f20.jpg" name="PCB 130F20" height="100">
+<img src="description/pcb_130f20.jpg" alt="PCB 130F20" height="100">
 
 ## Instruction
 Before start recording, you should first some settings first.
 
-![task_name](./description/UI/UI_task_name.png)
+
 - define task name
 
-![parameters](./description/UI/UI_DAQ_parameters.png)
+<img src="description/UI/UI_task_name.png" alt="task_name" width="400">
+
 - set sampling rate and frame(buffer) duration
 
-![Channel_option](./description/UI/UI_Channel_Option.png)
+<img src="description/UI/UI_DAQ_parameters.png" alt="parameters" width="400">
+
 - choose channel and select sensor model
 
-![button_control](./description/UI/UI_Button_control.png)
+<img src="description/UI/UI_Channel_Option.png" alt="Channel_Option" width="400">
+
 - press `Create` to create the task then press `Start` to start DAQ
 
+<img src="description/UI/UI_Button_control.png" alt="UI_Button_control" width="400">
+
 ## Automatic import parameters
-![import_button](./description/UI/UI_import_config.png)
+<img src="description/UI/UI_import_config.png" alt="import_button" width="400">
 When clicked `Import` button, parameters will automatically import to application.
 The parameters is written in `./models/record_cfg.json`. User can determine the parameters in config file.
 
