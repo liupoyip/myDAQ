@@ -27,8 +27,23 @@ Need to install the driver of DAQ called **NI-DAQmx** before execute this applic
 
 <img src="description/pcb_130f20.jpg" name="PCB 130F20" height="100">
 
-## Automatic import parameters
+## Instruction
+Before start recording, you should first some settings first.
 
+![task_name](./description/UI/UI_task_name.png)
+- define task name
+
+![parameters](./description/UI/UI_DAQ_parameters.png)
+- set sampling rate and frame(buffer) duration
+
+![Channel_option](./description/UI/UI_Channel_Option.png)
+- choose channel and select sensor model
+
+![button_control](./description/UI/UI_Button_control.png)
+- press `Create` to create the task then press `Start` to start DAQ
+
+## Automatic import parameters
+![import_button](./description/UI/UI_import_config.png)
 When clicked `Import` button, parameters will automatically import to application.
 The parameters is written in `./models/record_cfg.json`. User can determine the parameters in config file.
 
