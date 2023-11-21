@@ -1,5 +1,5 @@
 # Intro
-This application is intended to create a demo for a measurement system, allowing future successors to directly utilize the sensor signals in the measuring apparatus. The source code is open source, enabling the successor to make modifications freely.
+This application is intended to create a demo for a measurement system, allowing future successors to directly utilize the sensor signals in the measuring apparatus. The source code is open source, enabling the successor to modify freely.
 
 The application is developed for Nation Instrument's data acquisition(DAQ) device by Python.
 The package controlling core of DAQ is **nidaqmx**, and the UI framework used is **PySide6**.
